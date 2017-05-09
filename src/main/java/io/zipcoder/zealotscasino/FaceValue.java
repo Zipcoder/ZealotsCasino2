@@ -4,7 +4,8 @@ package io.zipcoder.zealotscasino;
  * Created by denniskalaygian on 5/9/17.
  */
 public enum FaceValue {
-    KING("K"), QUEEN("Q"), JACK("J"), ACE("A");
+
+    JACK("J"), QUEEN("Q"), KING("K"), ACE("A");
 
     private String val;
 
@@ -12,13 +13,13 @@ public enum FaceValue {
         val = theVal;
     }
 
-    public String getVal(){
+    public String getVal() {
         return val;
     }
 
     public int cardVal() {
         int numberVal = 0;
-        switch(val) {
+        switch (val) {
             case "K":
                 numberVal = 10;
                 break;
