@@ -8,9 +8,6 @@ import java.util.Collections;
  */
 public class Deck {
     private ArrayList<Card> deckQue = new ArrayList<>();
-    public void shuffle(){
-        Collections.shuffle(deckQue);
-    }
 
     public ArrayList<Card> getDeckQue() {
         return deckQue;
@@ -28,8 +25,14 @@ public class Deck {
             }
         }
     }
-//    public Card getCard(){
-//        Card card;
-//        return card;
-//    }
+
+    public void shuffle(){
+        Collections.shuffle(deckQue);
+    }
+
+    public Card surrenderCard(){
+        Card card = deckQue.get(0);
+        deckQue.remove(0);
+        return card;
+    }
 }
