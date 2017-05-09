@@ -28,12 +28,6 @@ public class TestDeck {
         assertEquals("Deck is not the correct size", expectedDeckSize, deck.getDeckQue().size());
     }
     @Test
-    public void buildDeck_DeckIsEmpty_DeckOfUniqueCardReturned(){
-        //Given
-        //When
-        //Then
-    }
-    @Test
     public void getCard_DeckHasCards_CardIsReturned(){
         //Given
         //When
