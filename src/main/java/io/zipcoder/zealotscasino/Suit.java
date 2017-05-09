@@ -11,4 +11,8 @@ public enum Suit {
     Suit(String theVal) {
         suitVal = theVal;
     }
+
+    public String getVal() {
+        return suitVal;
+    }
 }
