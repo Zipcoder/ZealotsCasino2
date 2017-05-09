@@ -5,7 +5,7 @@ import org.junit.Test;
 /**
  * Created by aaronlong on 5/8/17.
  */
-public class AppTest {
+public class TestApp {
     @Test
     public void testApp() {
     }
