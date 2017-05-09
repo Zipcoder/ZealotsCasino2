@@ -13,12 +13,20 @@ public class Hand {
         cards = new ArrayList<>();
     }
 
+    public void receiveCard(Card newCard) {
+        cards.add(newCard);
+    }
+
     public void receiveCards(ArrayList<Card> theCards) {
         cards.addAll(theCards);
     }
 
     public ArrayList<Card> getCards() {
         return (ArrayList<Card>) cards.clone();
+    }
+
+    public void remove(int index) {
+        cards.remove(index);
     }
 
 }
