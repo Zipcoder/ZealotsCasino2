@@ -63,13 +63,13 @@ public class TestWarDealer {
         //Given
         int playersCardValue = 10;
         int dealersCardValue = 9;
-        int expectedWinningActual = 10;
+        String expectedWinningActual = "win";
 
         //When
-        int actualWinningValue = dealer.determineOutcome(playersCardValue, dealersCardValue);
+        String actualWinningValue = dealer.determineOutcome(playersCardValue, dealersCardValue);
 
         //Then
-        assertEquals("Incorrect winning value",expectedWinningActual, actualWinningValue);
+        assertEquals("Player should have won",expectedWinningActual, actualWinningValue);
     }
 
 }
