@@ -54,21 +54,4 @@ public class TestBlackJackDealer {
         Assert.assertEquals("Checking if player is paid correctly", player.getWallet(), 10.0, 0);
     }
 
-    @Test
-    public void testExamineHandValue_HandHasCards_HandValueIncreases(){
-        //Given
-        int expected = 4;
-        Hand hand = new Hand();
-        Card card1 = new Card("TWO", "S");
-        Card card2 = new Card("TWO", "H");
-        hand.receiveCard(card1);
-        hand.receiveCard(card2);
-        player.setHand(hand);
-        //When
-        int actual = blackJackDealer.examineHandValue(player.getHand());
-        //Then
-        Assert.assertEquals("Checking to see if player receives proper hand value", expected, actual);
-
-    }
-
 }
