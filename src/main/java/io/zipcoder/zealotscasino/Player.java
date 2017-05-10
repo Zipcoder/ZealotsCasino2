@@ -37,4 +37,8 @@ public class Player
     public void setHand(Hand hand) {
         this.hand = hand;
     }
+
+    public void collectWinnings(double winnings){
+        wallet += winnings;
+    }
 }
