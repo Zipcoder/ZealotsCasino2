@@ -9,6 +9,9 @@ public class Player
     private double wallet;
     private Hand hand;
 
+    public Player(){
+        hand = new Hand();
+    }
     public double getBet() {
         return bet;
     }
@@ -36,5 +39,9 @@ public class Player
 
     public void setHand(Hand hand) {
         this.hand = hand;
+    }
+
+    public void collectWinnings(double winnings){
+        wallet += winnings;
     }
 }
