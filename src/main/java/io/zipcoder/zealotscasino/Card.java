@@ -10,6 +10,9 @@ public class Card implements Comparable<Card>{
     private int value;
     private String faceValue;
 
+    public enum Suit { S, D, H, C }
+    public enum CardValue {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, J, Q, K, A }
+
     public Card(){}
 
     public Card(int value, String suit){

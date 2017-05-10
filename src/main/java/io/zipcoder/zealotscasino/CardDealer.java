@@ -9,5 +9,7 @@ public interface CardDealer
 
     void dealHandTo(Player player);
 
-    void takeTurn();
+    void pay(Player player, double payOut);
+
+    void play(Player player);
 }

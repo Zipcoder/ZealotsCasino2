@@ -3,11 +3,46 @@ package io.zipcoder.zealotscasino;
 /**
  * Created by luisgarcia on 5/9/17.
  */
-public interface Player
+public class Player
 {
-    void makeBet(double bet);
+    private double bet;
+    private double wallet;
+    private Hand hand;
 
-    double getBet();
+    public Player(){
+        hand = new Hand();
 
-    void takeTurn();
+    }
+    public double getBet() {
+        return bet;
+    }
+
+    public void makeBet(double bet) {
+        this.bet = bet;
+        this.wallet = wallet - bet;
+    }
+
+    public double getWallet() {
+        return wallet;
+    }
+
+    public void initializeWallet(double initialWallet) {
+        this.wallet = initialWallet;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
+    }
+
+    public Hand getHand() {
+        return hand;
+    }
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+
+    public void collectWinnings(double winnings){
+        wallet += winnings;
+    }
 }

@@ -6,7 +6,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by andrewwong on 5/9/17.
@@ -32,12 +33,12 @@ public class TestDeck {
     public void getCard_DeckHasCards_CardIsReturned(){
         //Given
         deck.buildDeck();
-        Class cardType = Card.class;
+        //Class cardType = Card.class;
         Card card;
         //When
         card = deck.surrenderCard();
         //Then
-        assertEquals("Card not returned", card.getClass(), cardType);
+        assertTrue("Card not returned", card instanceof Card);
     }
 
 }
