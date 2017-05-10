@@ -11,7 +11,7 @@ public class Card implements Comparable<Card>{
     private String faceValue;
 
     public enum Suit { S, D, H, C }
-    public enum CardValue { J, Q, K, A, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN }
+    public enum CardValue {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, J, Q, K, A }
 
     public Card(){}
 
