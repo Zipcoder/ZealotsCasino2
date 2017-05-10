@@ -1,6 +1,7 @@
 package io.zipcoder.zealotscasino;
 
 import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
+import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 
 /**
  * Created by andrewwong on 5/10/17.
@@ -8,11 +9,13 @@ import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
 public class WarDealer implements CardDealer {
     private Deck deck;
     private Hand hand;
-    public WarDealer(){
+
+    public WarDealer() {
         deck = new Deck();
         deck.buildDeck();
     }
-    public void dealCardTo(Player player){
+
+    public void dealCardTo(Player player) {
         Hand playersHand = player.getHand();
         Card cardDealt = deck.surrenderCard();
         playersHand.receiveCard(cardDealt);
@@ -30,7 +33,7 @@ public class WarDealer implements CardDealer {
         player.collectWinnings(payOut);
     }
 
-    public void play(Player player){
+    public void play(Player player) {
         //get bet
         player.makeBet(getDoubleInput("Place a bet"));
 
@@ -41,6 +44,7 @@ public class WarDealer implements CardDealer {
         //compare cards
         int dealerCardValue = evaluateCardValue(dealerCard);
         int playerCardValue = evaluateCardValue(player.getHand().getCards().get(0));
+        String outcome = determineOutcome(playerCardValue, dealerCardValue);
 
 
         //determine winner
@@ -54,15 +58,35 @@ public class WarDealer implements CardDealer {
 
     }
 
-    public int evaluateCardValue(Card theCard){
+    public void processDeterminedOutcome(String outcome, Player player) {
+        String choice = "";
+        if (outcome.equals("win")) pay(player, player.getBet() * 2);
+        else if (outcome.equals("tie")) {
+            choice = getStringInput("Bet again? (Push  'Y' to double bet, 'N' to surrender and receive half of bet");
+            //processTie
+        } else {
+            askPlayAgain(player);
+        }
+
+    }
+
+    //public void processTie
+
+    public void askPlayAgain(Player player) {
+        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit");
+        if (choice.equals("Y")) play(player);
+    }
+
+
+    public int evaluateCardValue(Card theCard) {
         return Card.CardValue.valueOf(theCard.getFaceValue()).ordinal() + 2;
     }
 
-    public int evaluateWinner(int playerCardValue, int dealerCardValue) {
+    public String determineOutcome(int playerCardValue, int dealerCardValue) {
         if (playerCardValue > dealerCardValue) {
-            return playerCardValue;
+            return "win";
         } else if (playerCardValue < dealerCardValue) {
-            return dealerCardValue;
-        } else return 0;
+            return "lose";
+        } else return "tie";
     }
 }

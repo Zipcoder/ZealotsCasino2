@@ -66,7 +66,7 @@ public class TestWarDealer {
         int expectedWinningActual = 10;
 
         //When
-        int actualWinningValue = dealer.evaluateWinner(playersCardValue, dealersCardValue);
+        int actualWinningValue = dealer.determineOutcome(playersCardValue, dealersCardValue);
 
         //Then
         assertEquals("Incorrect winning value",expectedWinningActual, actualWinningValue);
