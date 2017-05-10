@@ -24,6 +24,7 @@ public class Game
     public void playWar()
     {
         dealer = new WarDealer();
+
     }
 
     /*public void playPoker()
