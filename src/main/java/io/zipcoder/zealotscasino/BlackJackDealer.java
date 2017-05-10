@@ -1,6 +1,8 @@
 package io.zipcoder.zealotscasino;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Created by denniskalaygian on 5/10/17.
@@ -9,6 +11,7 @@ public class BlackJackDealer implements CardDealer {
 
     private int dealerHandValue;
     private int playerHandValue;
+
     private Deck deck;
 
     public BlackJackDealer() {
@@ -20,19 +23,20 @@ public class BlackJackDealer implements CardDealer {
         return dealerHandValue;
     }
 
-    public void determineDealerHandValue(int handValue) {
-        this.dealerHandValue = handValue;
+    public void setDealerHandValue() {
+        Random generator = new Random();
+        dealerHandValue = generator.nextInt(7) + 14;
     }
 
     public int getPlayerHandValue() {
         return playerHandValue;
     }
 
-    public void determinePlayerHandValue(int playerHandValue) {
-        this.playerHandValue = playerHandValue;
+    public void determinePlayerHandValue(Hand hand) {
+        playerHandValue = examineHandValue(hand);
     }
 
-    public int examineHandValue(Hand hand) {
+    private int examineHandValue(Hand hand) {
         int handValue = 0;
         for(Card card: hand.getCards()) {
             if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 14){
@@ -58,19 +62,48 @@ public class BlackJackDealer implements CardDealer {
     }
 
     @Override
-    public void takeTurn() {}
+    public void play(Player player) {
+        do {
+            takeTurn(player);
+            String playAgain = UserInput.getStringInput("Play again? Yes / No");
+            if(!(playAgain.equalsIgnoreCase("yes"))){
+                break;
+            }
+        } while (true);
+
+    }
+
+    public void takeTurn(Player player) {
+        deck.buildDeck();
+        dealHandTo(player);
+        // Display the hand
+        determinePlayerHandValue(player.getHand());
+        // Display the hand value
+        takeHit(player);
+    }
 
     @Override
     public void pay(Player player, double payOut) {
         player.collectWinnings(payOut);
     }
 
+    public void takeHit(Player player){
+        boolean hit = checkIfPlayerHit();
+        if(hit){
+            dealCardTo(player);
+        }
+    }
 
-    public void checkIfHit(){} // Test to see if handValue DIDN'T increase
+    public boolean checkIfPlayerHit(){
+        UserInput in = new UserInput();
+        String hit = in.getStringInput("HIT / STAY");
+        if(hit.equalsIgnoreCase("hit")){
+            return true;
+        }
+        return false;
+    }
 
-    public void takeHit(Card card){} // Test to see if handValue DID increase
 
-    public boolean checkIfPlayerHit(){ return false; } // Test to see if
 
 
 
