@@ -11,6 +11,7 @@ public class Player
 
     public Player(){
         hand = new Hand();
+
     }
     public double getBet() {
         return bet;

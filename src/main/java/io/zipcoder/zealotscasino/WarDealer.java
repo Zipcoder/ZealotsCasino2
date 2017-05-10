@@ -1,11 +1,13 @@
 package io.zipcoder.zealotscasino;
 
+import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
+
 /**
  * Created by andrewwong on 5/10/17.
  */
 public class WarDealer implements CardDealer {
     private Deck deck;
-    private Card card;
+    private Hand hand;
     public WarDealer(){
         deck = new Deck();
         deck.buildDeck();
@@ -29,9 +31,18 @@ public class WarDealer implements CardDealer {
     }
 
     public void play(Player player){
-        //get
+        //get bet
+        player.makeBet(getDoubleInput("Place a bet"));
+
         //deal cards
+        dealHandTo(player);
+        Card dealerCard = deck.surrenderCard();
+
         //compare cards
+        int dealerCardValue = evaluateCardValue(dealerCard);
+        int playerCardValue = evaluateCardValue(player.getHand().getCards().get(0));
+
+
         //determine winner
         //collect payout or lose bet
         //if tie, player can quit or break tie
@@ -43,4 +54,15 @@ public class WarDealer implements CardDealer {
 
     }
 
+    public int evaluateCardValue(Card theCard){
+        return Card.CardValue.valueOf(theCard.getFaceValue()).ordinal() + 2;
+    }
+
+    public int evaluateWinner(int playerCardValue, int dealerCardValue) {
+        if (playerCardValue > dealerCardValue) {
+            return playerCardValue;
+        } else if (playerCardValue < dealerCardValue) {
+            return dealerCardValue;
+        } else return 0;
+    }
 }

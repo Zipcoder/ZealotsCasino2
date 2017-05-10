@@ -44,10 +44,32 @@ public class TestWarDealer {
         //Then
         assertEquals("Player did not receive payout", expectedWallet, actualWallet, 0D);
     }
-//    @Test
-//    public void takeTurn() {
-//
-//    }
-//
+
+    @Test
+    public void testEvaluateCardValue_CardIsAKing_returnsThirteen(){
+        //Given
+        Card card = new Card(Card.CardValue.K.name(), Card.Suit.H.name());
+        int expected = 13;
+
+        //When
+        int actual = dealer.evaluateCardValue(card);
+
+        //Then
+        assertEquals("King should be 13", expected, actual);
+    }
+
+    @Test
+    public void evaluateWinner_EvaluatingNineAndTenCard_TenIsReturned(){
+        //Given
+        int playersCardValue = 10;
+        int dealersCardValue = 9;
+        int expectedWinningActual = 10;
+
+        //When
+        int actualWinningValue = dealer.evaluateWinner(playersCardValue, dealersCardValue);
+
+        //Then
+        assertEquals("Incorrect winning value",expectedWinningActual, actualWinningValue);
+    }
 
 }
