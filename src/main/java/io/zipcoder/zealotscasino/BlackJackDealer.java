@@ -2,6 +2,7 @@ package io.zipcoder.zealotscasino;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Created by denniskalaygian on 5/10/17.
@@ -58,6 +59,18 @@ public class BlackJackDealer implements CardDealer {
     @Override
     public void dealHandTo(Player player) {
         for (int i = 0; i < 2; i++) dealCardTo(player);
+    }
+
+    @Override
+    public void play(Player player) {
+        do {
+            takeTurn(player);
+            String playAgain = UserInput.getStringInput("Play again? Yes / No");
+            if(!(playAgain.equalsIgnoreCase("yes"))){
+                break;
+            }
+        } while (true);
+
     }
 
     public void takeTurn(Player player) {
