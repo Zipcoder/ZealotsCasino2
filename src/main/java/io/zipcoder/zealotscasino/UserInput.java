@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class UserInput {
 
-    public String getStringInput(String prompt) {
+    public static String getStringInput(String prompt) {
         Scanner in = new Scanner(System.in);
         System.out.println(prompt);
         String userInput = in.nextLine();
         return userInput;
     }
-    public Double getDoubleInput(String prompt) {
+    public static Double getDoubleInput(String prompt) {
         try {
             return Double.parseDouble(getStringInput(prompt)); //needs to take double to two places
         } catch(Exception e){

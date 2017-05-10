@@ -28,7 +28,18 @@ public class WarDealer implements CardDealer {
         player.collectWinnings(payOut);
     }
 
-    public void play(WarDealer dealer){
+    public void play(Player player){
+        //get
+        //deal cards
+        //compare cards
+        //determine winner
+        //collect payout or lose bet
+        //if tie, player can quit or break tie
+        //collect tie bet
+        //burn 3 cards and deal
+        //compare cards
+        //determine winner
+        //payout
 
     }
 
