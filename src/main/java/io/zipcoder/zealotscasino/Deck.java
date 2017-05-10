@@ -14,13 +14,9 @@ public class Deck {
     }
 
     public void buildDeck(){
-        for(Suit suit: Suit.values()){
-            for(NumberValue numberValue: NumberValue.values()){
-                Card card = new Card(numberValue.getVal(), suit.getVal());
-                deckQue.add(card);
-            }
-            for(FaceValue faceValue: FaceValue.values()){
-                Card card = new Card(faceValue.getVal(), suit.getVal());
+        for(Card.Suit suit: Card.Suit.values()){
+            for(Card.CardValue cardValue : Card.CardValue.values()){
+                Card card = new Card(cardValue.name(), suit.name());
                 deckQue.add(card);
             }
         }
