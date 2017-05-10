@@ -11,5 +11,5 @@ public interface CardDealer
 
     void takeTurn();
 
-    double pay(Player player, double payOut);
+    void pay(Player player, double payOut);
 }
