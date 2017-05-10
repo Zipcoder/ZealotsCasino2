@@ -7,7 +7,9 @@ public class App {
 
     public static void main(String[] args)
     {
-        Game myGame = new Game();
+        Player player = new Player();
+        Game myGame = new Game(player);
+        myGame.displayIntro();
         myGame.displayMenu();
     }
 }

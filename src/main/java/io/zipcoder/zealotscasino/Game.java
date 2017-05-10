@@ -11,20 +11,24 @@ public class Game
     private CardDealer dealer;
     UserInput user;
 
-    public Game(){
-        player = new Player();
+    public Game(Player player){
+        this.player = player;
         user = new UserInput();
     }
+
 
     public void playBlackJack()
     {
         dealer = new BlackJackDealer();
+        dealer.play(player);
+        displayMenu();
     }
 
     public void playWar()
     {
         dealer = new WarDealer();
-
+        dealer.play(player);
+        displayMenu();
     }
 
     /*public void playPoker()
@@ -42,10 +46,6 @@ public class Game
         dealer = new SlotDealer();
     } */
 
-    public void instantiatePlayer(double money)
-    {
-        player.initializeWallet(money);
-    }
 
     public void chooseGame()
     {
@@ -79,24 +79,24 @@ public class Game
         }
     }
 
+    public void displayIntro()
+    {
+        System.out.println("--------------------Zealot's Casino--------------------");
+        double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?");
+        player.initializeWallet(startWallet);
+        //Game myGame = new Game(player);
+    }
+
 
     public void displayMenu()
     {
-        System.out.println("----------------------------Welcome to Zealot's Casino----------------------------");
         System.out.println("What will you like to play?");
         System.out.println("(1) War");
         System.out.println("(2) Blackjack");
         System.out.println("(3) Poker");
         System.out.println("(4) Roulette");
         System.out.println("(5) Slots");
-
         this.chooseGame();
-
-        double startWallet = user.getDoubleInput("How much money do you want to start your wallet with?");
-        this.instantiatePlayer(startWallet);
-
-
-
 
 
     }
