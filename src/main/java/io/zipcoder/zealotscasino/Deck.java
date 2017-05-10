@@ -20,6 +20,7 @@ public class Deck {
                 deckQue.add(card);
             }
         }
+        shuffle();
     }
 
     public void shuffle(){
