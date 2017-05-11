@@ -3,8 +3,6 @@ package io.zipcoder.zealotscasino;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -50,7 +48,7 @@ public class TestWarDealer {
     @Test
     public void testEvaluateCardValue_CardIsAKing_returnsThirteen(){
         //Given
-        Card card = new Card(Card.CardValue.K.name(), Card.Suit.H.name());
+        Card card = new Card(Card.CardValue.KING.name(), Card.Suit.HEARTS.name());
         int expected = 13;
 
         //When

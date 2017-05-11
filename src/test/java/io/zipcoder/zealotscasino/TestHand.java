@@ -16,7 +16,7 @@ public class TestHand {
     @Before
     public void setUp(){
         expected = new ArrayList<>();
-        Card[] cards = { new Card(9, Card.Suit.S.name()), new Card(10, Card.Suit.C.name()) };
+        Card[] cards = { new Card(9, Card.Suit.SPADES.name()), new Card(10, Card.Suit.CLUBS.name()) };
         hand = new Hand();
         for (Card card : cards) { expected.add(card); }
     }
