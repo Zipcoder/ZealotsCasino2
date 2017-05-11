@@ -1,5 +1,7 @@
 package io.zipcoder.zealotscasino;
 
+import java.text.NumberFormat;
+
 /**
  * Created by luisgarcia on 5/9/17.
  */
@@ -58,5 +60,11 @@ public class Player {
 
     public void collectWinnings(double winnings) {
         wallet += winnings;
+    }
+
+    public String printWallet(){
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String walletString = formatter.format(wallet);
+        return "Wallet: " + walletString;
     }
 }
