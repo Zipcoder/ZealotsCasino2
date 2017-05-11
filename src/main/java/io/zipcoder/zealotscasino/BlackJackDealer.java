@@ -20,8 +20,11 @@ public class BlackJackDealer implements CardDealer {
         deck.buildDeck();
     }
 
-    public int getDealerHandValue() {
-        return dealerHandValue;
+    public void initializeHands(Player player){
+        Hand hand = new Hand();
+        player.setHand(hand);
+        initializePlayerHandValue();
+        initializeDealerHandValue();
     }
 
     public void initializeDealerHandValue() {
@@ -29,9 +32,7 @@ public class BlackJackDealer implements CardDealer {
         dealerHandValue = generator.nextInt(7) + 14;
     }
 
-    public int getPlayerHandValue() {
-        return playerHandValue;
-    }
+
 
     public void initializePlayerHandValue(){
         playerHandValue = 0;
@@ -66,6 +67,11 @@ public class BlackJackDealer implements CardDealer {
                 handValue += Card.CardValue.valueOf(card.getFaceValue()).ordinal() + 2;
             }
         }
+        for(Card card: hand.getCards()){
+            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12 && handValue > 21){
+                handValue -= 10;
+            }
+        }
 
         return handValue;
     }
@@ -82,6 +88,7 @@ public class BlackJackDealer implements CardDealer {
     @Override
     public void dealHandTo(Player player) {
         for (int i = 0; i < 2; i++) dealCardTo(player);
+        userDisplayHand(player);
     }
 
     public void clearPlayerHand(Player player){
@@ -111,37 +118,26 @@ public class BlackJackDealer implements CardDealer {
 
     public void takeHit(Player player){
         dealCardTo(player);
+        userDisplayHand(player);
         }
 
     public void takeTurn(Player player) {
-
-        Hand hand = new Hand();
-        player.setHand(hand);
-        initializePlayerHandValue();
-        initializeDealerHandValue();
+        initializeHands(player);
         dealHandTo(player);
-        userDisplayHand(player);
         determinePlayerHandValue(player.getHand());
-        player.makeBet(UserInput.getDoubleInput("Place your bet (Minimum $20.00) "));
+        while(true) {
+            try {
+                player.makeBet(UserInput.getDoubleInput("Place your bet (Minimum $20.00) "));
+                break;
+            } catch (Exception e) {
+                System.out.println("Enter a valid number. ");
+            }
+        }
         double bet = player.getBet();
         boolean hit = checkIfPlayerHit();
         while(hit){
             takeHit(player);
-            userDisplayHand(player);
-            boolean bust = checkBust();
-            boolean blackJack = checkBlackJack();
-            if(bust){
-                displayLoseGame();
-                gameRunning = false;
-                break;
-            }
-            if(blackJack){
-                displayBlackJack();
-                pay(player, bet*2);
-                gameRunning = false;
-                break;
-            }
-            hit = checkIfPlayerHit();
+            hit = checkStatus(player, bet);
         }
         if(gameRunning == true) {
             decideWinner(player, bet);
@@ -163,7 +159,7 @@ public class BlackJackDealer implements CardDealer {
 
     public boolean checkIfPlayerHit(){
         UserInput in = new UserInput();
-        String hit = in.getStringInput("HIT / STAY");
+        String hit = in.getStringInput("If you would like another card, enter HIT ");
         if(hit.equalsIgnoreCase("hit")){
             return true;
         }
@@ -195,5 +191,28 @@ public class BlackJackDealer implements CardDealer {
             pay(player, bet*2);
         }
     }
+
+    public boolean checkStatus(Player player, double bet){
+        boolean bust = checkBust();
+        boolean blackJack = checkBlackJack();
+        if(bust){
+            displayLoseGame();
+            gameRunning = false;
+            return false;
+
+        }
+        if(blackJack){
+            displayBlackJack();
+            pay(player, bet*2);
+            gameRunning = false;
+            return false;
+
+        }
+        boolean hit = checkIfPlayerHit();
+
+        return hit;
+    }
+
+
 
 }
