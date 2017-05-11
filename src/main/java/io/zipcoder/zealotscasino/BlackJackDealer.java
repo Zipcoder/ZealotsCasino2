@@ -39,12 +39,20 @@ public class BlackJackDealer implements CardDealer {
     private int examineHandValue(Hand hand) {
         int handValue = 0;
         for(Card card: hand.getCards()) {
-            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 14){
-                if(handValue > 7){
+            int ordinalOfEnum = Card.CardValue.valueOf(card.getFaceValue()).ordinal();
+            if(ordinalOfEnum == 14 && handValue > 16) {
+                if(handValue > 16){
                     handValue++;
+                    continue;
                 }
+                handValue += (ordinalOfEnum - 1);
+                continue;
             }
-            handValue += (Card.CardValue.valueOf(card.getFaceValue()).ordinal() + 2);
+            if (ordinalOfEnum > 10) {
+                handValue += 10;
+                continue;
+            }
+            handValue += (ordinalOfEnum + 2);
         }
         return handValue;
     }
@@ -65,6 +73,8 @@ public class BlackJackDealer implements CardDealer {
 
     @Override
     public void play(Player player) {
+        deck.buildDeck();
+        dealHandTo(player);
         do {
             takeTurn(player);
             String playAgain = UserInput.getStringInput("Play again? Yes / No");
@@ -89,8 +99,8 @@ public class BlackJackDealer implements CardDealer {
     }
 
     public void takeTurn(Player player) {
-        deck.buildDeck();
-        dealHandTo(player);
+        //deck.buildDeck();
+        //dealHandTo(player);
         // Display the hand
         // Dennis: I added this to the deal card method
         determinePlayerHandValue(player.getHand());
@@ -105,6 +115,7 @@ public class BlackJackDealer implements CardDealer {
             outPut.append(card);
             outPut.append(" ");
         }
+        outPut.append("\nTotal Player value: " + playerHandValue);
         System.out.println(outPut);
     }
 
