@@ -83,7 +83,12 @@ public class Game
     {
         System.out.println("--------------------Zealot's Casino--------------------");
         double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?");
-        player.initializeWallet(startWallet);
+        try{
+            player.initializeWallet(startWallet);
+        }catch(IllegalArgumentException e){
+            System.out.println("Must have at least $20 to enter Zealot's Casino.");
+            displayIntro();
+        }
         //Game myGame = new Game(player);
     }
 
