@@ -12,6 +12,7 @@ public class BlackJackDealer implements CardDealer {
     private int dealerHandValue;
     private int playerHandValue;
     private boolean gameRunning;
+    private double insuranceValue;
 
     private Hand dealerHand;
     private Deck deck;
@@ -19,6 +20,10 @@ public class BlackJackDealer implements CardDealer {
     public BlackJackDealer() {
         deck = new Deck();
         deck.buildDeck();
+    }
+
+    public void setInsuranceValue(double insuranceValue) {
+        this.insuranceValue = insuranceValue;
     }
 
     public void setDealerHand(Hand hand){
@@ -109,8 +114,14 @@ public class BlackJackDealer implements CardDealer {
     private void dealHandToDealer() {
         for (int i = 0; i < 2; i++) dealCardToDealer();
         System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
-    }
+        if(dealerHand.getCards().get(0).getFaceValue() == "ACE"){
+            boolean response = requestInsuranceValue();
+            if(response){
+                setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
+            }
 
+        }
+    }
 
     @Override
     public void play(Player player) {
@@ -159,6 +170,8 @@ public class BlackJackDealer implements CardDealer {
         }
         if(dealerHandValue < 17){
             dealCardToDealer();
+        }else if(dealerHandValue == 21 && insuranceValue != 0){
+            pay(player, insuranceValue);
         }
         if(gameRunning == true) {
             decideWinner(player, bet);
@@ -213,7 +226,7 @@ public class BlackJackDealer implements CardDealer {
         }
     }
 
-    private boolean checkStatus(Player player, double bet){ //Test
+    private boolean checkStatus(Player player, double bet){
         boolean bust = checkBust();
         boolean blackJack = checkBlackJack();
         if(bust){
@@ -230,10 +243,14 @@ public class BlackJackDealer implements CardDealer {
 
         }
         boolean hit = checkIfPlayerHit();
-
         return hit;
     }
 
-
-
+    private boolean requestInsuranceValue(){
+        String answer = UserInput.getStringInput("Take insurance? Enter Yes / No" );
+        if(answer.equalsIgnoreCase("yes")){
+            return true;
+        }
+        return false;
+    }
 }
