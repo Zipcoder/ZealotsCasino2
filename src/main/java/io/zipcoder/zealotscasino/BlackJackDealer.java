@@ -28,7 +28,11 @@ public class BlackJackDealer implements CardDealer {
 
     public void setDealerHand(Hand hand){
         this.dealerHand = hand;
-    };
+    }
+
+    public void setPlayerHandValue(int value){
+        playerHandValue = value;
+    }
 
     public void initializeHands(Player player){
         Hand playerHand = new Hand();
@@ -116,8 +120,13 @@ public class BlackJackDealer implements CardDealer {
         System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
         if(dealerHand.getCards().get(0).getFaceValue() == "ACE"){
             boolean response = requestInsuranceValue();
-            if(response){
-                setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
+            while(response){
+                try {
+                    setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
+                    break;
+                }catch(Exception e){
+                    System.out.println("Please enter a valid number.");
+                }
             }
 
         }
@@ -126,15 +135,15 @@ public class BlackJackDealer implements CardDealer {
     @Override
     public void play(Player player) {
         gameRunning = true;
-        do {
-
+        while(gameRunning){
+            displayPlayerWallet(player);
             takeTurn(player);
             String playAgain = UserInput.getStringInput("Play again? Yes / No");
             if((playAgain.equalsIgnoreCase("yes"))){
                 gameRunning = true;
                 deck.buildDeck();
             }
-        } while (gameRunning);
+        }
 
     }
 
@@ -149,24 +158,25 @@ public class BlackJackDealer implements CardDealer {
         }
 
     public void takeTurn(Player player) {
-        initializeHands(player);
-        dealHandTo(player);
-        dealHandToDealer();
-        determinePlayerHandValue(player.getHand());
-        determineDealerHandValue(dealerHand);
         while(true) {
             try {
-                player.makeBet(UserInput.getDoubleInput("Place your bet (Minimum $20.00) "));
+                player.makeBet(UserInput.getDoubleInput("Place your bet! (Minimum $20.00) "));
                 break;
             } catch (Exception e) {
                 System.out.println("Enter a valid number. ");
             }
         }
-        double bet = player.getBet();
+        initializeHands(player);
+        dealHandTo(player);
+        determinePlayerHandValue(player.getHand());
+        assertBlackJack(player);
+        dealHandToDealer();
+        determineDealerHandValue(dealerHand);
+
         boolean hit = checkIfPlayerHit();
         while(hit){
             takeHit(player);
-            hit = checkStatus(player, bet);
+            hit = checkStatus(player, player.getBet());
         }
         if(dealerHandValue < 17){
             dealCardToDealer();
@@ -174,7 +184,7 @@ public class BlackJackDealer implements CardDealer {
             pay(player, insuranceValue);
         }
         if(gameRunning == true) {
-            decideWinner(player, bet);
+            decideWinner(player, player.getBet());
             gameRunning = false;
         }
 
@@ -236,21 +246,31 @@ public class BlackJackDealer implements CardDealer {
 
         }
         if(blackJack){
-            displayBlackJack();
             pay(player, bet*2);
             gameRunning = false;
             return false;
-
         }
         boolean hit = checkIfPlayerHit();
         return hit;
     }
 
+    public void assertBlackJack(Player player){
+        if(playerHandValue == 21){
+            displayBlackJack();
+            pay(player, player.getBet()*3);
+            gameRunning = false;
+        }
+    }
+
     private boolean requestInsuranceValue(){
-        String answer = UserInput.getStringInput("Take insurance? Enter Yes / No" );
+        String answer = UserInput.getStringInput("Take insurance? Enter Yes if you would like to. " );
         if(answer.equalsIgnoreCase("yes")){
             return true;
         }
         return false;
+    }
+
+    public void displayPlayerWallet(Player player){
+        System.out.println("You have $" + player.getWallet() + " remaining.");
     }
 }

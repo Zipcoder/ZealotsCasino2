@@ -121,5 +121,26 @@ public class TestBlackJackDealer {
         Assert.assertEquals("Checking if player received a correct value for their hand", returnValue, expectedValue);
     }
 
+    @Test
+    public void testAssertBlackJack_PlayerHasBlackJack_PlayerIsPaidProperly() {
+        //Given
+        blackJackDealer.initializeHands(player);
+        Card card1 = new Card("ACE", "Spades");
+        Card card2 = new Card("TEN", "Spades");
+        Hand currentHand = player.getHand();
+        currentHand.receiveCard(card1);
+        currentHand.receiveCard(card2);
+        blackJackDealer.setPlayerHandValue(blackJackDealer.examineHandValue(player.getHand()));
+        player.setWallet(300);
+        player.makeBet(300);
+        double expected = 900;
+
+        //When
+        blackJackDealer.assertBlackJack(player);
+
+        //Then
+        Assert.assertEquals("Checking to see if player receives proper amount", expected, player.getWallet(), 0);
+    }
+
 
 }
