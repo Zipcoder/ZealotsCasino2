@@ -48,8 +48,14 @@ public class Game
 
     public void chooseGame()
     {
-        double gameChoice = user.getDoubleInput("Choose your # of choice: ");
-
+        double gameChoice;
+        if(player.getWallet() < player.getMinimumBet()){
+            System.out.println("Just kidding, you broke");
+            gameChoice = 6;
+        }
+        else{
+            gameChoice = user.getDoubleInput("Choose your # of choice: ");
+        }
 
         if(gameChoice == 1)
         {
