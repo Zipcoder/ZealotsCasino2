@@ -10,8 +10,8 @@ public class Card implements Comparable<Card>{
     private int value;
     private String faceValue;
 
-    public enum Suit { S, D, H, C }
-    public enum CardValue {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, J, Q, K, A }
+    public enum Suit {SPADES, DIAMONDS, HEARTS, CLUBS}
+    public enum CardValue {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE}
 
     public Card(){}
 
@@ -50,10 +50,8 @@ public class Card implements Comparable<Card>{
     }
 
     public String toString(){
-        if (faceValue == null) {
-            return String.format("%d%s", value, suit.toUpperCase().charAt(0));
-        }
-        return String.format("%s%s", faceValue, suit.toUpperCase().charAt(0));
+        
+        return String.format("%s of %s", faceValue.charAt(0) + faceValue.substring(1).toLowerCase(), suit.charAt(0) + suit.substring(1).toLowerCase());
     }
 
 }

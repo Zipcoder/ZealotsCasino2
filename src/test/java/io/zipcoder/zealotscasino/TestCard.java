@@ -47,7 +47,7 @@ public class TestCard {
     public void toString_FormatsCardCorrectlyWithFaceValue_ReturnsString() {
         //Given
         String expected = "JS";
-        card1 = new Card(Card.CardValue.J.name(), "spades");
+        card1 = new Card(Card.CardValue.JACK.name(), "spades");
 
 
         //When
