@@ -53,7 +53,9 @@ public class BlackJackDealer implements CardDealer {
     @Override
     public void dealCardTo(Player player) {
         Card card = deck.surrenderCard();
-        player.getHand().receiveCard(card);
+        Hand currentHand = player.getHand();
+        currentHand.receiveCard(card);
+        determinePlayerHandValue(currentHand);
     }
 
     @Override
@@ -73,15 +75,6 @@ public class BlackJackDealer implements CardDealer {
 
     }
 
-    public void takeTurn(Player player) {
-        deck.buildDeck();
-        dealHandTo(player);
-        // Display the hand
-        determinePlayerHandValue(player.getHand());
-        // Display the hand value
-        takeHit(player);
-    }
-
     @Override
     public void pay(Player player, double payOut) {
         player.collectWinnings(payOut);
@@ -92,6 +85,27 @@ public class BlackJackDealer implements CardDealer {
         if(hit){
             dealCardTo(player);
         }
+        userDisplayHand(player);
+    }
+
+    public void takeTurn(Player player) {
+        deck.buildDeck();
+        dealHandTo(player);
+        // Display the hand
+        // Dennis: I added this to the deal card method
+        determinePlayerHandValue(player.getHand());
+        // Display the hand value
+        takeHit(player);
+    }
+
+    public void userDisplayHand(Player player) {
+        StringBuilder outPut = new StringBuilder(1000);
+        ArrayList<Card> cards = player.getHand().getCards();
+        for (Card card : cards) {
+            outPut.append(card);
+            outPut.append(" ");
+        }
+        System.out.println(outPut);
     }
 
     public boolean checkIfPlayerHit(){
