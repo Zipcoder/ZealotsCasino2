@@ -1,6 +1,5 @@
 package io.zipcoder.zealotscasino;
 
-import javax.jws.soap.SOAPBinding;
 
 /**
  * Created by luisgarcia on 5/10/17.
@@ -72,6 +71,10 @@ public class Game
         {
             this.playSlots();
         }*/
+        else if(gameChoice == 6)
+        {
+            System.out.println("Thanks for playing!");
+        }
         else
         {
             System.out.println("Invalid Entry. Try Again");
@@ -101,6 +104,7 @@ public class Game
         System.out.println("(3) Poker");
         System.out.println("(4) Roulette");
         System.out.println("(5) Slots");
+        System.out.println("(6) Quit");
         this.chooseGame();
     }
 
