@@ -100,12 +100,16 @@ public class BlackJackDealer implements CardDealer {
     public void play(Player player) {
         gameRunning = true;
         do {
-
+            if(player.getWallet() < 20){
+                System.out.println("You only have $" + player.getWallet() + " left. You'll need that for the bus.");
+                break;
+            }
             takeTurn(player);
             String playAgain = UserInput.getStringInput("Play again? Yes / No");
             if((playAgain.equalsIgnoreCase("yes"))){
                 gameRunning = true;
             }
+
         } while (gameRunning);
 
     }
