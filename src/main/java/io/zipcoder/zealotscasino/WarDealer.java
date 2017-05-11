@@ -52,7 +52,7 @@ public class WarDealer implements CardDealer {
 
         //collect payout, lose bet, or continue playing if tie
         processDeterminedOutcome(outcome, player);
-        if(player.getWallet() < 20){
+        if(player.getWallet() < player.getMinimumBet()){
             System.out.println("Got $20? Nah you broke.");
             return;
         }

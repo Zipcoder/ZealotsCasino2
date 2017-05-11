@@ -1,5 +1,7 @@
 package io.zipcoder.zealotscasino;
 
+import java.text.NumberFormat;
+
 /**
  * Created by luisgarcia on 5/9/17.
  */
@@ -8,6 +10,10 @@ public class Player {
     private double wallet;
     private Hand hand;
     private final static double MINIMUM_BET = 20;
+
+    public static double getMinimumBet() {
+        return MINIMUM_BET;
+    }
 
     public Player() {
         hand = new Hand();
@@ -34,7 +40,7 @@ public class Player {
     }
 
     public void initializeWallet(double initialWallet) {
-        if(initialWallet < 20){
+        if(initialWallet < MINIMUM_BET){
             throw new IllegalArgumentException("Not enough money to play");
         }
         this.wallet = initialWallet;
@@ -54,5 +60,11 @@ public class Player {
 
     public void collectWinnings(double winnings) {
         wallet += winnings;
+    }
+
+    public String printWallet(){
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String walletString = formatter.format(wallet);
+        return "Wallet: " + walletString;
     }
 }
