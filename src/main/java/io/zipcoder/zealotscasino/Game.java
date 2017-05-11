@@ -1,6 +1,7 @@
 package io.zipcoder.zealotscasino;
 
 
+
 /**
  * Created by luisgarcia on 5/10/17.
  */
@@ -30,11 +31,13 @@ public class Game
         displayMenu();
     }
 
-    /*public void playPoker()
+    public void playPoker()
     {
         dealer = new PokerDealer();
+        dealer.play(player);
+        displayMenu();
     }
-
+/*
     public void playRoulette()
     {
         dealer = new RouletteDealer();
@@ -65,11 +68,11 @@ public class Game
         {
             this.playBlackJack();
         }
-/*        else if(gameChoice == 3)
+        else if(gameChoice == 3)
         {
             this.playPoker();
         }
-        else if(gameChoice == 4)
+        /*else if(gameChoice == 4)
         {
             this.playRoulette();
         }
