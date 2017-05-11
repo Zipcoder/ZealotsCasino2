@@ -50,7 +50,7 @@ public class Game
     {
         double gameChoice;
         if(player.getWallet() < player.getMinimumBet()){
-            System.out.println("Just kidding, you broke");
+            System.out.println("Just kidding, you broke fam");
             gameChoice = 6;
         }
         else{
