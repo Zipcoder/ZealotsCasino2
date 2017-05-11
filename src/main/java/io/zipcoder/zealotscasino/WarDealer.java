@@ -8,7 +8,6 @@ import static io.zipcoder.zealotscasino.UserInput.getStringInput;
  */
 public class WarDealer implements CardDealer {
     private Deck deck;
-    private Hand hand;
 
     public WarDealer() {
         deck = new Deck();
@@ -35,10 +34,19 @@ public class WarDealer implements CardDealer {
 
     public void play(Player player) {
         //get bet
-        player.makeBet(getDoubleInput("Place a bet"));
+        try{
+            player.makeBet(getDoubleInput("Place a bet"));
+        }catch(IllegalArgumentException e){
+            System.out.println("Insufficient Funds.");
+            player.makeBet(getDoubleInput("Place a bet"));
+        }catch(SecurityException e){
+            System.out.println("Minimum bet is $20.");
+            player.makeBet(getDoubleInput("Place a bet"));
+        }
 
-        //deals hand, compares cards, returns win/lose/tie
+        //deals hand, compares cards, returns win/lose/tie, player discards hand
         String outcome = playRound(player);
+        player.getHand().remove(0);
 
         //collect payout, lose bet, or continue playing if tie
         processDeterminedOutcome(outcome, player);
@@ -48,12 +56,18 @@ public class WarDealer implements CardDealer {
     public void processTie(Player player) {
         String choice = getStringInput("Bet again? (Push  'Y' to double bet, any other key to surrender and receive half of bet");
         if (choice.equalsIgnoreCase("Y")) {
-            //collect bet and deal another card
-            player.makeBet(player.getBet());
+            try{
+                //collect bet and deal another card
+                player.makeBet(player.getBet());
+                //deals hand, compares cards, returns win/lose/tie
+                String outcome = playRound(player);
+                processTieRound(outcome, player);
+            }catch (IllegalArgumentException e){
+                System.out.println("Unable to double bet due to insufficient funds.");
+                pay(player, player.getBet() / 2);
+                System.out.println("You receive half of your original bet (" + player.getBet() / 2 + ")\nWallet : " + player.getWallet() + "\n");
+            }
 
-            //deals hand, compares cards, returns win/lose/tie
-            String outcome = playRound(player);
-            processTieRound(outcome, player);
         } else {
             //player gets half their original bet back
             pay(player, player.getBet() / 2);
@@ -97,8 +111,11 @@ public class WarDealer implements CardDealer {
             System.out.println("Your card is higher! You win!\nWallet : " + player.getWallet() + "\n");
         }
         else if (outcome.equals("tie")) processTie(player);
-        else System.out.println("Dealer wins!\nWallet : " + player.getWallet() + "\n");
+        else {
+            System.out.println("Dealer wins!\nWallet : " + player.getWallet() + "\n");
+        }
         askPlayAgain(player);
+
     }
 
     public String playRound(Player player) {
