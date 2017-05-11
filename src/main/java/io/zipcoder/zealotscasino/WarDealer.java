@@ -38,13 +38,15 @@ public class WarDealer implements CardDealer {
             player.makeBet(getDoubleInput("Place a bet"));
         }catch(IllegalArgumentException e){
             System.out.println("Insufficient Funds.");
-            player.makeBet(getDoubleInput("Place a bet"));
+            play(player);
+            return;
         }catch(SecurityException e){
             System.out.println("Minimum bet is $20.");
-            player.makeBet(getDoubleInput("Place a bet"));
+            play(player);
+            return;
         }
 
-        //deals hand, compares cards, returns win/lose/tie, player discards hand
+        //deals hand, compares cgiards, returns win/lose/tie, player discards hand
         String outcome = playRound(player);
         player.getHand().remove(0);
 
