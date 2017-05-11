@@ -12,7 +12,8 @@ public class BlackJackDealer implements CardDealer {
     private int dealerHandValue;
     private int playerHandValue;
     private boolean gameRunning;
-
+    
+    private Hand hand;
     private Deck deck;
 
     public BlackJackDealer() {
