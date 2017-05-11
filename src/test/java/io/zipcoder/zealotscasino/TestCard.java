@@ -21,14 +21,14 @@ public class TestCard {
 
     //nameOfMethod_Scenario_Result
 
-//    @Test
-//    public void compareTo_CardTwoIsGreater_ReturnsNegativeInt() {
-//        //When
-//        int actual = card1.compareTo(card2);
-//
-//        //Then
-//        assertTrue("compareTo is not evaluating card values correctly", actual < 0);
-//    }
+    @Test
+    public void compareTo_CardTwoIsGreater_ReturnsNegativeInt() {
+        //When
+        int actual = card1.compareTo(card2);
+
+        //Then
+        assertTrue("compareTo is not evaluating card values correctly", actual < 0);
+    }
 
 
     @Test
