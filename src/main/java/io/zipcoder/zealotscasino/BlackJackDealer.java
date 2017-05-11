@@ -38,7 +38,7 @@ public class BlackJackDealer implements CardDealer {
 
     private int examineHandValue(Hand hand) {
         int handValue = 0;
-        for(Card card: hand.getCards()) {
+        for(Card card: hand.getCards()) { // King Queen Jack worth 10
             if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 14){
                 if(handValue > 7){
                     handValue++;
