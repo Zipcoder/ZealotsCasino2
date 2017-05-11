@@ -18,8 +18,17 @@ public class Player
     }
 
     public void makeBet(double bet) {
-        this.bet = bet;
-        this.wallet = wallet - bet;
+        try{
+            if(bet>wallet) {
+                throw new IllegalArgumentException("Insufficient Funds");
+            }
+                this.bet = bet;
+                this.wallet = wallet - bet;
+        }catch(IllegalArgumentException e){
+            System.out.println("Insufficient funds");
+        }
+
+
     }
 
     public double getWallet() {
