@@ -34,7 +34,7 @@ public class TestCard {
     @Test
     public void toString_FormatsCardCorrectly_ReturnsString() {
         //Given
-        String expected = "2S";
+        String expected = "Two of Spades";
 
         //When
         String actual = card1.toString();
@@ -46,7 +46,7 @@ public class TestCard {
     @Test
     public void toString_FormatsCardCorrectlyWithFaceValue_ReturnsString() {
         //Given
-        String expected = "JS";
+        String expected = "Jack of Spades";
         card1 = new Card(Card.CardValue.JACK.name(), "spades");
 
 
