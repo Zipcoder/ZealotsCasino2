@@ -11,12 +11,14 @@ public class BlackJackDealer implements CardDealer {
 
     private int dealerHandValue;
     private int playerHandValue;
+    private boolean gameRunning;
 
     private Deck deck;
 
     public BlackJackDealer() {
         deck = new Deck();
         deck.buildDeck();
+        gameRunning = true;
     }
 
     public int getDealerHandValue() {
@@ -32,8 +34,16 @@ public class BlackJackDealer implements CardDealer {
         return playerHandValue;
     }
 
+    private void clearGame() {
+        System.out.println("Bust");
+        gameRunning = false;
+        playerHandValue = 0;
+        dealerHandValue = 0;
+    }
+
     public void determinePlayerHandValue(Hand hand) {
         playerHandValue = examineHandValue(hand);
+        if (playerHandValue > 21) clearGame();
     }
 
     private int examineHandValue(Hand hand) {
@@ -48,7 +58,7 @@ public class BlackJackDealer implements CardDealer {
                 handValue += (ordinalOfEnum - 1);
                 continue;
             }
-            if (ordinalOfEnum > 10) {
+            if (ordinalOfEnum >= 9) {
                 handValue += 10;
                 continue;
             }
@@ -73,7 +83,7 @@ public class BlackJackDealer implements CardDealer {
 
     @Override
     public void play(Player player) {
-        deck.buildDeck();
+        //deck.buildDeck();
         dealHandTo(player);
         do {
             takeTurn(player);
@@ -81,7 +91,7 @@ public class BlackJackDealer implements CardDealer {
             if(!(playAgain.equalsIgnoreCase("yes"))){
                 break;
             }
-        } while (true);
+        } while (gameRunning);
 
     }
 
@@ -127,10 +137,5 @@ public class BlackJackDealer implements CardDealer {
         }
         return false;
     }
-
-
-
-
-
 
 }
