@@ -48,7 +48,7 @@ public class TestWarDealer {
     @Test
     public void testEvaluateCardValue_CardIsAKing_returnsThirteen(){
         //Given
-        Card card = new Card(Card.CardValue.K.name(), Card.Suit.H.name());
+        Card card = new Card(Card.CardValue.KING.name(), Card.Suit.HEARTS.name());
         int expected = 13;
 
         //When
@@ -59,17 +59,106 @@ public class TestWarDealer {
     }
 
     @Test
-    public void evaluateWinner_EvaluatingNineAndTenCard_TenIsReturned(){
+    public void determineOutcome_PlayerCardHigher_ReturnWin(){
         //Given
         int playersCardValue = 10;
         int dealersCardValue = 9;
-        String expectedWinningActual = "win";
+        String expected = "win";
 
         //When
-        String actualWinningValue = dealer.determineOutcome(playersCardValue, dealersCardValue);
+        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
 
         //Then
-        assertEquals("Player should have won",expectedWinningActual, actualWinningValue);
+        assertEquals("Player should have won",expected, actual);
     }
 
+    @Test
+    public void determineOutcome_PlayerCardLower_ReturnsLose() {
+
+        //: Given
+        int playersCardValue = 9;
+        int dealersCardValue = 10;
+        String expected = "lose";
+
+        //: When
+        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
+
+        //: Then
+        assertEquals("Player should have lost",expected, actual);
+    }
+
+    @Test
+    public void determineOutcome_EqualValue_ReturnsTie() {
+
+        //: Given
+        int playersCardValue = 10;
+        int dealersCardValue = 10;
+        String expected = "tie";
+
+        //: When
+        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
+
+        //: Then
+        assertEquals("The result should be a tie",expected, actual);
+    }
+
+//    @Test
+//    public void processDeterminedOutcome_PlayerWins_PlayerReceivesTwiceBet(){
+//        //Given
+//        player.setWallet(100);
+//        player.makeBet(5);
+//        double expected = 105;
+//
+//        //When
+//        dealer.processDeterminedOutcome("win", player);
+//        double actual = player.getWallet();
+//
+//        //Then
+//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
+//    }
+//
+//    @Test
+//    public void processTieRound_PlayerWins_PlayerReceivesOriginalBet(){
+//        player.setWallet(100);
+//        player.makeBet(5);
+//        player.makeBet(5);
+//        double expected = 105;
+//
+//        //When
+//        dealer.processTieRound("win", player);
+//        double actual = player.getWallet();
+//
+//        //Then
+//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
+//    }
+
+//    @Test
+//    public void processTieRound_PlayerLoses_WalletDecreasedByTwoBets(){
+//        player.setWallet(100);
+//        player.makeBet(5);
+//        player.makeBet(5);
+//        double expected = 90;
+//
+//        //When
+//        dealer.processTieRound("lose", player);
+//        double actual = player.getWallet();
+//
+//        //Then
+//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
+//    }
+
+//    @Test
+//    public void processTieRound_PlayerTies_PlayerReceivesDoubleBet(){
+//        player.setWallet(100);
+//        player.makeBet(5);
+//        player.makeBet(5);
+//        double expected = 110;
+//
+//        //When
+//        dealer.processTieRound("tie", player);
+//        double actual = player.getWallet();
+//
+//        //Then
+//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
+//    }
 }
