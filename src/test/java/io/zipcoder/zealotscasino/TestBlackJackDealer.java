@@ -29,7 +29,7 @@ public class TestBlackJackDealer {
         blackJackDealer.dealCardTo(player);
 
         // Then
-        Assert.assertTrue("Check if new card are added",  player.getHand().getCards().size() > 0);
+        Assert.assertTrue("Check if new card is added",  player.getHand().getCards().size() > 0);
     }
 
     @Test
