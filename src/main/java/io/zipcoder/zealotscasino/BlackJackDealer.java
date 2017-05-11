@@ -180,7 +180,7 @@ public class BlackJackDealer implements CardDealer {
         return false;
     }
 
-    public void decideWinner(Player player, double bet){
+    public void decideWinner(Player player, double bet){ 
         if((dealerHandValue - playerHandValue) > 0){
             System.out.println("Dealer wins with a hand value of: " + dealerHandValue);
         } else if(dealerHandValue == playerHandValue){
