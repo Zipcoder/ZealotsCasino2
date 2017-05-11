@@ -3,21 +3,28 @@ package io.zipcoder.zealotscasino;
 /**
  * Created by luisgarcia on 5/9/17.
  */
-public class Player
-{
+public class Player {
     private double bet;
     private double wallet;
     private Hand hand;
+    private final static double MINIMUM_BET = 20;
 
-    public Player(){
+    public Player() {
         hand = new Hand();
 
     }
+
     public double getBet() {
         return bet;
     }
 
     public void makeBet(double bet) {
+        if (bet > wallet) {
+            throw new IllegalArgumentException("Insufficient Funds");
+        }
+        if (bet < MINIMUM_BET){
+            throw new SecurityException("Minimum bet not achieved");
+        }
         this.bet = bet;
         this.wallet = wallet - bet;
     }
@@ -42,7 +49,7 @@ public class Player
         this.hand = hand;
     }
 
-    public void collectWinnings(double winnings){
+    public void collectWinnings(double winnings) {
         wallet += winnings;
     }
 }
