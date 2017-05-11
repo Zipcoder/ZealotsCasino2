@@ -37,46 +37,47 @@ public class WarDealer implements CardDealer {
         //get bet
         player.makeBet(getDoubleInput("Place a bet"));
 
-        //deal cards
-        dealHandTo(player);
-        Card dealerCard = deck.surrenderCard();
+        //deals hand, compares cards, returns win/lose/tie
+        String outcome = playRound(player);
 
-        //compare cards
-        int dealerCardValue = evaluateCardValue(dealerCard);
-        int playerCardValue = evaluateCardValue(player.getHand().getCards().get(0));
-        String outcome = determineOutcome(playerCardValue, dealerCardValue);
-
-
-        //determine winner
-        //collect payout or lose bet
-        //if tie, player can quit or break tie
-        //collect tie bet
-        //burn 3 cards and deal
-        //compare cards
-        //determine winner
-        //payout
+        //collect payout, lose bet, or continue playing if tie
+        processDeterminedOutcome(outcome, player);
 
     }
 
-    public void processDeterminedOutcome(String outcome, Player player) {
-        String choice = "";
-        if (outcome.equals("win")) pay(player, player.getBet() * 2);
-        else if (outcome.equals("tie")) {
-            choice = getStringInput("Bet again? (Push  'Y' to double bet, 'N' to surrender and receive half of bet");
-            //processTie
+    public void processTie(Player player) {
+        String choice = getStringInput("Bet again? (Push  'Y' to double bet, any other key to surrender and receive half of bet");
+        if (choice.equalsIgnoreCase("Y")) {
+            //collect bet and deal another card
+            player.makeBet(player.getBet());
+
+            //deals hand, compares cards, returns win/lose/tie
+            String outcome = playRound(player);
+            processTieRound(outcome, player);
         } else {
-            askPlayAgain(player);
+            //player gets half their original bet back
+            pay(player, player.getBet() / 2);
+            System.out.println("You receive half of your original bet (" + player.getBet() / 2 + ")\nWallet : " + player.getWallet() + "\n");
         }
-
     }
 
-    //public void processTie
+    public void processTieRound(String outcome, Player player) {
+        if (outcome.equals("win")){
+            pay(player, player.getBet() * 3);
+            System.out.println("Your card is higher! You win your original bet!\nWallet : " + player.getWallet() + "\n");
+        }
+        else if (outcome.equals("tie")){
+            pay(player, player.getBet() * 4);
+            System.out.println("It's a tie! You win (double total bet)!\nWallet : " + player.getWallet());
+        } else System.out.println("Dealer Wins!\nWallet : " + player.getWallet() + "\n");
+    }
+
 
     public void askPlayAgain(Player player) {
-        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit");
-        if (choice.equals("Y")) play(player);
+        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit war)");
+        if (choice.equalsIgnoreCase("Y")) play(player);
+        else System.out.println("Thanks for playing!\n\n");
     }
-
 
     public int evaluateCardValue(Card theCard) {
         return Card.CardValue.valueOf(theCard.getFaceValue()).ordinal() + 2;
@@ -89,4 +90,31 @@ public class WarDealer implements CardDealer {
             return "lose";
         } else return "tie";
     }
+
+    public void processDeterminedOutcome(String outcome, Player player) {
+        if (outcome.equals("win")){
+            pay(player, player.getBet() * 2);
+            System.out.println("Your card is higher! You win!\nWallet : " + player.getWallet() + "\n");
+        }
+        else if (outcome.equals("tie")) processTie(player);
+        else System.out.println("Dealer wins!\nWallet : " + player.getWallet() + "\n");
+        askPlayAgain(player);
+    }
+
+    public String playRound(Player player) {
+        //deal cards
+        dealHandTo(player);
+        System.out.println("Your card : " + player.getHand().getCards().get(0));
+
+        Card dealerCard = deck.surrenderCard();
+        System.out.println("Dealer's card : " + dealerCard + "\n");
+
+        //compare cards
+        int dealerCardValue = evaluateCardValue(dealerCard);
+        int playerCardValue = evaluateCardValue(player.getHand().getCards().get(0));
+
+        //determine winner
+        return determineOutcome(playerCardValue, dealerCardValue);
+    }
+
 }
