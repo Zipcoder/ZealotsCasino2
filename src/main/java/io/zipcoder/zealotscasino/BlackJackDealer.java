@@ -72,7 +72,6 @@ public class BlackJackDealer implements CardDealer {
                 handValue -= 10;
             }
         }
-
         return handValue;
     }
 
