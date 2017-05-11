@@ -38,18 +38,25 @@ public class WarDealer implements CardDealer {
             player.makeBet(getDoubleInput("Place a bet"));
         }catch(IllegalArgumentException e){
             System.out.println("Insufficient Funds.");
-            player.makeBet(getDoubleInput("Place a bet"));
+            play(player);
+            return;
         }catch(SecurityException e){
             System.out.println("Minimum bet is $20.");
-            player.makeBet(getDoubleInput("Place a bet"));
+            play(player);
+            return;
         }
 
-        //deals hand, compares cards, returns win/lose/tie, player discards hand
+        //deals hand, compares cgiards, returns win/lose/tie, player discards hand
         String outcome = playRound(player);
         player.getHand().remove(0);
 
         //collect payout, lose bet, or continue playing if tie
         processDeterminedOutcome(outcome, player);
+        if(player.getWallet() < 20){
+            System.out.println("Got $20? Nah you broke.");
+            return;
+        }
+        askPlayAgain(player);
 
     }
 
@@ -114,7 +121,8 @@ public class WarDealer implements CardDealer {
         else {
             System.out.println("Dealer wins!\nWallet : " + player.getWallet() + "\n");
         }
-        askPlayAgain(player);
+
+//        askPlayAgain(player);
 
     }
 

@@ -86,14 +86,19 @@ public class Game
     {
         System.out.println("--------------------Zealot's Casino--------------------");
         double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?");
-        player.initializeWallet(startWallet);
+        try{
+            player.initializeWallet(startWallet);
+        }catch(IllegalArgumentException e){
+            System.out.println("Must have at least $20 to enter Zealot's Casino.");
+            displayIntro();
+        }
         //Game myGame = new Game(player);
     }
 
 
     public void displayMenu()
     {
-        System.out.println("What will you like to play?");
+        System.out.println("What would you like to play?");
         System.out.println("(1) War");
         System.out.println("(2) Blackjack");
         System.out.println("(3) Poker");
@@ -101,8 +106,6 @@ public class Game
         System.out.println("(5) Slots");
         System.out.println("(6) Quit");
         this.chooseGame();
-
-
     }
 
 }

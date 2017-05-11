@@ -34,6 +34,9 @@ public class Player {
     }
 
     public void initializeWallet(double initialWallet) {
+        if(initialWallet < 20){
+            throw new IllegalArgumentException("Not enough money to play");
+        }
         this.wallet = initialWallet;
     }
 
