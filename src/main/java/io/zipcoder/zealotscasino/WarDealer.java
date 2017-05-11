@@ -34,13 +34,13 @@ public class WarDealer implements CardDealer {
 
     public void play(Player player) {
         //get bet
-        try{
+        try {
             player.makeBet(getDoubleInput("Place a bet"));
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             System.out.println("Insufficient Funds.");
             play(player);
             return;
-        }catch(SecurityException e){
+        } catch (SecurityException e) {
             System.out.println("Minimum bet is $20.");
             play(player);
             return;
@@ -52,7 +52,7 @@ public class WarDealer implements CardDealer {
 
         //collect payout, lose bet, or continue playing if tie
         processDeterminedOutcome(outcome, player);
-        if(player.getWallet() < player.getMinimumBet()){
+        if (player.getWallet() < player.getMinimumBet()) {
             System.out.println("Got $20? Nah you broke.");
             return;
         }
@@ -63,33 +63,32 @@ public class WarDealer implements CardDealer {
     public void processTie(Player player) {
         String choice = getStringInput("Bet again? (Push  'Y' to double bet, any other key to surrender and receive half of bet");
         if (choice.equalsIgnoreCase("Y")) {
-            try{
+            try {
                 //collect bet and deal another card
                 player.makeBet(player.getBet());
                 //deals hand, compares cards, returns win/lose/tie
                 String outcome = playRound(player);
                 processTieRound(outcome, player);
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.out.println("Unable to double bet due to insufficient funds.");
                 pay(player, player.getBet() / 2);
-                System.out.println("You receive half of your original bet (" + player.getBet() / 2 + ")\nWallet : " + player.getWallet() + "\n");
+                System.out.println("You receive half of your original bet (" + player.getBet() / 2 + "\n" + player.printWallet() + "\n");
             }
 
         } else {
             //player gets half their original bet back
             pay(player, player.getBet() / 2);
-            System.out.println("You receive half of your original bet (" + player.getBet() / 2 + ")\nWallet : " + player.getWallet() + "\n");
+            System.out.println("You receive half of your original bet (" + player.getBet() / 2 + "\n" + player.printWallet() + "\n");
         }
     }
 
     public void processTieRound(String outcome, Player player) {
-        if (outcome.equals("win")){
+        if (outcome.equals("win")) {
             pay(player, player.getBet() * 3);
-            System.out.println("Your card is higher! You win your original bet!\nWallet : " + player.getWallet() + "\n");
-        }
-        else if (outcome.equals("tie")){
+            System.out.println("Your card is higher! You win your original bet!" + "\n" + player.printWallet() + "\n");
+        } else if (outcome.equals("tie")) {
             pay(player, player.getBet() * 4);
-            System.out.println("It's a tie! You win (double total bet)!\nWallet : " + player.getWallet());
+            System.out.println("It's a tie! You win (double total bet)!" + "\n" + player.printWallet() + "\n");
         } else System.out.println("Dealer Wins!\nWallet : " + player.getWallet() + "\n");
     }
 
@@ -113,13 +112,12 @@ public class WarDealer implements CardDealer {
     }
 
     public void processDeterminedOutcome(String outcome, Player player) {
-        if (outcome.equals("win")){
+        if (outcome.equals("win")) {
             pay(player, player.getBet() * 2);
-            System.out.println("Your card is higher! You win!\nWallet : " + player.getWallet() + "\n");
-        }
-        else if (outcome.equals("tie")) processTie(player);
+            System.out.println("Your card is higher! You win!" + "\n" + player.printWallet() + "\n");
+        } else if (outcome.equals("tie")) processTie(player);
         else {
-            System.out.println("Dealer wins!\nWallet : " + player.getWallet() + "\n");
+            System.out.println("Dealer wins!" + "\n" + player.printWallet() + "\n");
         }
 
 //        askPlayAgain(player);
