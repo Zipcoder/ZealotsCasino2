@@ -13,6 +13,7 @@ public class BlackJackDealer implements CardDealer {
     private int playerHandValue;
     private boolean gameRunning;
 
+    private Hand dealerHand;
     private Deck deck;
 
     public BlackJackDealer() {
@@ -20,16 +21,21 @@ public class BlackJackDealer implements CardDealer {
         deck.buildDeck();
     }
 
+    public void setDealerHand(Hand hand){
+        this.dealerHand = hand;
+    };
+
     public void initializeHands(Player player){
-        Hand hand = new Hand();
-        player.setHand(hand);
+        Hand playerHand = new Hand();
+        player.setHand(playerHand);
+        Hand dealersHand = new Hand();
+        setDealerHand(dealersHand);
         initializePlayerHandValue();
         initializeDealerHandValue();
     }
 
     public void initializeDealerHandValue() {
-        Random generator = new Random();
-        dealerHandValue = generator.nextInt(7) + 14;
+        dealerHandValue = 0;
     }
 
 
@@ -48,10 +54,13 @@ public class BlackJackDealer implements CardDealer {
 
     public void determinePlayerHandValue(Hand hand) {
         playerHandValue = examineHandValue(hand);
-
     }
 
-    private int examineHandValue(Hand hand) {
+    public void determineDealerHandValue(Hand hand){
+        dealerHandValue = examineHandValue(hand);
+    }
+
+    public int examineHandValue(Hand hand) {
         int handValue = 0;
         for(Card card: hand.getCards()) {
             if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12){
@@ -72,7 +81,6 @@ public class BlackJackDealer implements CardDealer {
                 handValue -= 10;
             }
         }
-
         return handValue;
     }
 
@@ -85,17 +93,24 @@ public class BlackJackDealer implements CardDealer {
         determinePlayerHandValue(currentHand);
     }
 
+    private void dealCardToDealer() {
+        Card card = deck.surrenderCard();
+        Hand currentHand = dealerHand;
+        currentHand.receiveCard(card);
+        determineDealerHandValue(currentHand);
+    }
+
     @Override
     public void dealHandTo(Player player) {
         for (int i = 0; i < 2; i++) dealCardTo(player);
         userDisplayHand(player);
     }
 
-    public void clearPlayerHand(Player player){
-        for(int i = 0; i < player.getHand().getCards().size(); i++ ){
-            player.getHand().remove(i);
-        }
+    private void dealHandToDealer() {
+        for (int i = 0; i < 2; i++) dealCardToDealer();
+        System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
     }
+
 
     @Override
     public void play(Player player) {
@@ -106,6 +121,7 @@ public class BlackJackDealer implements CardDealer {
             String playAgain = UserInput.getStringInput("Play again? Yes / No");
             if((playAgain.equalsIgnoreCase("yes"))){
                 gameRunning = true;
+                deck.buildDeck();
             }
         } while (gameRunning);
 
@@ -116,7 +132,7 @@ public class BlackJackDealer implements CardDealer {
         player.collectWinnings(payOut);
     }
 
-    public void takeHit(Player player){
+    private void takeHit(Player player){
         dealCardTo(player);
         userDisplayHand(player);
         }
@@ -124,7 +140,9 @@ public class BlackJackDealer implements CardDealer {
     public void takeTurn(Player player) {
         initializeHands(player);
         dealHandTo(player);
+        dealHandToDealer();
         determinePlayerHandValue(player.getHand());
+        determineDealerHandValue(dealerHand);
         while(true) {
             try {
                 player.makeBet(UserInput.getDoubleInput("Place your bet (Minimum $20.00) "));
@@ -139,6 +157,9 @@ public class BlackJackDealer implements CardDealer {
             takeHit(player);
             hit = checkStatus(player, bet);
         }
+        if(dealerHandValue < 17){
+            dealCardToDealer();
+        }
         if(gameRunning == true) {
             decideWinner(player, bet);
             gameRunning = false;
@@ -146,7 +167,7 @@ public class BlackJackDealer implements CardDealer {
 
     }
 
-    public void userDisplayHand(Player player) {
+    private void userDisplayHand(Player player) {
         StringBuilder outPut = new StringBuilder(1000);
         ArrayList<Card> cards = player.getHand().getCards();
         for (Card card : cards) {
@@ -157,7 +178,7 @@ public class BlackJackDealer implements CardDealer {
         System.out.println(outPut);
     }
 
-    public boolean checkIfPlayerHit(){
+    private boolean checkIfPlayerHit(){
         UserInput in = new UserInput();
         String hit = in.getStringInput("If you would like another card, enter HIT ");
         if(hit.equalsIgnoreCase("hit")){
@@ -180,8 +201,8 @@ public class BlackJackDealer implements CardDealer {
         return false;
     }
 
-    public void decideWinner(Player player, double bet){
-        if((dealerHandValue - playerHandValue) > 0){
+    private void decideWinner(Player player, double bet){
+        if((dealerHandValue - playerHandValue) > 0 && dealerHandValue < 22){
             System.out.println("Dealer wins with a hand value of: " + dealerHandValue);
         } else if(dealerHandValue == playerHandValue){
             System.out.println("Tie!");
@@ -192,7 +213,7 @@ public class BlackJackDealer implements CardDealer {
         }
     }
 
-    public boolean checkStatus(Player player, double bet){
+    private boolean checkStatus(Player player, double bet){ //Test
         boolean bust = checkBust();
         boolean blackJack = checkBlackJack();
         if(bust){
