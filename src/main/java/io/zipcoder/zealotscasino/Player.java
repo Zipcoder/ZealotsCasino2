@@ -9,6 +9,10 @@ public class Player {
     private Hand hand;
     private final static double MINIMUM_BET = 20;
 
+    public static double getMinimumBet() {
+        return MINIMUM_BET;
+    }
+
     public Player() {
         hand = new Hand();
 
@@ -34,7 +38,7 @@ public class Player {
     }
 
     public void initializeWallet(double initialWallet) {
-        if(initialWallet < 20){
+        if(initialWallet < MINIMUM_BET){
             throw new IllegalArgumentException("Not enough money to play");
         }
         this.wallet = initialWallet;

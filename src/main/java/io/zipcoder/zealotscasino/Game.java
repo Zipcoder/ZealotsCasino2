@@ -49,7 +49,7 @@ public class Game
     public void chooseGame()
     {
         double gameChoice;
-        if(player.getWallet() < 20){
+        if(player.getWallet() < player.getMinimumBet()){
             System.out.println("Just kidding, you broke");
             gameChoice = 6;
         }
