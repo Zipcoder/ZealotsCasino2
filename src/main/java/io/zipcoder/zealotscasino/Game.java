@@ -95,15 +95,13 @@ public class Game
 
     public void displayMenu()
     {
-        System.out.println("What will you like to play?");
+        System.out.println("What would you like to play?");
         System.out.println("(1) War");
         System.out.println("(2) Blackjack");
         System.out.println("(3) Poker");
         System.out.println("(4) Roulette");
         System.out.println("(5) Slots");
         this.chooseGame();
-
-
     }
 
 }
