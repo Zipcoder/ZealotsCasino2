@@ -44,9 +44,8 @@ public class Card implements Comparable<Card>{
         faceValue = theFaceValue;
     }
 
-
     public int compareTo(Card c){
-        return value - c.getValue();
+        return Card.CardValue.valueOf(getFaceValue()).ordinal() - Card.CardValue.valueOf(c.getFaceValue()).ordinal();
     }
 
     public String toString(){
