@@ -109,9 +109,11 @@ public class PokerDealer implements CardDealer {
     }
 
     public void askPlayAgain(Player player) {
-        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit poker)");
-        if (choice.equalsIgnoreCase("Y")) play(player);
-        else System.out.println("Thanks for playing!\n\n");
+        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit war)");
+        if (choice.equalsIgnoreCase("Y"))
+            play(player);
+        else
+            System.out.println("Thanks for playing!\n\n");
     }
 
     public String calculateHand(Player player) {
