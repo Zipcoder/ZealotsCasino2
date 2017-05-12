@@ -109,7 +109,7 @@ public class BlackJackDealer implements CardDealer {
         }
         for(Card card: hand.getCards()){
             if(extractCardValue(card) == 12 && handValue > 21){
-                card.setFaceValue("TWO");
+                /*card.setFaceValue("TWO");*/
                 handValue -= 10;
             }
         }
@@ -119,7 +119,7 @@ public class BlackJackDealer implements CardDealer {
     private int examineCardValue(Card card, int total){
         int cardTotal = 0;
         if(extractCardValue(card) == 12){
-           cardTotal = examineAceValue(total);
+           cardTotal += examineAceValue(total);
         }else if(extractCardValue(card) > 8 && extractCardValue(card) < 12){
             cardTotal += 10;
         }else if(extractCardValue(card) <= 8){
@@ -129,12 +129,13 @@ public class BlackJackDealer implements CardDealer {
     }
 
     private int examineAceValue(int total){
+        int aceVal = 0;
         if(total > 10){
-            total++;
+            aceVal++;
         } else {
-            total += 11;
+            aceVal += 11;
         }
-        return total;
+        return aceVal;
     }
 
     private int extractCardValue(Card card){
