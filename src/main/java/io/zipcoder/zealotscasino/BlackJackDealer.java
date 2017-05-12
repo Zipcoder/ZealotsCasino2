@@ -49,6 +49,8 @@ public class BlackJackDealer implements CardDealer {
                 gameRunning = true;
                 deck.buildDeck();
             }
+            Hand hand = new Hand();
+            player.setHand(hand);
         }
     }
 
