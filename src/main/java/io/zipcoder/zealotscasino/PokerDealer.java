@@ -109,7 +109,7 @@ public class PokerDealer implements CardDealer {
     }
 
     public void askPlayAgain(Player player) {
-        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit war)");
+        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit)");
         if (choice.equalsIgnoreCase("Y"))
             play(player);
         else
@@ -242,7 +242,13 @@ public class PokerDealer implements CardDealer {
 
 
     public int discardCards(Player player) {
-        double numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
+        double numCardstoDiscard;
+        do{
+            numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
+            if(numCardstoDiscard > 6){
+                System.out.println("You can only discard the card you have");
+            }
+        } while(numCardstoDiscard > 6);
         ArrayList<Integer> indexes = new ArrayList<>();
         for (int i = 0; i < numCardstoDiscard; i++) {
             double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");

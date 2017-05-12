@@ -16,10 +16,8 @@ public class UserInput {
         System.out.println(prompt);
         String userInput = in.nextLine();
         return userInput;
-
     }
     public static Double getDoubleInput(String prompt) {
-
         try {
             return Double.parseDouble(getStringInput(prompt)); //needs to take double to two places
         } catch(NullPointerException e){
