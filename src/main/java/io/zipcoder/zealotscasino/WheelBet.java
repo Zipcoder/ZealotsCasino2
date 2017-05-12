@@ -19,16 +19,7 @@ public class WheelBet {
         return betAmount;
     }
 
-    public void setBetAmount(double betAmount) {
-        this.betAmount = betAmount;
-    }
-
     public String getLocationOnWheel() {
         return locationOnWheel;
     }
-
-    public void setLocationOnWheel(String locationOnWheel) {
-        this.locationOnWheel = locationOnWheel;
-    }
-
 }
