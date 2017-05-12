@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.zipcoder.zealotscasino.UserInput.*;
-
+import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
+import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 
 /**
  * Created by luisgarcia on 5/11/17.
@@ -60,11 +60,10 @@ public class PokerDealer implements CardDealer {
 
         // determine winnings and pay
 
-
     }
 
     public void askPlayAgain(Player player) {
-        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit poker)");
+        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit war)");
         if (choice.equalsIgnoreCase("Y")) play(player);
         else System.out.println("Thanks for playing!\n\n");
     }
@@ -133,25 +132,6 @@ public class PokerDealer implements CardDealer {
         return false;
     }
 
-//    public boolean checkFullHouse(Player player) {
-//
-//        if (returnNumberOfValuesInPlayerHand(player) == 2) {
-//            ArrayList<Card> playerHand = player.getHand().getCards();
-//            Collections.sort(playerHand);
-//
-//            boolean myBoolean = playerHand.get(0).getValue() == playerHand.get(1).getValue();
-//            boolean myBoolean2 = playerHand.get(3).getValue() == playerHand.get(4).getValue();
-//
-//            if (myBoolean && myBoolean2) return true;
-//            else checkFourOfAKind(true);
-//        }
-//        return false;
-//    }
-
-//    public boolean checkFourOfAKind(boolean mybool) {
-//        return mybool;
-//    }
-
     public boolean checkStraight(Player player) {
         ArrayList<Card> playerHand = player.getHand().getCards();
         Collections.sort(playerHand);
@@ -215,7 +195,6 @@ public class PokerDealer implements CardDealer {
         double numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
         for (int i = 0; i < numCardstoDiscard; i++) {
             double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
-            player.getHand().remove((int) getDiscard - 1);
         }
         userDisplayHand(player);
         return (int) numCardstoDiscard;
