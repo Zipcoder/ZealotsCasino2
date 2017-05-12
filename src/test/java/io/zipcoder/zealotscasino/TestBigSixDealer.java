@@ -41,6 +41,20 @@ public class TestBigSixDealer {
     }
 
     @Test
+    public void checkIfWon_WinningDenominationIsJOKER_ReturnsPayOutOf40() {
+        //Given
+        BigSixDealer wheelDealer = new BigSixDealer();
+        String winningDenomination = "JOKER";
+        int expected = 40;
+
+        //When
+        int actual = wheelDealer.checkIfWon(winningDenomination);
+
+        //Then
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void payOut_PlayerWinsOn20Denomination_PlayersWalletIncreasesBy20() {
         //Given
         BigSixDealer wheelDealer = new BigSixDealer();
@@ -57,4 +71,24 @@ public class TestBigSixDealer {
         //Then
         assertEquals(expected, actual,0);
     }
+
+    @Test
+    public void payOut_PlayerDoesNotWinOnAnyDenomination_PlayersWalletDoesNotIncrease(){
+    //Given
+        BigSixDealer wheelDealer = new BigSixDealer();
+        Player player = new Player();
+        player.setWallet(100);
+        player.makeBet(20);
+        int payOutRatio = -1;
+        double expected = 80;
+
+    //When
+        wheelDealer.payOut(player, payOutRatio, player.getBet());
+        double actual = player.getWallet();
+
+    //Then
+        assertEquals(expected, actual,0);
+    }
+
+
 }

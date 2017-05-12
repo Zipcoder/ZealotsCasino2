@@ -18,8 +18,12 @@ public class BigSixDealer {
         return wheelDenominations;
     }
 
-    public void setWheelDenominations(ArrayList<String> wheelDenominations) {
-        this.wheelDenominations = wheelDenominations;
+
+    public void play(Player player) {
+        initializeWheelDenominations();
+        playRound(player);
+        System.out.println(player.printWallet());
+        askPlayAgain(player);
     }
 
 
@@ -34,11 +38,13 @@ public class BigSixDealer {
         wheelDenominations.add("CASINO");
     }
 
+
     public String spinWheel() {
         Collections.shuffle(wheelDenominations);
         String winningDenomination = wheelDenominations.get(0);
         return winningDenomination;
     }
+
 
     public int checkIfWon(String winningDenomination) {
         int payOutRatio;
@@ -65,7 +71,7 @@ public class BigSixDealer {
                 payOutRatio = 20;
                 break;
             default:
-                payOutRatio = 0;
+                payOutRatio = -1;
         }
         return payOutRatio;
     }
@@ -74,62 +80,54 @@ public class BigSixDealer {
         player.collectWinnings(betAmount + betAmount * payOutRatio);
     }
 
+
     public void playRound(Player player) {
         takeBetsAndDenominations(player);
         String winningDenomination = spinWheel();
         int payOutRatio = checkIfWon(winningDenomination);
-        if (payOutRatio == 0){
-            System.out.println("You must choose one of the denominations on the wheel");
-            playRound(player);
-        }
-
         for (WheelBet wheelBet : wheelBets) {
             if (wheelBet.getLocationOnWheel().equalsIgnoreCase(winningDenomination)) {
                 payOut(player, payOutRatio, wheelBet.getBetAmount());
-                System.out.println("Your bet of " + wheelBet.getBetAmount() + " on " + wheelBet.getLocationOnWheel() + " netted " + (wheelBet.getBetAmount() * payOutRatio));
+                System.out.println("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " netted " + (wheelBet.getBetAmount() * payOutRatio) + "!!");
             } else {
-                System.out.println("Your bet of " + wheelBet.getBetAmount() + " on " + wheelBet.getLocationOnWheel() + " did not hit");
+                System.out.println("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " did not hit...");
             }
         }
-    }
-
-
-    public void play(Player player) {
-            initializeWheelDenominations();
-            playRound(player);
-            System.out.println("Wallet : " + player.getWallet());
-            askPlayAgain(player);
     }
 
 
     public void takeBetsAndDenominations(Player player) {
         String denominationChoice;
-        double amount;
+
         do {
-            System.out.println("Enter a denomination on the wheel to determine your pay out ratio\n1 : Bet * 1\n2 : Bet * 2\n5: Bet * 5\n10 : Bet * 10\n20 : Bet * 20\nJOKER : Bet * 40\nCASINO : Bet * 40\n");
+            System.out.println("Enter a denomination on the wheel to determine your pay out ratio\n1 : You win your bet * 1\n2 : You win your bet * 2\n5: You win your bet * 5\n10 : You win your bet * 10\n20 : You win your bet * 20\nJOKER : You win your bet * 40\nCASINO : You win your bet * 40\n");
             denominationChoice = UserInput.getStringInput("Which denomination would you like to place a bet on? (or n if done placing bets)");
-            if (denominationChoice.equalsIgnoreCase("n"))
+
+            if (denominationChoice.equalsIgnoreCase("n")) {
                 break;
+            } else if (denominationChoice.equals("1") || denominationChoice.equals("2") || denominationChoice.equals("5") || denominationChoice.equals("10") || denominationChoice.equals("20") || denominationChoice.equalsIgnoreCase("JOKER") || denominationChoice.equalsIgnoreCase("CASINO")) {
 
                 try {
                     player.makeBet(getDoubleInput("How much would you like to bet?"));
                 } catch (IllegalArgumentException e) {
                     System.out.println("Insufficient Funds.");
-                    playRound(player);
+                    System.out.println("\n" + player.printWallet() + "\n");
+                    takeBetsAndDenominations(player);
                     return;
                 } catch (SecurityException e) {
                     System.out.println("Minimum bet is $20.");
-                    playRound(player);
+                    System.out.println("\n" + player.printWallet() + "\n");
+                    takeBetsAndDenominations(player);
                     return;
                 }
-
                 WheelBet wheelbet = new WheelBet(player.getBet(), denominationChoice);
                 wheelBets.add(wheelbet);
-
-
+                System.out.println("\n" + player.printWallet() + "\n");
+            } else {
+                System.out.println("You must enter a valid denomination.");
             }
-            while(!denominationChoice.equalsIgnoreCase("n"));
-        }
+        } while (!denominationChoice.equalsIgnoreCase("n"));
+    }
 
 
     public void askPlayAgain(Player player) {
@@ -139,7 +137,8 @@ public class BigSixDealer {
                 wheelBets.clear();
                 play(player);
             } else System.out.println("Thanks for playing!\n\n");
+        } else {
+            System.out.println("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");
         }
-        else{ System.out.println("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");}
     }
 }
