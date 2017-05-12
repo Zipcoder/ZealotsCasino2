@@ -110,7 +110,7 @@ public class BlackJackDealer implements CardDealer {
         for(Card card: hand.getCards()){
             if(extractCardValue(card) == 12 && handValue > 21){
                 card.setFaceValue("TWO");
-                handValue -= 11;
+                handValue -= 10;
             }
         }
         return handValue;

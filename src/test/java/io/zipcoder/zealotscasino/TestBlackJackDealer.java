@@ -80,7 +80,7 @@ public class TestBlackJackDealer {
         int returnValue = blackJackDealer.examineHandValue(player.getHand());
 
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", returnValue, expectedValue);
+        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class TestBlackJackDealer {
         int returnValue = blackJackDealer.examineHandValue(player.getHand());
 
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", returnValue, expectedValue);
+        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TestBlackJackDealer {
         int returnValue = blackJackDealer.examineHandValue(player.getHand());
 
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", returnValue, expectedValue);
+        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
     }
 
     @Test
@@ -140,7 +140,7 @@ public class TestBlackJackDealer {
         int returnValue = blackJackDealer.examineHandValue(player.getHand());
 
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", returnValue, expectedValue);
+        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
     }
 
     @Test
