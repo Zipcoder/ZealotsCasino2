@@ -60,7 +60,8 @@ public class WarDealer implements CardDealer {
             return;
         }
         askPlayAgain(player);
-
+        Hand hand = new Hand();
+        player.setHand(hand);
     }
 
     public void processTie(Player player) {
