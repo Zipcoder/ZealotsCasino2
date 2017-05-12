@@ -69,8 +69,4 @@ public class Player {
         String walletString = formatter.format(wallet);
         return "Wallet: " + walletString;
     }
-
-    public void makeWheelBets(){
-
-    }
 }
