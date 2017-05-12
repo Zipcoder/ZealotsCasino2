@@ -41,5 +41,4 @@ public class TestUserInput {
         //Then
         assertEquals(expected, actualOutput, 0);
     }
-
 }
