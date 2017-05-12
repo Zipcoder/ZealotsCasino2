@@ -48,7 +48,7 @@ public class TestBlackJackDealer {
         //When
         blackJackDealer.pay(player, 10.0);
 
-        //System.out.println(Card.CardValue.valueOf("THREE").ordinal());
+        //UserInput.display(Card.CardValue.valueOf("THREE").ordinal());
 
         //Then
         Assert.assertEquals("Checking if player is paid correctly", player.getWallet(), 10.0, 0);

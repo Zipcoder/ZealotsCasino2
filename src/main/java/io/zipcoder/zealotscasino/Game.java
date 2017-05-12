@@ -56,7 +56,7 @@ public class Game
     {
         double gameChoice;
         if(player.getWallet() < player.getMinimumBet()){
-            System.out.println("Just kidding, you broke fam");
+            UserInput.display("Just kidding, you broke fam");
             gameChoice = 6;
         }
         else{
@@ -85,23 +85,23 @@ public class Game
         }
         else if(gameChoice == 6)
         {
-            System.out.println("Thanks for playing!");
+            UserInput.display("Thanks for playing!");
         }
         else
         {
-            System.out.println("Invalid Entry. Try Again");
+            UserInput.display("Invalid Entry. Try Again");
             this.chooseGame();
         }
     }
 
     public void displayIntro()
     {
-        System.out.println("--------------------Zealot's Casino--------------------");
+        UserInput.display("--------------------Zealot's Casino--------------------");
         double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?");
         try{
             player.initializeWallet(startWallet);
         }catch(IllegalArgumentException e){
-            System.out.println("Must have at least $20 to enter Zealot's Casino.");
+            UserInput.display("Must have at least $20 to enter Zealot's Casino.");
             displayIntro();
         }
         //Game myGame = new Game(player);
@@ -110,13 +110,13 @@ public class Game
 
     public void displayMenu()
     {
-        System.out.println("What would you like to play?");
-        System.out.println("(1) War");
-        System.out.println("(2) Blackjack");
-        System.out.println("(3) Poker");
-        System.out.println("(4) Roulette");
-        System.out.println("(5) BigSix");
-        System.out.println("(6) Quit");
+        UserInput.display("What would you like to play?");
+        UserInput.display("(1) War");
+        UserInput.display("(2) Blackjack");
+        UserInput.display("(3) Poker");
+        UserInput.display("(4) Roulette");
+        UserInput.display("(5) BigSix");
+        UserInput.display("(6) Quit");
         this.chooseGame();
     }
 
