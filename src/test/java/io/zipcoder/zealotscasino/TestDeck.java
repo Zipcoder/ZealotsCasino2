@@ -40,5 +40,16 @@ public class TestDeck {
         //Then
         assertTrue("Card not returned", card instanceof Card);
     }
+    @Test
+    public void surrenderCard_DeckWasFull_DeckLosesOneCard(){
+        //Given
+        deck.buildDeck();
+        int expectedDeckSize = 51;
+        //When
+        deck.surrenderCard();
+        int actualDeckSize = deck.getDeckQue().size();
+        //Then
+        assertEquals("Deck did not surrender card", expectedDeckSize, actualDeckSize);
+    }
 
 }
