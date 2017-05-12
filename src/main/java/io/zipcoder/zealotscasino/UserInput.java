@@ -1,14 +1,20 @@
 package io.zipcoder.zealotscasino;
 
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class UserInput {
 
+    static Scanner in;
+    UserInput(InputStream scannerIn){
+        in = new Scanner(scannerIn);
+    }
+    UserInput(){}
     public static String getStringInput(String prompt) {
-        Scanner in = new Scanner(System.in);
         System.out.println(prompt);
         String userInput = in.nextLine();
         return userInput;
+
     }
     public static Double getDoubleInput(String prompt) {
         try {
