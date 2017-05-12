@@ -33,6 +33,9 @@ public class WarDealer implements CardDealer {
     }
 
     public void play(Player player) {
+        if(deck.getDeckQue().size()==0){
+            deck.buildDeck();
+        }
         //get bet
         try {
             player.makeBet(getDoubleInput("Place a bet"));

@@ -40,6 +40,7 @@ public class TestDeck {
         //Then
         assertTrue("Card not returned", card instanceof Card);
     }
+
     @Test
     public void surrenderCard_DeckWasFull_DeckLosesOneCard(){
         //Given
