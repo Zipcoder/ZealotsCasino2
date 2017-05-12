@@ -200,6 +200,6 @@ public class TestWarDealer {
         double actual = player.getWallet();
 
         //Then
-        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
+        assertEquals("Wallet should now have $140", expected, actual, 0);
     }
 }
