@@ -1,5 +1,7 @@
 package io.zipcoder.zealotscasino;
 
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+
 import java.text.NumberFormat;
 
 /**
@@ -66,5 +68,9 @@ public class Player {
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String walletString = formatter.format(wallet);
         return "Wallet: " + walletString;
+    }
+
+    public void makeWheelBets(){
+
     }
 }

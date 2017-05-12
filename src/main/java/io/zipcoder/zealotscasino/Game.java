@@ -9,6 +9,7 @@ public class Game
 {
     private Player player;
     private CardDealer dealer;
+    private BigSixDealer bigSixDealer;
     UserInput user;
 
     public Game(Player player){
@@ -41,12 +42,14 @@ public class Game
     public void playRoulette()
     {
         dealer = new RouletteDealer();
-    }
+    }*/
 
-    public void playSlots()
+    public void playBigSix()
     {
-        dealer = new SlotDealer();
-    } */
+        bigSixDealer = new BigSixDealer();
+        bigSixDealer.play(player);
+        displayMenu();
+    }
 
 
     public void chooseGame()
@@ -75,11 +78,11 @@ public class Game
         /*else if(gameChoice == 4)
         {
             this.playRoulette();
-        }
+        }*/
         else if(gameChoice == 5)
         {
-            this.playSlots();
-        }*/
+            this.playBigSix();
+        }
         else if(gameChoice == 6)
         {
             System.out.println("Thanks for playing!");
@@ -112,7 +115,7 @@ public class Game
         System.out.println("(2) Blackjack");
         System.out.println("(3) Poker");
         System.out.println("(4) Roulette");
-        System.out.println("(5) Slots");
+        System.out.println("(5) BigSix");
         System.out.println("(6) Quit");
         this.chooseGame();
     }
