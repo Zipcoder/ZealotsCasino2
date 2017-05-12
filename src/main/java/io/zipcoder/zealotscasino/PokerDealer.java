@@ -2,6 +2,8 @@ package io.zipcoder.zealotscasino;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
 import static io.zipcoder.zealotscasino.UserInput.getStringInput;
@@ -74,37 +76,75 @@ public class PokerDealer implements CardDealer
        // int numberOfValues = determineNumberOfValues(player);
     }
 
-    private void determineNumberOfValues(Player player)
+    public int returnNumberOfValuesInPlayerHand(Player player)
     {
+        ArrayList<Card> playerHand = player.getHand().getCards();
+        Map<Integer, Integer> mapOfValues = new HashMap<>();
 
+
+        for(int i = 0; i < playerHand.size(); i++){
+
+            Integer key = playerHand.get(i).getValue();
+            Integer frequency = mapOfValues.get(key);
+
+            mapOfValues.put(key, frequency == null? 1 : frequency + 1);
+        }
+
+        Integer amountOfKey = mapOfValues.keySet().size();
+        return  amountOfKey;
     }
 
-    public boolean checkRoayalFlush(Player player)
+    public boolean checkRoyalFlush(Player player)
     {
-        ArrayList<Card> list = player.getHand().getCards();
-        Collections.sort(list);
-        if(list.get(0).getValue() == 10 && checkStraight(player))
+        ArrayList<Card> playerHand = player.getHand().getCards();
+        Collections.sort(playerHand);
+
+        if(returnNumberOfValuesInPlayerHand(player) == 5 && (playerHand.get(0).getValue() == 10))
         {
             return true;
         }
         return false;
+    }
+
+    public boolean checkFullHouse(Player player)
+    {
 
 
+        if(returnNumberOfValuesInPlayerHand(player) == 2)
+        {
+            ArrayList<Card> playerHand = player.getHand().getCards();
+            Collections.sort(playerHand);
+
+            boolean myBoolean = playerHand.get(0).getValue() == playerHand.get(1).getValue();
+            boolean myBoolean2 = playerHand.get(3).getValue() == playerHand.get(4).getValue();
+
+            if(myBoolean && myBoolean2)
+            {
+                return true;
+            }
+            else
+                checkFourOfAKind(true);
+        }
+        return false;
+    }
+
+    public boolean checkFourOfAKind(boolean mybool)
+    {
+        return mybool;
     }
 
     public boolean checkStraight(Player player)
     {
-        ArrayList<Card> list = player.getHand().getCards();
-        Collections.sort(list);
-        int value = list.get(0).getValue();
-        int value2 = 2;
+        ArrayList<Card> playerHand = player.getHand().getCards();
+        Collections.sort(playerHand);
+        int value = playerHand.get(0).getValue();
 
         for(int i = 1; i < 4; i++)
         {
-            if(list.get(i).getValue() == value2 && list.get(4).getFaceValue().equals("ACE"))
+            if((playerHand.get(i).getValue() == value+1) && (playerHand.get(4).getFaceValue().equals("ACE")))
             {
-                value2++;
-                if(value2 == 3)
+                value++;
+                if(value == 5)
                 {
                     return true;
                 }
@@ -114,7 +154,7 @@ public class PokerDealer implements CardDealer
 
         for(int i = 1; i < 5; i++)
         {
-            if(list.get(i).getValue() == value + 1)
+            if(playerHand.get(i).getValue() == value + 1)
             {
                 value++;
             } else
@@ -123,7 +163,7 @@ public class PokerDealer implements CardDealer
         return true;
     }
 
-    public boolean checkStraightlFlush(Player player)
+    public boolean checkStraightFlush(Player player)
     {
 
         if(checkFlush(player) && checkStraight(player))
@@ -135,13 +175,12 @@ public class PokerDealer implements CardDealer
 
     public boolean checkFlush(Player player)
     {
-        //boolean myboolean = false;
-        ArrayList<Card> list = player.getHand().getCards();
-        String myString = list.get(0).getSuit();
+        ArrayList<Card> playerHand = player.getHand().getCards();
+        String myString = playerHand.get(0).getSuit();
 
         for(int i = 1; i < 5; i++)
         {
-            if(!list.get(i).getSuit().equals(myString))
+            if(!playerHand.get(i).getSuit().equals(myString))
             {
                 return false;
             }
