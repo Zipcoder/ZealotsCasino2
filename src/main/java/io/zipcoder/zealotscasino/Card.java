@@ -7,7 +7,6 @@ public class Card implements Comparable<Card>{
 
 
     private String suit;
-    private int value;
     private String faceValue;
 
     public enum Suit {SPADES, DIAMONDS, HEARTS, CLUBS}
@@ -15,24 +14,17 @@ public class Card implements Comparable<Card>{
 
     public Card(){}
 
-    public Card(int value, String suit){
-        this.suit = suit;
-        this.value = value;
-    }
-
     public Card(String faceValue, String suit){
         this.faceValue = faceValue;
         this.suit = suit;
     }
 
-
     public String getSuit() {
         return suit;
     }
 
-
     public int getValue() {
-        return value;
+        return Card.CardValue.valueOf(getFaceValue()).ordinal() + 2;
     }
 
     public String getFaceValue() {

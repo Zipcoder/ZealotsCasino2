@@ -57,6 +57,18 @@ public class TestCard {
         assertEquals("toString is not yielding the correct string", expected, actual);
     }
 
+    @Test
+    public void getValue_JackOfSpades_ValueIsEleven() {
+        //Given
+        int expected = 11;
+        card1 = new Card(Card.CardValue.JACK.name(), "SPADES");
+
+        //When
+        int actual = card1.getValue();
+
+        //Then
+        assertEquals("The value of Jack is 11", expected, actual);
+    }
 
 
 
