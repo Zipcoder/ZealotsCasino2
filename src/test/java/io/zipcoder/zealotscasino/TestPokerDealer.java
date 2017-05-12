@@ -124,45 +124,144 @@ public class TestPokerDealer
                 assertEquals("There should be three different values", expected, actual);
         }
 
+//        @Test
+//        public void testCheckFullHouse()
+//        {
+//                //Given
+//                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
+//                player.getHand().receiveCard(new Card("TEN","SPADES"));
+//                player.getHand().receiveCard(new Card("TEN","HEARTS"));
+//                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
+//                player.getHand().receiveCard(new Card("KING","SPADES"));
+//
+//                //WHEN
+//                boolean myBool = dealer.checkFullHouse(player);
+//
+//                //THEN
+//                assertTrue("Should return is full house", myBool);
+//        }
+
+//        @Test
+//        public void testFourOfAKind()
+//        {
+//                //Given
+//                boolean bool = false;
+//                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
+//                player.getHand().receiveCard(new Card("TEN","SPADES"));
+//                player.getHand().receiveCard(new Card("TEN","HEARTS"));
+//                player.getHand().receiveCard(new Card("TEN","CLUBS"));
+//                player.getHand().receiveCard(new Card("KING","SPADES"));
+//
+//                if(!dealer.checkFullHouse(player)) //given that we check two different values in hand
+//                {
+//                        bool = true;
+//                }
+//
+//
+//                //WHEN
+//                boolean myBool = dealer.checkFourOfAKind(bool);
+//
+//                //THEN
+//                assertTrue("Should return four of a kind", myBool);
+//        }
+
         @Test
-        public void testCheckFullHouse()
-        {
-                //Given
-                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("TEN","SPADES"));
-                player.getHand().receiveCard(new Card("TEN","HEARTS"));
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","SPADES"));
-
-                //WHEN
-                boolean myBool = dealer.checkFullHouse(player);
-
-                //THEN
-                assertTrue("Should return is full house", myBool);
-        }
-
-        @Test
-        public void testFourOfAKind()
+        public void testCalculateHand_TestPair_ReturnsPair()
         {
                 //Given
                 boolean bool = false;
-                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
+                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
                 player.getHand().receiveCard(new Card("TEN","SPADES"));
-                player.getHand().receiveCard(new Card("TEN","HEARTS"));
+                player.getHand().receiveCard(new Card("SIX","HEARTS"));
                 player.getHand().receiveCard(new Card("TEN","CLUBS"));
                 player.getHand().receiveCard(new Card("KING","SPADES"));
-
-                if(!dealer.checkFullHouse(player)) //given that we check two different values in hand
-                {
-                        bool = true;
-                }
-
+                String expected = "PAIR";
 
                 //WHEN
-                boolean myBool = dealer.checkFourOfAKind(bool);
+                String actual = dealer.calculateHand(player);
 
                 //THEN
-                assertTrue("Should return is fouur of a kind", myBool);
+                assertEquals("There should be a pair of Tens", expected, actual);
         }
+
+        @Test
+        public void evaluateThreeRanks_TwoPair_ReturnsTwoPair()
+        {
+                //Given
+                boolean bool = false;
+                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
+                player.getHand().receiveCard(new Card("FIVE","SPADES"));
+                player.getHand().receiveCard(new Card("SIX","HEARTS"));
+                player.getHand().receiveCard(new Card("SIX","CLUBS"));
+                player.getHand().receiveCard(new Card("KING","SPADES"));
+                String expected = "TWO PAIR";
+
+                //WHEN
+                String actual = dealer.evaluateThreeRanks(player);
+
+                //THEN
+                assertEquals("The result should be TWO PAIR", expected, actual);
+        }
+
+        @Test
+        public void evaluateThreeRanks_ThreeFives_ReturnsThreeOfAKind()
+        {
+                //Given
+                boolean bool = false;
+                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
+                player.getHand().receiveCard(new Card("FOUR","SPADES"));
+                player.getHand().receiveCard(new Card("FIVE","HEARTS"));
+                player.getHand().receiveCard(new Card("FIVE","CLUBS"));
+                player.getHand().receiveCard(new Card("SIX","SPADES"));
+                String expected = "THREE OF A KIND";
+
+                //WHEN
+                String actual = dealer.evaluateThreeRanks(player);
+
+                //THEN
+                assertEquals("The result should be THREE OF A KIND", expected, actual);
+        }
+
+        @Test
+        public void evaluateTwoRanks_FourAces_ReturnsFourOfAKind()
+        {
+                //Given
+                boolean bool = false;
+                player.getHand().receiveCard(new Card("ACE","DIAMONDS"));
+                player.getHand().receiveCard(new Card("ACE","SPADES"));
+                player.getHand().receiveCard(new Card("ACE","HEARTS"));
+                player.getHand().receiveCard(new Card("ACE","CLUBS"));
+                player.getHand().receiveCard(new Card("SIX","SPADES"));
+                String expected = "FOUR OF A KIND";
+
+                //WHEN
+                String actual = dealer.evaluateTwoRanks(player);
+
+                //THEN
+                assertEquals("The result should be FOUR OF A KIND", expected, actual);
+        }
+
+
+        @Test
+        public void evaluateTwoRanks_KingsAndSixes_ReturnsFullHouse()
+        {
+                //Given
+                boolean bool = false;
+                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
+                player.getHand().receiveCard(new Card("SIX","SPADES"));
+                player.getHand().receiveCard(new Card("KING","HEARTS"));
+                player.getHand().receiveCard(new Card("SIX","CLUBS"));
+                player.getHand().receiveCard(new Card("KING","SPADES"));
+                String expected = "FULL HOUSE";
+
+                //WHEN
+                String actual = dealer.evaluateTwoRanks(player);
+
+                //THEN
+                assertEquals("The result should be FULL HOUSE", expected, actual);
+        }
+
+
+
 
 }
