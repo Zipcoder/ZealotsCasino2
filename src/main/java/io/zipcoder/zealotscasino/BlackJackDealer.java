@@ -12,61 +12,146 @@ public class BlackJackDealer implements CardDealer {
     private int dealerHandValue;
     private int playerHandValue;
     private boolean gameRunning;
+    private double insuranceValue;
 
+    private Hand dealerHand;
     private Deck deck;
 
     public BlackJackDealer() {
         deck = new Deck();
         deck.buildDeck();
+    }
+
+    public void setInsuranceValue(double insuranceValue) {
+        this.insuranceValue = insuranceValue;
+    }
+
+    public void setDealerHand(Hand hand){
+        this.dealerHand = hand;
+    }
+
+    public void setPlayerHandValue(int value){
+        playerHandValue = value;
+    }
+
+    @Override
+    public void play(Player player) {
         gameRunning = true;
+        while(gameRunning){
+            if(player.getWallet() < 20){
+                System.out.println("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
+                break;
+            }
+            displayPlayerWallet(player);
+            takeTurn(player);
+            String playAgain = UserInput.getStringInput("Play again? Yes / No");
+            if((playAgain.equalsIgnoreCase("yes"))){
+                gameRunning = true;
+                deck.buildDeck();
+            }
+        }
     }
 
-    public int getDealerHandValue() {
-        return dealerHandValue;
+    public void displayPlayerWallet(Player player){
+        System.out.println("You have $" + player.getWallet() + " remaining.");
     }
 
-    public void setDealerHandValue() {
-        Random generator = new Random();
-        dealerHandValue = generator.nextInt(7) + 14;
+    public void takeTurn(Player player) {
+        protectedBetProcess(player);
+        buildPlayersHands(player);
+        if(checkIfSplit(player)){
+            split(player);
+        }else {
+            assertBlackJack(player);
+            if (playerHandValue != 21) {
+                buildDealerHand(player);
+                hitProcess(player);
+                evaluateResult(player);
+            }
+        }
     }
 
-    public int getPlayerHandValue() {
-        return playerHandValue;
+    private void protectedBetProcess(Player player){
+        while(true) {
+            try {
+                player.makeBet(UserInput.getDoubleInput("Place your bet! (Minimum $20.00) "));
+                break;
+            } catch (Exception e) {
+                System.out.println("Enter a valid number. ");
+            }
+        }
     }
 
-    private void clearGame() {
-        System.out.println("Bust");
-        gameRunning = false;
-        playerHandValue = 0;
-        dealerHandValue = 0;
+    private void buildPlayersHands(Player player){
+        initializeHands(player);
+        dealHandTo(player);
+        determinePlayerHandValue(player.getHand());
     }
 
-    public void determinePlayerHandValue(Hand hand) {
-        playerHandValue = examineHandValue(hand);
-        if (playerHandValue > 21) clearGame();
+    private void buildDealerHand(Player player){
+        dealHandToDealer(player);
+        determineDealerHandValue(dealerHand);
     }
 
-    private int examineHandValue(Hand hand) {
+    public void initializeHands(Player player){
+        Hand playerHand = new Hand();
+        player.setHand(playerHand);
+        Hand dealersHand = new Hand();
+        setDealerHand(dealersHand);
+        initializePlayerHandValue();
+        initializeDealerHandValue();
+    }
+
+    public int examineHandValue(Hand hand) {
         int handValue = 0;
         for(Card card: hand.getCards()) {
-            int ordinalOfEnum = Card.CardValue.valueOf(card.getFaceValue()).ordinal();
-            if(ordinalOfEnum == 14 && handValue > 16) {
-                if(handValue > 16){
+            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12){ // Change CardValue enum to account for ace
+                if(handValue > 10){
                     handValue++;
-                    continue;
+                }else{
+                    handValue += 11;
                 }
-                handValue += (ordinalOfEnum - 1);
-                continue;
             }
-            if (ordinalOfEnum >= 9) {
+            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() > 8 && Card.CardValue.valueOf(card.getFaceValue()).ordinal() < 12){
                 handValue += 10;
-                continue;
+            }else if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() <= 8){
+                handValue += Card.CardValue.valueOf(card.getFaceValue()).ordinal() + 2;
             }
-            handValue += (ordinalOfEnum + 2);
+        }
+        for(Card card: hand.getCards()){
+            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12 && handValue > 21){
+                card.setFaceValue("TWO");
+                handValue -= 10;
+            }
         }
         return handValue;
     }
 
+    public void initializeDealerHandValue() {
+        dealerHandValue = 0;
+    }
+
+
+
+    public void initializePlayerHandValue(){
+        playerHandValue = 0;
+    }
+
+    private void displayLoseGame() {
+        System.out.println("Busted!");
+    }
+
+    private void displayBlackJack() {
+        System.out.println("BlackJack!");
+    }
+
+    public void determinePlayerHandValue(Hand hand) {
+        playerHandValue = examineHandValue(hand);
+    }
+
+    public void determineDealerHandValue(Hand hand){
+        dealerHandValue = examineHandValue(hand);
+    }
 
     @Override
     public void dealCardTo(Player player) {
@@ -76,23 +161,29 @@ public class BlackJackDealer implements CardDealer {
         determinePlayerHandValue(currentHand);
     }
 
-    @Override
-    public void dealHandTo(Player player) {
-        for (int i = 0; i < 2; i++) dealCardTo(player);
+    private void dealCardToDealer() {
+        Card card = deck.surrenderCard();
+        Hand currentHand = dealerHand;
+        currentHand.receiveCard(card);
+        determineDealerHandValue(currentHand);
     }
 
     @Override
-    public void play(Player player) {
-        //deck.buildDeck();
-        dealHandTo(player);
-        do {
-            takeTurn(player);
-            String playAgain = UserInput.getStringInput("Play again? Yes / No");
-            if(!(playAgain.equalsIgnoreCase("yes"))){
-                break;
-            }
-        } while (gameRunning);
+    public void dealHandTo(Player player) {
+        for (int i = 0; i < 2; i++) dealCardTo(player);
+        userDisplayHand(player);
+    }
 
+    private void dealHandToDealer(Player player) {
+        for (int i = 0; i < 2; i++) dealCardToDealer();
+        displayDealerCardUp();
+        if(dealerHand.getCards().get(0).getFaceValue() == "ACE"){
+            protectedInsuranceRequest(player);
+        }
+    }
+
+    private void displayDealerCardUp(){
+        System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
     }
 
     @Override
@@ -100,25 +191,12 @@ public class BlackJackDealer implements CardDealer {
         player.collectWinnings(payOut);
     }
 
-    public void takeHit(Player player){
-        boolean hit = checkIfPlayerHit();
-        if(hit){
-            dealCardTo(player);
-        }
+    private void takeHit(Player player){
+        dealCardTo(player);
         userDisplayHand(player);
-    }
+        }
 
-    public void takeTurn(Player player) {
-        //deck.buildDeck();
-        //dealHandTo(player);
-        // Display the hand
-        // Dennis: I added this to the deal card method
-        determinePlayerHandValue(player.getHand());
-        // Display the hand value
-        takeHit(player);
-    }
-
-    public void userDisplayHand(Player player) {
+    private void userDisplayHand(Player player) {
         StringBuilder outPut = new StringBuilder(1000);
         ArrayList<Card> cards = player.getHand().getCards();
         for (Card card : cards) {
@@ -129,13 +207,154 @@ public class BlackJackDealer implements CardDealer {
         System.out.println(outPut);
     }
 
-    public boolean checkIfPlayerHit(){
+    private boolean checkIfPlayerHit(){
         UserInput in = new UserInput();
-        String hit = in.getStringInput("HIT / STAY");
+        String hit = in.getStringInput("If you would like another card, enter HIT ");
         if(hit.equalsIgnoreCase("hit")){
             return true;
         }
         return false;
     }
 
+    private boolean checkBust(){
+        if(playerHandValue > 21){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkBlackJack(){
+        if(playerHandValue == 21){
+            return true;
+        }
+        return false;
+    }
+
+    private void decideWinner(Player player, double bet){
+        if((dealerHandValue - playerHandValue) > 0 && dealerHandValue < 22){
+            System.out.println("Dealer wins with a hand value of: " + dealerHandValue);
+        } else if(dealerHandValue == playerHandValue){
+            System.out.println("Tie!");
+            pay(player, bet);
+        } else{
+            System.out.println("Player wins, dealer hand was " + dealerHandValue);
+            pay(player, bet*2);
+        }
+    }
+
+    private boolean checkStatus(Player player, double bet){
+        boolean bust = checkBust();
+        boolean blackJack = checkBlackJack();
+        if(bust){
+            displayLoseGame();
+            gameRunning = false;
+            return false;
+
+        }
+        if(blackJack){
+            pay(player, bet*2);
+            gameRunning = false;
+            return false;
+        }
+        boolean hit = checkIfPlayerHit();
+        return hit;
+    }
+
+    public void assertBlackJack(Player player){
+        if(playerHandValue == 21){
+            displayBlackJack();
+            pay(player, player.getBet()*3);
+            gameRunning = false;
+        }
+    }
+
+    private boolean requestInsuranceValue(){
+        String answer = UserInput.getStringInput("Take insurance? Enter Yes if you would like to. " );
+        if(answer.equalsIgnoreCase("yes")){
+            return true;
+        }
+        return false;
+    }
+
+    private void hitProcess(Player player){
+        boolean hit = checkIfPlayerHit();
+        while(hit){
+            takeHit(player);
+            hit = checkStatus(player, player.getBet());
+        }
+    }
+
+    private void evaluateResult(Player player){
+        if(dealerHandValue == 21){
+            payPlayer(player);
+        }else {
+            checkIfDealerHit();
+            payPlayer(player);
+        }
+    }
+
+    private void checkIfDealerHit() {
+        if (dealerHandValue < 17) {
+            dealCardToDealer();
+        }
+    }
+
+    private void payPlayer(Player player){
+        if(dealerHandValue == 21 && insuranceValue != 0){
+            System.out.println("Dealer had BlackJack - good call! ");
+            pay(player, insuranceValue);
+        }
+        if(gameRunning == true) {
+            decideWinner(player, player.getBet());
+            gameRunning = false;
+        }
+    }
+
+    private void protectedInsuranceRequest(Player player){
+        boolean response = requestInsuranceValue();
+        while(response){
+            try {
+                setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
+                double postInsuranceWallet = player.getWallet() - insuranceValue;
+                player.setWallet(postInsuranceWallet);
+                break;
+            }catch(Exception e){
+                System.out.println("Please enter a valid number.");
+            }
+        }
+    }
+
+    public boolean checkIfSplit(Player player){
+        if(player.getHand().getCards().get(0).getFaceValue().equals(player.getHand().getCards().get(1).getFaceValue())){
+            String splitDecision = UserInput.getStringInput("Type YES if you would like to split. ");
+            if(splitDecision.equalsIgnoreCase("yes")){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public void split(Player player){
+            player.setWallet(player.getWallet() + player.getBet());
+            player.makeBet(player.getBet() * 2);
+            ArrayList<Card> cards = new ArrayList<>();
+            for(int i = 0; i < player.getHand().getCards().size(); i++){
+                cards.add(player.getHand().getCards().get(i));
+            }
+            for(Card card : cards){
+                Hand hand = new Hand();
+                playerHandValue = 0;
+                player.setHand(hand);
+                player.getHand().receiveCard(card);
+                dealCardTo(player);
+                assertBlackJack(player);
+                if(playerHandValue != 21) {
+                    buildDealerHand(player);
+                    hitProcess(player);
+                    evaluateResult(player);
+                    dealerHandValue = 0;
+                }
+            }
+    }
 }
