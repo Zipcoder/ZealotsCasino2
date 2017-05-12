@@ -33,6 +33,9 @@ public class WarDealer implements CardDealer {
     }
 
     public void play(Player player) {
+        if(deck.getDeckQue().size()==0){
+            deck.buildDeck();
+        }
         //get bet
         try {
             player.makeBet(getDoubleInput("Place a bet"));
@@ -68,7 +71,7 @@ public class WarDealer implements CardDealer {
                 player.makeBet(player.getBet());
                 //deals hand, compares cards, returns win/lose/tie
                 String outcome = playRound(player);
-                processTieRound(outcome, player);
+                processTieOutcome(outcome, player);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to double bet due to insufficient funds.");
                 pay(player, player.getBet() / 2);
@@ -82,7 +85,7 @@ public class WarDealer implements CardDealer {
         }
     }
 
-    public void processTieRound(String outcome, Player player) {
+    public void processTieOutcome(String outcome, Player player) {
         if (outcome.equals("win")) {
             pay(player, player.getBet() * 3);
             System.out.println("Your card is higher! You win your original bet!" + "\n" + player.printWallet() + "\n");
@@ -119,9 +122,6 @@ public class WarDealer implements CardDealer {
         else {
             System.out.println("Dealer wins!" + "\n" + player.printWallet() + "\n");
         }
-
-//        askPlayAgain(player);
-
     }
 
     public String playRound(Player player) {

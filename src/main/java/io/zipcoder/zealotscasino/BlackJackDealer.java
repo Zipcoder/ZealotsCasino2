@@ -105,26 +105,40 @@ public class BlackJackDealer implements CardDealer {
     public int examineHandValue(Hand hand) {
         int handValue = 0;
         for(Card card: hand.getCards()) {
-            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12){ // Change CardValue enum to account for ace
-                if(handValue > 10){
-                    handValue++;
-                }else{
-                    handValue += 11;
-                }
-            }
-            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() > 8 && Card.CardValue.valueOf(card.getFaceValue()).ordinal() < 12){
-                handValue += 10;
-            }else if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() <= 8){
-                handValue += Card.CardValue.valueOf(card.getFaceValue()).ordinal() + 2;
-            }
+            handValue += examineCardValue(card, handValue);
         }
         for(Card card: hand.getCards()){
-            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12 && handValue > 21){
-                card.setFaceValue("TWO");
+            if(extractCardValue(card) == 12 && handValue > 21){
                 handValue -= 10;
             }
         }
         return handValue;
+    }
+
+    private int examineCardValue(Card card, int total){
+        int cardTotal = 0;
+        if(extractCardValue(card) == 12){
+           cardTotal += examineAceValue(total);
+        }else if(extractCardValue(card) > 8 && extractCardValue(card) < 12){
+            cardTotal += 10;
+        }else if(extractCardValue(card) <= 8){
+            cardTotal += Card.CardValue.valueOf(card.getFaceValue()).ordinal() + 2;
+        }
+        return cardTotal;
+    }
+
+    private int examineAceValue(int total){
+        int aceVal = 0;
+        if(total > 10){
+            aceVal++;
+        } else {
+            aceVal += 11;
+        }
+        return aceVal;
+    }
+
+    private int extractCardValue(Card card){
+        return Card.CardValue.valueOf(card.getFaceValue()).ordinal();
     }
 
     public void initializeDealerHandValue() {

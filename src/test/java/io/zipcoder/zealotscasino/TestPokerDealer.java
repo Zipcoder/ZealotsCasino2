@@ -124,46 +124,6 @@ public class TestPokerDealer
                 assertEquals("There should be three different values", expected, actual);
         }
 
-//        @Test
-//        public void testCheckFullHouse()
-//        {
-//                //Given
-//                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-//                player.getHand().receiveCard(new Card("TEN","SPADES"));
-//                player.getHand().receiveCard(new Card("TEN","HEARTS"));
-//                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-//                player.getHand().receiveCard(new Card("KING","SPADES"));
-//
-//                //WHEN
-//                boolean myBool = dealer.checkFullHouse(player);
-//
-//                //THEN
-//                assertTrue("Should return is full house", myBool);
-//        }
-
-//        @Test
-//        public void testFourOfAKind()
-//        {
-//                //Given
-//                boolean bool = false;
-//                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-//                player.getHand().receiveCard(new Card("TEN","SPADES"));
-//                player.getHand().receiveCard(new Card("TEN","HEARTS"));
-//                player.getHand().receiveCard(new Card("TEN","CLUBS"));
-//                player.getHand().receiveCard(new Card("KING","SPADES"));
-//
-//                if(!dealer.checkFullHouse(player)) //given that we check two different values in hand
-//                {
-//                        bool = true;
-//                }
-//
-//
-//                //WHEN
-//                boolean myBool = dealer.checkFourOfAKind(bool);
-//
-//                //THEN
-//                assertTrue("Should return four of a kind", myBool);
-//        }
 
         @Test
         public void testCalculateHand_TestPair_ReturnsPair()
@@ -259,6 +219,56 @@ public class TestPokerDealer
 
                 //THEN
                 assertEquals("The result should be FULL HOUSE", expected, actual);
+        }
+
+        @Test
+        public void testPayPlayer_Flush_Win_130()
+        {
+                //given
+
+                player.setWallet(50);
+                player.makeBet(20);
+                double expeted = 150;
+
+                //when
+                dealer.payPlayer(player, "FLUSH");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expeted, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_RoyalFlush()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expeted = 19550;
+
+                //when
+                dealer.payPlayer(player, "ROYAL FLUSH");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expeted, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer()
+        {
+                //given
+
+                player.setWallet(50);
+                player.makeBet(20);
+                double expeted = 50;
+
+                //when
+                dealer.payPlayer(player, "PAIR");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expeted, actual,0);
         }
 
 
