@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.zipcoder.zealotscasino.UserInput.*;
-
+import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
+import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 
 /**
  * Created by luisgarcia on 5/11/17.
@@ -33,9 +33,13 @@ public class PokerDealer implements CardDealer {
 
     public void pay(Player player, double payOut) {
         player.collectWinnings(payOut);
+        System.out.println("You win " + payOut + "!\nWallet: " + player.getWallet());
     }
 
     public void play(Player player) {
+        if(deck.getDeckQue().size() < 10)
+            deck.buildDeck();
+
         //get bet
         makeBet(player);
 
@@ -56,57 +60,102 @@ public class PokerDealer implements CardDealer {
         userDisplayHand(player);
 
         //calculate hand
-        System.out.println("Rank of hand = " + calculateHand(player));
+        String rankOfHand = calculateHand(player);
+        System.out.println("You got a " + rankOfHand);
 
         // determine winnings and pay
+        payPlayer(player, rankOfHand);
 
+        player.setHand(new Hand());
 
+        askPlayAgain(player);
+    }
+
+    public void payPlayer(Player player, String rankOfHand) {
+        switch(rankOfHand){
+            case "PAIR":
+                pay(player, player.getBet());
+                break;
+            case "TWO PAIR":
+                pay(player, player.getBet() * 2);
+                break;
+            case "THREE OF A KIND":
+                pay(player, player.getBet() * 3);
+                break;
+            case "STRAIGHT":
+                pay(player, player.getBet() * 4);
+                break;
+            case "FLUSH":
+                pay(player, player.getBet() * 6);
+                break;
+            case "FULL HOUSE":
+                pay(player, player.getBet() * 9);
+                break;
+            case "FOUR OF A KIND":
+                pay(player, player.getBet() * 25);
+                break;
+            case "STRAIGHT FLUSH":
+                pay(player, player.getBet() * 50);
+                break;
+            case "ROYAL FLUSH":
+                pay(player, player.getBet() * 976);
+                break;
+            case "NO PAIR":
+                System.out.println("Sorry, you lose!\nWallet: " + player.getWallet());
+                break;
+            default:
+                break;
+        }
     }
 
     public void askPlayAgain(Player player) {
-        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit poker)");
-        if (choice.equalsIgnoreCase("Y")) play(player);
-        else System.out.println("Thanks for playing!\n\n");
+        String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit war)");
+        if (choice.equalsIgnoreCase("Y"))
+            play(player);
+        else
+            System.out.println("Thanks for playing!\n\n");
     }
 
     public String calculateHand(Player player) {
         int numberOfValues = returnNumberOfValuesInPlayerHand(player);
-        if(numberOfValues == 5){
+        if (numberOfValues == 5) {
             return evaluateFiveRanks(player);
-        } else if(numberOfValues == 4){
+        } else if (numberOfValues == 4) {
             return "PAIR";
-        } else if(numberOfValues == 3){
+        } else if (numberOfValues == 3) {
             return evaluateThreeRanks(player);
         } else {
             return evaluateTwoRanks(player);
         }
     }
 
-    public String evaluateFiveRanks(Player player){
-        if(checkRoyalFlush(player)) return "ROYAL FLUSH";
-        else if(checkStraightFlush(player)) return "STRAIGHT FLUSH";
-        else if(checkFlush(player)) return "FLUSH";
-        else if(checkStraight(player)) return "STRAIGHT";
+    public String evaluateFiveRanks(Player player) {
+        if (checkRoyalFlush(player)) return "ROYAL FLUSH";
+        else if (checkStraightFlush(player)) return "STRAIGHT FLUSH";
+        else if (checkFlush(player)) return "FLUSH";
+        else if (checkStraight(player)) return "STRAIGHT";
         else return "NO PAIR";
     }
 
     public String evaluateTwoRanks(Player player) {
         ArrayList<Card> hand = player.getHand().getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
-        for(Integer key: mapOfHand.keySet()){
-            if(mapOfHand.get(key) == 4) return "FOUR OF A KIND";
-        } return "FULL HOUSE";
+        for (Integer key : mapOfHand.keySet()) {
+            if (mapOfHand.get(key) == 4) return "FOUR OF A KIND";
+        }
+        return "FULL HOUSE";
     }
 
     public String evaluateThreeRanks(Player player) {
         ArrayList<Card> hand = player.getHand().getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
-        for(Integer key: mapOfHand.keySet()){
-            if(mapOfHand.get(key) == 3) return "THREE OF A KIND";
-        } return "TWO PAIR";
+        for (Integer key : mapOfHand.keySet()) {
+            if (mapOfHand.get(key) == 3) return "THREE OF A KIND";
+        }
+        return "TWO PAIR";
     }
 
-    public Map<Integer, Integer> toHashMap(ArrayList<Card> playerHand){
+    public Map<Integer, Integer> toHashMap(ArrayList<Card> playerHand) {
         Map<Integer, Integer> mapOfValues = new HashMap<>();
 
         for (int i = 0; i < playerHand.size(); i++) {
@@ -132,25 +181,6 @@ public class PokerDealer implements CardDealer {
 
         return false;
     }
-
-//    public boolean checkFullHouse(Player player) {
-//
-//        if (returnNumberOfValuesInPlayerHand(player) == 2) {
-//            ArrayList<Card> playerHand = player.getHand().getCards();
-//            Collections.sort(playerHand);
-//
-//            boolean myBoolean = playerHand.get(0).getValue() == playerHand.get(1).getValue();
-//            boolean myBoolean2 = playerHand.get(3).getValue() == playerHand.get(4).getValue();
-//
-//            if (myBoolean && myBoolean2) return true;
-//            else checkFourOfAKind(true);
-//        }
-//        return false;
-//    }
-
-//    public boolean checkFourOfAKind(boolean mybool) {
-//        return mybool;
-//    }
 
     public boolean checkStraight(Player player) {
         ArrayList<Card> playerHand = player.getHand().getCards();
@@ -213,11 +243,17 @@ public class PokerDealer implements CardDealer {
 
     public int discardCards(Player player) {
         double numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
+        ArrayList<Integer> indexes = new ArrayList<>();
         for (int i = 0; i < numCardstoDiscard; i++) {
             double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
-            player.getHand().remove((int) getDiscard - 1);
+            indexes.add((int) getDiscard);
         }
-        userDisplayHand(player);
+        Collections.sort(indexes);
+        Hand cloneOfHand = player.getHand();
+        for (int j = indexes.size() - 1; j >= 0; j--) {
+            cloneOfHand.remove(indexes.get(j) - 1);
+        }
+        player.setHand(cloneOfHand);
         return (int) numCardstoDiscard;
     }
 
