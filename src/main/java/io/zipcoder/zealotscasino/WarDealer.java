@@ -119,9 +119,6 @@ public class WarDealer implements CardDealer {
         else {
             System.out.println("Dealer wins!" + "\n" + player.printWallet() + "\n");
         }
-
-//        askPlayAgain(player);
-
     }
 
     public String playRound(Player player) {

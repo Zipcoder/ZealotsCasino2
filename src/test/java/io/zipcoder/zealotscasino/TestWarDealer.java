@@ -102,63 +102,63 @@ public class TestWarDealer {
         assertEquals("The result should be a tie",expected, actual);
     }
 
-//    @Test
-//    public void processDeterminedOutcome_PlayerWins_PlayerReceivesTwiceBet(){
-//        //Given
-//        player.setWallet(100);
-//        player.makeBet(5);
-//        double expected = 105;
-//
-//        //When
-//        dealer.processDeterminedOutcome("win", player);
-//        double actual = player.getWallet();
-//
-//        //Then
-//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
-//    }
-//
-//    @Test
-//    public void processTieRound_PlayerWins_PlayerReceivesOriginalBet(){
-//        player.setWallet(100);
-//        player.makeBet(5);
-//        player.makeBet(5);
-//        double expected = 105;
-//
-//        //When
-//        dealer.processTieRound("win", player);
-//        double actual = player.getWallet();
-//
-//        //Then
-//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
-//    }
+    @Test
+    public void processDeterminedOutcome_PlayerWins_PlayerReceivesEvenBet(){
+        //Given
+        player.setWallet(100);
+        player.makeBet(20);
+        double expected = 120;
 
-//    @Test
-//    public void processTieRound_PlayerLoses_WalletDecreasedByTwoBets(){
-//        player.setWallet(100);
-//        player.makeBet(5);
-//        player.makeBet(5);
-//        double expected = 90;
-//
-//        //When
-//        dealer.processTieRound("lose", player);
-//        double actual = player.getWallet();
-//
-//        //Then
-//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
-//    }
+        //When
+        dealer.processDeterminedOutcome("win", player);
+        double actual = player.getWallet();
 
-//    @Test
-//    public void processTieRound_PlayerTies_PlayerReceivesDoubleBet(){
-//        player.setWallet(100);
-//        player.makeBet(5);
-//        player.makeBet(5);
-//        double expected = 110;
-//
-//        //When
-//        dealer.processTieRound("tie", player);
-//        double actual = player.getWallet();
-//
-//        //Then
-//        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
-//    }
+        //Then
+        assertEquals("Wallet should now have $120 (100 - 20 + 40)", expected, actual, 0);
+    }
+
+    @Test
+    public void processTieRound_PlayerWins_PlayerReceivesOriginalBet(){
+        player.setWallet(100);
+        player.makeBet(20);
+        player.makeBet(20); //player doubles bet after tie
+        double expected = 120;
+
+        //When
+        dealer.processTieRound("win", player);
+        double actual = player.getWallet();
+
+        //Then
+        assertEquals("Wallet should now have $120 (100 - 20 + 40)", expected, actual, 0);
+    }
+
+    @Test
+    public void processTieRound_PlayerLoses_WalletDecreasedByTwoBets(){
+        player.setWallet(100);
+        player.makeBet(20);
+        player.makeBet(20); //player doubles bet after tie
+        double expected = 60;
+
+        //When
+        dealer.processTieRound("lose", player);
+        double actual = player.getWallet();
+
+        //Then
+        assertEquals("Wallet should now have $60", expected, actual, 0);
+    }
+
+    @Test
+    public void processTieRound_PlayerTies_PlayerReceivesDoubleBet(){
+        player.setWallet(100);
+        player.makeBet(20);
+        player.makeBet(20);
+        double expected = 140;
+
+        //When
+        dealer.processTieRound("tie", player);
+        double actual = player.getWallet();
+
+        //Then
+        assertEquals("Wallet should now have $105 (100 - 5 + 10)", expected, actual, 0);
+    }
 }
