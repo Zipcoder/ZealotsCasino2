@@ -122,6 +122,28 @@ public class TestBlackJackDealer {
     }
 
     @Test
+    public void testExamineHandValue_PlayerHasHand_AceIsStaticPostDynamic(){
+        //Given
+        blackJackDealer.initializeHands(player);
+        Card card1 = new Card("ACE", "Spades");
+        Card card2 = new Card("JACK", "Hearts");
+        Card card3 = new Card("TWO", "Spades");
+        Card card4 = new Card("NINE", "Spades");
+        Hand currentHand = player.getHand();
+        currentHand.receiveCard(card1);
+        currentHand.receiveCard(card2);
+        currentHand.receiveCard(card3);
+        currentHand.receiveCard(card4);
+        int expectedValue = 22;
+
+        //When
+        int returnValue = blackJackDealer.examineHandValue(player.getHand());
+
+        //Then
+        Assert.assertEquals("Checking if player received a correct value for their hand", returnValue, expectedValue);
+    }
+
+    @Test
     public void testAssertBlackJack_PlayerHasBlackJack_PlayerIsPaidProperly() {
         //Given
         blackJackDealer.initializeHands(player);
@@ -141,6 +163,5 @@ public class TestBlackJackDealer {
         //Then
         Assert.assertEquals("Checking to see if player receives proper amount", expected, player.getWallet(), 0);
     }
-
 
 }
