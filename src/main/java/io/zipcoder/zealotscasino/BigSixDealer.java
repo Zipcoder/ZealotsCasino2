@@ -22,7 +22,7 @@ public class BigSixDealer {
     public void play(Player player) {
         initializeWheelDenominations();
         playRound(player);
-        System.out.println(player.printWallet());
+        UserInput.display(player.printWallet());
         askPlayAgain(player);
     }
 
@@ -88,9 +88,9 @@ public class BigSixDealer {
         for (WheelBet wheelBet : wheelBets) {
             if (wheelBet.getLocationOnWheel().equalsIgnoreCase(winningDenomination)) {
                 payOut(player, payOutRatio, wheelBet.getBetAmount());
-                System.out.println("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " netted " + (wheelBet.getBetAmount() * payOutRatio) + "!!");
+                UserInput.display("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " netted " + (wheelBet.getBetAmount() * payOutRatio) + "!!");
             } else {
-                System.out.println("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " did not hit...");
+                UserInput.display("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " did not hit...");
             }
         }
     }
@@ -100,7 +100,7 @@ public class BigSixDealer {
         String denominationChoice;
 
         do {
-            System.out.println("Enter a denomination on the wheel to determine your pay out ratio\n1 : You win your bet * 1\n2 : You win your bet * 2\n5: You win your bet * 5\n10 : You win your bet * 10\n20 : You win your bet * 20\nJOKER : You win your bet * 40\nCASINO : You win your bet * 40\n");
+            UserInput.display("Enter a denomination on the wheel to determine your pay out ratio\n1 : You win your bet * 1\n2 : You win your bet * 2\n5: You win your bet * 5\n10 : You win your bet * 10\n20 : You win your bet * 20\nJOKER : You win your bet * 40\nCASINO : You win your bet * 40\n");
             denominationChoice = UserInput.getStringInput("Which denomination would you like to place a bet on? (or n if done placing bets)");
 
             if (denominationChoice.equalsIgnoreCase("n")) {
@@ -110,21 +110,21 @@ public class BigSixDealer {
                 try {
                     player.makeBet(getDoubleInput("How much would you like to bet?"));
                 } catch (IllegalArgumentException e) {
-                    System.out.println("Insufficient Funds.");
-                    System.out.println("\n" + player.printWallet() + "\n");
+                    UserInput.display("Insufficient Funds.");
+                    UserInput.display("\n" + player.printWallet() + "\n");
                     takeBetsAndDenominations(player);
                     return;
                 } catch (SecurityException e) {
-                    System.out.println("Minimum bet is $20.");
-                    System.out.println("\n" + player.printWallet() + "\n");
+                    UserInput.display("Minimum bet is $20.");
+                    UserInput.display("\n" + player.printWallet() + "\n");
                     takeBetsAndDenominations(player);
                     return;
                 }
                 WheelBet wheelbet = new WheelBet(player.getBet(), denominationChoice);
                 wheelBets.add(wheelbet);
-                System.out.println("\n" + player.printWallet() + "\n");
+                UserInput.display("\n" + player.printWallet() + "\n");
             } else {
-                System.out.println("You must enter a valid denomination.");
+                UserInput.display("You must enter a valid denomination.");
             }
         } while (!denominationChoice.equalsIgnoreCase("n"));
     }
@@ -136,9 +136,9 @@ public class BigSixDealer {
             if (choice.equalsIgnoreCase("Y")) {
                 wheelBets.clear();
                 play(player);
-            } else System.out.println("Thanks for playing!\n\n");
+            } else UserInput.display("Thanks for playing!\n\n");
         } else {
-            System.out.println("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");
+            UserInput.display("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");
         }
     }
 }

@@ -39,7 +39,7 @@ public class BlackJackDealer implements CardDealer {
         gameRunning = true;
         while(gameRunning){
             if(player.getWallet() < 20){
-                System.out.println("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
+                UserInput.display("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
                 break;
             }
             displayPlayerWallet(player);
@@ -55,7 +55,7 @@ public class BlackJackDealer implements CardDealer {
     }
 
     public void displayPlayerWallet(Player player){
-        System.out.println("You have $" + player.getWallet() + " remaining.");
+        UserInput.display("You have $" + player.getWallet() + " remaining.");
     }
 
     public void takeTurn(Player player) {
@@ -79,7 +79,7 @@ public class BlackJackDealer implements CardDealer {
                 player.makeBet(UserInput.getDoubleInput("Place your bet! (Minimum $20.00) "));
                 break;
             } catch (Exception e) {
-                System.out.println("Enter a valid number. ");
+                UserInput.display("Enter a valid number. ");
             }
         }
     }
@@ -154,11 +154,11 @@ public class BlackJackDealer implements CardDealer {
     }
 
     private void displayLoseGame() {
-        System.out.println("Busted!");
+        UserInput.display("Busted!");
     }
 
     private void displayBlackJack() {
-        System.out.println("BlackJack!");
+        UserInput.display("BlackJack!");
     }
 
     public void determinePlayerHandValue(Hand hand) {
@@ -199,7 +199,7 @@ public class BlackJackDealer implements CardDealer {
     }
 
     private void displayDealerCardUp(){
-        System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
+        UserInput.display("Exposed card of dealer: " + dealerHand.getCards().get(0));
     }
 
     @Override
@@ -220,7 +220,7 @@ public class BlackJackDealer implements CardDealer {
             outPut.append(" ");
         }
         outPut.append("\nTotal Player value: " + playerHandValue);
-        System.out.println(outPut);
+        UserInput.display(outPut);
     }
 
     private boolean checkIfPlayerHit(){
@@ -248,12 +248,12 @@ public class BlackJackDealer implements CardDealer {
 
     private void decideWinner(Player player, double bet){
         if((dealerHandValue - playerHandValue) > 0 && dealerHandValue < 22){
-            System.out.println("Dealer wins with a hand value of: " + dealerHandValue);
+            UserInput.display("Dealer wins with a hand value of: " + dealerHandValue);
         } else if(dealerHandValue == playerHandValue){
-            System.out.println("Tie!");
+            UserInput.display("Tie!");
             pay(player, bet);
         } else{
-            System.out.println("Player wins, dealer hand was " + dealerHandValue);
+            UserInput.display("Player wins, dealer hand was " + dealerHandValue);
             pay(player, bet*2);
         }
     }
@@ -317,7 +317,7 @@ public class BlackJackDealer implements CardDealer {
 
     private void payPlayer(Player player){
         if(dealerHandValue == 21 && insuranceValue != 0){
-            System.out.println("Dealer had BlackJack - good call! ");
+            UserInput.display("Dealer had BlackJack - good call! ");
             pay(player, insuranceValue);
         }
         if(gameRunning == true) {
@@ -335,7 +335,7 @@ public class BlackJackDealer implements CardDealer {
                 player.setWallet(postInsuranceWallet);
                 break;
             }catch(Exception e){
-                System.out.println("Please enter a valid number.");
+                UserInput.display("Please enter a valid number.");
             }
         }
     }

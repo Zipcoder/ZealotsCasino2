@@ -33,7 +33,7 @@ public class PokerDealer implements CardDealer {
 
     public void pay(Player player, double payOut) {
         player.collectWinnings(payOut);
-        System.out.println("You win " + payOut + "!\nWallet: " + player.getWallet());
+        UserInput.display("You win " + payOut + "!\nWallet: " + player.getWallet());
     }
 
     public void play(Player player) {
@@ -56,12 +56,12 @@ public class PokerDealer implements CardDealer {
         replace(player, numberToReplace);
 
         //display new hand
-        System.out.println("Updated Hand: ");
+        UserInput.display("Updated Hand: ");
         userDisplayHand(player);
 
         //calculate hand
         String rankOfHand = calculateHand(player);
-        System.out.println("You got a " + rankOfHand);
+        UserInput.display("You got a " + rankOfHand);
 
         // determine winnings and pay
         payPlayer(player, rankOfHand);
@@ -101,7 +101,7 @@ public class PokerDealer implements CardDealer {
                 pay(player, player.getBet() * 976);
                 break;
             case "NO PAIR":
-                System.out.println("Sorry, you lose!\nWallet: " + player.getWallet());
+                UserInput.display("Sorry, you lose!\nWallet: " + player.getWallet());
                 break;
             default:
                 break;
@@ -113,7 +113,7 @@ public class PokerDealer implements CardDealer {
         if (choice.equalsIgnoreCase("Y"))
             play(player);
         else
-            System.out.println("Thanks for playing!\n\n");
+            UserInput.display("Thanks for playing!\n\n");
     }
 
     public String calculateHand(Player player) {
@@ -230,11 +230,11 @@ public class PokerDealer implements CardDealer {
         try {
             player.makeBet(getDoubleInput("Make a bet"));
         } catch (IllegalArgumentException e) {
-            System.out.println("Insufficient Funds.");
+            UserInput.display("Insufficient Funds.");
             play(player);
             return;
         } catch (SecurityException e) {
-            System.out.println("Minimum bet is $20.");
+            UserInput.display("Minimum bet is $20.");
             play(player);
             return;
         }
@@ -246,7 +246,7 @@ public class PokerDealer implements CardDealer {
         do{
             numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
             if(numCardstoDiscard > 6){
-                System.out.println("You can only discard the card you have");
+                UserInput.display("You can only discard the card you have");
             }
         } while(numCardstoDiscard > 6);
         ArrayList<Integer> indexes = new ArrayList<>();
@@ -269,6 +269,6 @@ public class PokerDealer implements CardDealer {
         for (int i = 0; i < cards.size(); i++) {
             outPut.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");
         }
-        System.out.println(outPut);
+        UserInput.display(outPut);
     }
 }
