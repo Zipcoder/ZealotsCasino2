@@ -65,7 +65,7 @@ public class TestBigSixDealer {
         double expected = 500;
 
         //When
-        wheelDealer.payOut(player, payOutRatio, player.getBet());
+        wheelDealer.payOut(player, payOutRatio, player.getBet().betValue());
         double actual = player.getWallet();
 
         //Then
@@ -83,7 +83,7 @@ public class TestBigSixDealer {
         double expected = 80;
 
     //When
-        wheelDealer.payOut(player, payOutRatio, player.getBet());
+        wheelDealer.payOut(player, payOutRatio, player.getBet().betValue());
         double actual = player.getWallet();
 
     //Then

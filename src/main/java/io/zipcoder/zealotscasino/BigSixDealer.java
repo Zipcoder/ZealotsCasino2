@@ -120,7 +120,7 @@ public class BigSixDealer {
                     takeBetsAndDenominations(player);
                     return;
                 }
-                WheelBet wheelbet = new WheelBet(player.getBet(), denominationChoice);
+                WheelBet wheelbet = new WheelBet(player.getBet().betValue(), denominationChoice);
                 wheelBets.add(wheelbet);
                 UserInput.display("\n" + player.printWallet() + "\n");
             } else {

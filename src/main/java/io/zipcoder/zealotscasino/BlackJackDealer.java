@@ -279,7 +279,7 @@ public class BlackJackDealer implements CardDealer {
     public void assertBlackJack(Player player){
         if(playerHandValue == 21){
             displayBlackJack();
-            pay(player, player.getBet()*3);
+            pay(player, player.getBet().betValue() * 3);
             gameRunning = false;
         }
     }
@@ -296,7 +296,7 @@ public class BlackJackDealer implements CardDealer {
         boolean hit = checkIfPlayerHit();
         while(hit){
             takeHit(player);
-            hit = checkStatus(player, player.getBet());
+            hit = checkStatus(player, player.getBet().betValue());
         }
     }
 
@@ -321,7 +321,7 @@ public class BlackJackDealer implements CardDealer {
             pay(player, insuranceValue);
         }
         if(gameRunning == true) {
-            decideWinner(player, player.getBet());
+            decideWinner(player, player.getBet().betValue());
             gameRunning = false;
         }
     }
@@ -352,8 +352,8 @@ public class BlackJackDealer implements CardDealer {
     }
 
     public void split(Player player){
-            player.setWallet(player.getWallet() + player.getBet());
-            player.makeBet(player.getBet() * 2);
+            player.setWallet(player.getWallet() + player.getBet().betValue());
+            player.makeBet(player.getBet().betValue() * 2);
             ArrayList<Card> cards = new ArrayList<>();
             for(int i = 0; i < player.getHand().getCards().size(); i++){
                 cards.add(player.getHand().getCards().get(i));

@@ -69,29 +69,29 @@ public class WarDealer implements CardDealer {
         if (choice.equalsIgnoreCase("Y")) {
             try {
                 //collect bet and deal another card
-                player.makeBet(player.getBet());
+                player.makeBet(player.getBet().betValue());
                 //deals hand, compares cards, returns win/lose/tie
                 String outcome = playRound(player);
                 processTieOutcome(outcome, player);
             } catch (IllegalArgumentException e) {
                 UserInput.display("Unable to double bet due to insufficient funds.");
-                pay(player, player.getBet() / 2);
-                UserInput.display("You receive half of your original bet (" + player.getBet() / 2 + "\n" + player.printWallet() + "\n");
+                pay(player, player.getBet().betValue() / 2);
+                UserInput.display("You receive half of your original bet (" + player.getBet().betValue() / 2 + "\n" + player.printWallet() + "\n");
             }
 
         } else {
             //player gets half their original bet back
-            pay(player, player.getBet() / 2);
-            UserInput.display("You receive half of your original bet (" + player.getBet() / 2 + "\n" + player.printWallet() + "\n");
+            pay(player, player.getBet().betValue() / 2);
+            UserInput.display("You receive half of your original bet (" + player.getBet().betValue() / 2 + "\n" + player.printWallet() + "\n");
         }
     }
 
     public void processTieOutcome(String outcome, Player player) {
         if (outcome.equals("win")) {
-            pay(player, player.getBet() * 3);
+            pay(player, player.getBet().betValue() * 3);
             UserInput.display("Your card is higher! You win your original bet!" + "\n" + player.printWallet() + "\n");
         } else if (outcome.equals("tie")) {
-            pay(player, player.getBet() * 4);
+            pay(player, player.getBet().betValue() * 4);
             UserInput.display("It's a tie! You win (double total bet)!" + "\n" + player.printWallet() + "\n");
         } else UserInput.display("Dealer Wins!\nWallet : " + player.getWallet() + "\n");
     }
@@ -117,7 +117,7 @@ public class WarDealer implements CardDealer {
 
     public void processDeterminedOutcome(String outcome, Player player) {
         if (outcome.equals("win")) {
-            pay(player, player.getBet() * 2);
+            pay(player, player.getBet().betValue() * 2);
             UserInput.display("Your card is higher! You win!" + "\n" + player.printWallet() + "\n");
         } else if (outcome.equals("tie")) processTie(player);
         else {

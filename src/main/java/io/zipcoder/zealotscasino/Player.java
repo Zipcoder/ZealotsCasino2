@@ -6,7 +6,7 @@ import java.text.NumberFormat;
  * Created by luisgarcia on 5/9/17.
  */
 public class Player {
-    private double bet;
+    private Bet bet;
     private double wallet;
     private Hand hand;
     private final static double MINIMUM_BET = 20;
@@ -17,10 +17,10 @@ public class Player {
 
     public Player() {
         hand = new Hand();
-
+        bet = new Bet();
     }
 
-    public double getBet() {
+    public Bet getBet() {
         return bet;
     }
 
@@ -31,7 +31,7 @@ public class Player {
         if (bet < MINIMUM_BET){
             throw new SecurityException("Minimum bet not achieved");
         }
-        this.bet = bet;
+        this.bet.makeBet(bet);
         this.wallet = wallet - bet;
     }
 
@@ -66,5 +66,12 @@ public class Player {
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String walletString = formatter.format(wallet);
         return "Wallet: " + walletString;
+    }
+
+    public boolean canMakeBet() {
+        if (bet.betValue() > wallet || bet.betValue() < MINIMUM_BET) {
+            return false;
+        }
+        return true;
     }
 }
