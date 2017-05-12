@@ -34,6 +34,61 @@ public class BlackJackDealer implements CardDealer {
         playerHandValue = value;
     }
 
+    @Override
+    public void play(Player player) {
+        gameRunning = true;
+        while(gameRunning){
+            if(player.getWallet() < 20){
+                System.out.println("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
+                break;
+            }
+            displayPlayerWallet(player);
+            takeTurn(player);
+            String playAgain = UserInput.getStringInput("Play again? Yes / No");
+            if((playAgain.equalsIgnoreCase("yes"))){
+                gameRunning = true;
+                deck.buildDeck();
+            }
+        }
+    }
+
+    public void displayPlayerWallet(Player player){
+        System.out.println("You have $" + player.getWallet() + " remaining.");
+    }
+
+    public void takeTurn(Player player) {
+        protectedBetProcess(player);
+        buildPlayersHands(player);
+        assertBlackJack(player);
+        if(playerHandValue != 21) {
+            buildDealerHand(player);
+            hitProcess(player);
+            evaluateResult(player);
+        }
+    }
+
+    private void protectedBetProcess(Player player){
+        while(true) {
+            try {
+                player.makeBet(UserInput.getDoubleInput("Place your bet! (Minimum $20.00) "));
+                break;
+            } catch (Exception e) {
+                System.out.println("Enter a valid number. ");
+            }
+        }
+    }
+
+    private void buildPlayersHands(Player player){
+        initializeHands(player);
+        dealHandTo(player);
+        determinePlayerHandValue(player.getHand());
+    }
+
+    private void buildDealerHand(Player player){
+        dealHandToDealer(player);
+        determineDealerHandValue(dealerHand);
+    }
+
     public void initializeHands(Player player){
         Hand playerHand = new Hand();
         player.setHand(playerHand);
@@ -41,6 +96,30 @@ public class BlackJackDealer implements CardDealer {
         setDealerHand(dealersHand);
         initializePlayerHandValue();
         initializeDealerHandValue();
+    }
+
+    public int examineHandValue(Hand hand) {
+        int handValue = 0;
+        for(Card card: hand.getCards()) {
+            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12){
+                if(handValue > 10){
+                    handValue++;
+                }else{
+                    handValue += 11;
+                }
+            }
+            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() > 8 && Card.CardValue.valueOf(card.getFaceValue()).ordinal() < 12){
+                handValue += 10;
+            }else if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() <= 8){
+                handValue += Card.CardValue.valueOf(card.getFaceValue()).ordinal() + 2;
+            }
+        }
+        for(Card card: hand.getCards()){
+            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12 && handValue > 21){
+                handValue -= 10;
+            }
+        }
+        return handValue;
     }
 
     public void initializeDealerHandValue() {
@@ -69,31 +148,6 @@ public class BlackJackDealer implements CardDealer {
         dealerHandValue = examineHandValue(hand);
     }
 
-    public int examineHandValue(Hand hand) {
-        int handValue = 0;
-        for(Card card: hand.getCards()) {
-            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12){
-                if(handValue > 10){
-                    handValue++;
-                }else{
-                    handValue += 11;
-                }
-            }
-            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() > 8 && Card.CardValue.valueOf(card.getFaceValue()).ordinal() < 12){
-                handValue += 10;
-            }else if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() <= 8){
-                handValue += Card.CardValue.valueOf(card.getFaceValue()).ordinal() + 2;
-            }
-        }
-        for(Card card: hand.getCards()){
-            if(Card.CardValue.valueOf(card.getFaceValue()).ordinal() == 12 && handValue > 21){
-                handValue -= 10;
-            }
-        }
-        return handValue;
-    }
-
-
     @Override
     public void dealCardTo(Player player) {
         Card card = deck.surrenderCard();
@@ -115,7 +169,7 @@ public class BlackJackDealer implements CardDealer {
         userDisplayHand(player);
     }
 
-    private void dealHandToDealer() {
+    private void dealHandToDealer(Player player) {
         for (int i = 0; i < 2; i++) dealCardToDealer();
         System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
         if(dealerHand.getCards().get(0).getFaceValue() == "ACE"){
@@ -123,6 +177,8 @@ public class BlackJackDealer implements CardDealer {
             while(response){
                 try {
                     setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
+                    double postInsuranceWallet = player.getWallet() - insuranceValue;
+                    player.setWallet(postInsuranceWallet);
                     break;
                 }catch(Exception e){
                     System.out.println("Please enter a valid number.");
@@ -130,21 +186,6 @@ public class BlackJackDealer implements CardDealer {
             }
 
         }
-    }
-
-    @Override
-    public void play(Player player) {
-        gameRunning = true;
-        while(gameRunning){
-            displayPlayerWallet(player);
-            takeTurn(player);
-            String playAgain = UserInput.getStringInput("Play again? Yes / No");
-            if((playAgain.equalsIgnoreCase("yes"))){
-                gameRunning = true;
-                deck.buildDeck();
-            }
-        }
-
     }
 
     @Override
@@ -157,38 +198,7 @@ public class BlackJackDealer implements CardDealer {
         userDisplayHand(player);
         }
 
-    public void takeTurn(Player player) {
-        while(true) {
-            try {
-                player.makeBet(UserInput.getDoubleInput("Place your bet! (Minimum $20.00) "));
-                break;
-            } catch (Exception e) {
-                System.out.println("Enter a valid number. ");
-            }
-        }
-        initializeHands(player);
-        dealHandTo(player);
-        determinePlayerHandValue(player.getHand());
-        assertBlackJack(player);
-        dealHandToDealer();
-        determineDealerHandValue(dealerHand);
 
-        boolean hit = checkIfPlayerHit();
-        while(hit){
-            takeHit(player);
-            hit = checkStatus(player, player.getBet());
-        }
-        if(dealerHandValue < 17){
-            dealCardToDealer();
-        }else if(dealerHandValue == 21 && insuranceValue != 0){
-            pay(player, insuranceValue);
-        }
-        if(gameRunning == true) {
-            decideWinner(player, player.getBet());
-            gameRunning = false;
-        }
-
-    }
 
     private void userDisplayHand(Player player) {
         StringBuilder outPut = new StringBuilder(1000);
@@ -270,7 +280,34 @@ public class BlackJackDealer implements CardDealer {
         return false;
     }
 
-    public void displayPlayerWallet(Player player){
-        System.out.println("You have $" + player.getWallet() + " remaining.");
+    private void hitProcess(Player player){
+        boolean hit = checkIfPlayerHit();
+        while(hit){
+            takeHit(player);
+            hit = checkStatus(player, player.getBet());
+        }
+    }
+
+    private void evaluateResult(Player player){
+        checkIfDealerHit();
+        payPlayer(player);
+    }
+
+
+
+    private void checkIfDealerHit() {
+        if (dealerHandValue < 17) {
+            dealCardToDealer();
+        }
+    }
+
+    private void payPlayer(Player player){
+        if(dealerHandValue == 21 && insuranceValue != 0){
+            pay(player, insuranceValue);
+        }
+        if(gameRunning == true) {
+            decideWinner(player, player.getBet());
+            gameRunning = false;
+        }
     }
 }
