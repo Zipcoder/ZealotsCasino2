@@ -59,11 +59,15 @@ public class BlackJackDealer implements CardDealer {
     public void takeTurn(Player player) {
         protectedBetProcess(player);
         buildPlayersHands(player);
-        assertBlackJack(player);
-        if(playerHandValue != 21) {
-            buildDealerHand(player);
-            hitProcess(player);
-            evaluateResult(player);
+        if(checkIfSplit(player)){
+            split(player);
+        }else {
+            assertBlackJack(player);
+            if (playerHandValue != 21) {
+                buildDealerHand(player);
+                hitProcess(player);
+                evaluateResult(player);
+            }
         }
     }
 
@@ -171,21 +175,14 @@ public class BlackJackDealer implements CardDealer {
 
     private void dealHandToDealer(Player player) {
         for (int i = 0; i < 2; i++) dealCardToDealer();
-        System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
+        displayDealerCardUp();
         if(dealerHand.getCards().get(0).getFaceValue() == "ACE"){
-            boolean response = requestInsuranceValue();
-            while(response){
-                try {
-                    setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
-                    double postInsuranceWallet = player.getWallet() - insuranceValue;
-                    player.setWallet(postInsuranceWallet);
-                    break;
-                }catch(Exception e){
-                    System.out.println("Please enter a valid number.");
-                }
-            }
-
+            protectedInsuranceRequest(player);
         }
+    }
+
+    private void displayDealerCardUp(){
+        System.out.println("Exposed card of dealer: " + dealerHand.getCards().get(0));
     }
 
     @Override
@@ -197,8 +194,6 @@ public class BlackJackDealer implements CardDealer {
         dealCardTo(player);
         userDisplayHand(player);
         }
-
-
 
     private void userDisplayHand(Player player) {
         StringBuilder outPut = new StringBuilder(1000);
@@ -293,8 +288,6 @@ public class BlackJackDealer implements CardDealer {
         payPlayer(player);
     }
 
-
-
     private void checkIfDealerHit() {
         if (dealerHandValue < 17) {
             dealCardToDealer();
@@ -309,5 +302,48 @@ public class BlackJackDealer implements CardDealer {
             decideWinner(player, player.getBet());
             gameRunning = false;
         }
+    }
+
+    private void protectedInsuranceRequest(Player player){
+        boolean response = requestInsuranceValue();
+        while(response){
+            try {
+                setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
+                double postInsuranceWallet = player.getWallet() - insuranceValue;
+                player.setWallet(postInsuranceWallet);
+                break;
+            }catch(Exception e){
+                System.out.println("Please enter a valid number.");
+            }
+        }
+    }
+
+    public boolean checkIfSplit(Player player){
+        if(player.getHand().getCards().get(0).getFaceValue().equals(player.getHand().getCards().get(1).getFaceValue())){
+            return true;
+        }
+        return false;
+    }
+
+    public void split(Player player){
+            player.makeBet(player.getBet() * 2);
+            ArrayList<Card> cards = new ArrayList<>();
+            for(int i = 0; i < player.getHand().getCards().size(); i++){
+                cards.add(player.getHand().getCards().get(i));
+            }
+            for(Card card : cards){
+                Hand hand = new Hand();
+                player.setHand(hand);
+                player.getHand().receiveCard(card);
+                dealCardTo(player);
+                assertBlackJack(player);
+                if(playerHandValue != 21) {
+                    buildDealerHand(player);
+                    hitProcess(player);
+                    evaluateResult(player);
+                }
+            }
+            player.setWallet()
+
     }
 }

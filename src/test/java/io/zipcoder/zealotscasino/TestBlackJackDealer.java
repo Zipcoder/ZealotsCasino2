@@ -142,5 +142,22 @@ public class TestBlackJackDealer {
         Assert.assertEquals("Checking to see if player receives proper amount", expected, player.getWallet(), 0);
     }
 
+    @Test
+    public void testCheckIfSplit_PlayerDrawsSameCardValue_IsASplit(){
+        //Given
+        blackJackDealer.initializeHands(player);
+        Card card1 = new Card("TWO", "Spades");
+        Card card2 = new Card("TWO", "Spades");
+        Hand currentHand = player.getHand();
+        currentHand.receiveCard(card1);
+        currentHand.receiveCard(card2);
+
+        //When
+        boolean returnValue = blackJackDealer.checkIfSplit(player);
+
+        //Then
+        Assert.assertTrue("Checking to see if split is recognized", returnValue == true);
+    }
+
 
 }
