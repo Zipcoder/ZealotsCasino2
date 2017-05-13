@@ -19,7 +19,7 @@ public class TestPokerDealer
                 player = new Player();
                 dealer = new PokerDealer();
         }
-        
+
 
         @Test
         public void testDealHandTo_FiveCards()
@@ -237,7 +237,71 @@ public class TestPokerDealer
         }
 
         @Test
-        public void testPayPlayer_Flush_Win_130()
+        public void testPayPlayer_NoPair_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 30;
+
+                //when
+                dealer.payPlayer(player, "NO PAIR");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing no pair loss", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_RoyalFlush_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 19550;
+
+                //when
+                dealer.payPlayer(player, "ROYAL FLUSH");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_StraightFlush_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 1030;
+
+                //when
+                dealer.payPlayer(player, "STRAIGHT FLUSH");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_FourOfAKind_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 530;
+
+                //when
+                dealer.payPlayer(player, "FOUR OF A KIND");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_Flush_PayOut()
         {
                 //given
 
@@ -253,24 +317,10 @@ public class TestPokerDealer
                 assertEquals("Testing flush payout", expeted, actual,0);
         }
 
-        @Test
-        public void testPayPlayer_RoyalFlush()
-        {
-                //given
-                player.setWallet(50);
-                player.makeBet(20);
-                double expeted = 19550;
 
-                //when
-                dealer.payPlayer(player, "ROYAL FLUSH");
-                double actual = player.getWallet();
-
-                //then
-                assertEquals("Testing flush payout", expeted, actual,0);
-        }
 
         @Test
-        public void testPayPlayer()
+        public void testPayPlayer_Pair()
         {
                 //given
 
@@ -285,6 +335,8 @@ public class TestPokerDealer
                 //then
                 assertEquals("Testing flush payout", expeted, actual,0);
         }
+
+
 
 
 
