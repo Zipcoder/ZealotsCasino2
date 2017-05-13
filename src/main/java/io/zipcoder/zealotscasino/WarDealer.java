@@ -94,13 +94,13 @@ public class WarDealer {
     }
 
     public void processTieOutcome(String outcome, Player player) {
-        if (outcome.equals("win")) {
-            pay(player, player.getBet().getBetValue() * 3);
-            UserInput.display("Your card is higher! You win your original bet!" + "\n" + player.printWallet() + "\n");
-        } else if (outcome.equals("tie")) {
-            pay(player, player.getBet().getBetValue() * 4);
-            UserInput.display("It's a tie! You win (double total bet)!" + "\n" + player.printWallet() + "\n");
-        } else UserInput.display("Dealer Wins!\nWallet : " + player.getWallet() + "\n");
+//        if (outcome.equals("win")) {
+//            pay(player, player.getBet().getBetValue() * 3);
+//            UserInput.display("Your card is higher! You win your original bet!" + "\n" + player.printWallet() + "\n");
+//        } else if (outcome.equals("tie")) {
+//            pay(player, player.getBet().getBetValue() * 4);
+//            UserInput.display("It's a tie! You win (double total bet)!" + "\n" + player.printWallet() + "\n");
+//        } else UserInput.display("Dealer Wins!\nWallet : " + player.getWallet() + "\n");
     }
 
 
@@ -134,7 +134,7 @@ public class WarDealer {
 
 
     //DONE
-    public double processDeterminedOutcome(String outcome) {
+    public int processDeterminedOutcome(String outcome) {
         switch (outcome) {
             case "win":
                 return bet.getBetValue();

@@ -205,13 +205,13 @@ public class TestWarDealer {
         //Given
         String outcome = "win";
         Bet bet = new Bet();
-        bet.setBetValue(20);
+        bet.makeBet(20, player);
         dealer.setBet(bet);
-        double expectedWinnings = 20;
+        int expectedWinnings = 20;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        int actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
-        assertEquals(expectedWinnings, actualWinnings, 0);
+        assertEquals(expectedWinnings, actualWinnings);
     }
 
     @Test
@@ -219,13 +219,13 @@ public class TestWarDealer {
         //Given
         String outcome = "lose";
         Bet bet = new Bet();
-        bet.setBetValue(20);
+        bet.makeBet(20, player);
         dealer.setBet(bet);
-        double expectedWinnings = 0;
+        int expectedWinnings = 0;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        int actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
-        assertEquals(expectedWinnings, actualWinnings, 0);
+        assertEquals(expectedWinnings, actualWinnings;
     }
 
     @Test
@@ -233,12 +233,12 @@ public class TestWarDealer {
         //Given
         String outcome = "tie";
         Bet bet = new Bet();
-        bet.setBetValue(20);
+        bet.makeBet(20, player);
         dealer.setBet(bet);
-        double expectedWinnings = -1;
+        int expectedWinnings = -1;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        int actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
-        assertEquals(expectedWinnings, actualWinnings, 0);
+        assertEquals(expectedWinnings, actualWinnings);
     }
 }
