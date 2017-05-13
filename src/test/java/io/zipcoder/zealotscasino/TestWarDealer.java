@@ -16,21 +16,9 @@ public class TestWarDealer {
     Player player;
 
     @Before
-    public void initWarDealer(){
+    public void initWarDealer() {
         dealer = new WarDealer();
         player = new Player();
-    }
-    @Test
-    public void dealHandTo_DealerHasCard_PlayerReceivesCard(){
-        //Given
-        Player player = new Player();
-        int expectedSizeOfHand = 1;
-
-        //When
-        dealer.dealHandTo(player);
-
-        //Then
-        assertEquals("Player did not receive card", expectedSizeOfHand, player.getHand().getCards().size());
     }
 
     @Test
@@ -48,7 +36,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void evaluateCardValue_CardIsAKing_returnsThirteen(){
+    public void evaluateCardValue_CardIsAKing_returnsThirteen() {
         //Given
         Card card = new Card(Card.CardValue.KING.name(), Card.Suit.HEARTS.name());
         int expected = 13;
@@ -61,7 +49,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void evaluateCardValue_CardIsAnAce_returnsFourteen(){
+    public void evaluateCardValue_CardIsAnAce_returnsFourteen() {
         //Given
         Card card = new Card(Card.CardValue.ACE.name(), Card.Suit.DIAMONDS.name());
         int expected = 14;
@@ -74,7 +62,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void evaluateCardValue_CardIsAFive_returnsFive(){
+    public void evaluateCardValue_CardIsAFive_returnsFive() {
         //Given
         Card card = new Card(Card.CardValue.FIVE.name(), Card.Suit.SPADES.name());
         int expected = 5;
@@ -87,7 +75,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void determineOutcome_PlayerCardHigher_ReturnWin(){
+    public void determineOutcome_PlayerCardHigher_ReturnWin() {
         //Given
         int playersCardValue = 10;
         int dealersCardValue = 9;
@@ -97,7 +85,7 @@ public class TestWarDealer {
         String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
 
         //Then
-        assertEquals("Player should have won",expected, actual);
+        assertEquals("Player should have won", expected, actual);
     }
 
     @Test
@@ -112,7 +100,7 @@ public class TestWarDealer {
         String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
 
         //: Then
-        assertEquals("Player should have lost",expected, actual);
+        assertEquals("Player should have lost", expected, actual);
     }
 
     @Test
@@ -127,61 +115,10 @@ public class TestWarDealer {
         String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
 
         //: Then
-        assertEquals("The result should be a tie",expected, actual);
+        assertEquals("The result should be a tie", expected, actual);
     }
-
     @Test
-    public void processDeterminedOutcome_PlayerWins_PlayerReceivesEvenBet(){
-        //Given
-        player.setWallet(100);
-        player.makeBet(20);
-        double expected = 120;
-
-        //When
-        dealer.processDeterminedOutcome("win", player);
-        double actual = player.getWallet();
-
-        //Then
-        assertEquals("Wallet should now have $120 (100 - 20 + 40)", expected, actual, 0);
-    }
-
-    @Test
-    public void processDeterminedOutcome_PlayerLoses_PlayerReceivesNothing(){
-        //Given
-        player.setWallet(100);
-        player.makeBet(20);
-        double expected = 80;
-
-        //When
-        dealer.processDeterminedOutcome("lose", player);
-        double actual = player.getWallet();
-
-        //Then
-        assertEquals("Wallet should now have $80", expected, actual, 0);
-    }
-
-    //come back to this when able to mock
-//    @Test
-//    public void processDeterminedOutcome_PlayerTiesAndDoublesBet_PlayerBetsAgain(){
-//        //Given
-//        player.setWallet(100);
-//        player.makeBet(20);
-//        String outcome = "tie";
-//
-//        //When
-//        dealer.processDeterminedOutcome(outcome, player);
-//        String choice = "Y";
-//
-//        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(choice.getBytes());
-//        UserInput userInput = new UserInput(byteArrayInputStream);
-//
-//        //Then
-//
-//
-//    }
-
-    @Test
-    public void processTieOutcome_PlayerWins_PlayerReceivesOriginalBet(){
+    public void processTieOutcome_PlayerWins_PlayerReceivesOriginalBet() {
         player.setWallet(100);
         player.makeBet(20);
         player.makeBet(20); //player doubles bet after tie
@@ -196,7 +133,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void processTieOutcome_PlayerLoses_WalletDecreasedByTwoBets(){
+    public void processTieOutcome_PlayerLoses_WalletDecreasedByTwoBets() {
         player.setWallet(100);
         player.makeBet(20);
         player.makeBet(20); //player doubles bet after tie
@@ -211,7 +148,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void processTieOutcome_PlayerTies_PlayerReceivesDoubleBet(){
+    public void processTieOutcome_PlayerTies_PlayerReceivesDoubleBet() {
         player.setWallet(100);
         player.makeBet(20);
         player.makeBet(20);
@@ -225,58 +162,83 @@ public class TestWarDealer {
         assertEquals("Wallet should now have $140", expected, actual, 0);
     }
 
+
+    // DONE
     @Test
-    public void playRound_PlayersCardIsHigher_WinOutcomeReturned(){
+    public void playRound_PlayersCardIsHigher_WinOutcomeReturned() {
         //Given
-        Hand playersHand = new Hand();
-        Hand dealersHand = new Hand();
+        String expectedOutcome = "win";
         Card playersCard = new Card(Card.CardValue.TEN.name(), Card.Suit.CLUBS.name());
         Card dealersCard = new Card(Card.CardValue.TWO.name(), Card.Suit.CLUBS.name());
-        playersHand.receiveCard(playersCard);
-        player.setHand(playersHand);
-        dealersHand.receiveCard(dealersCard);
-        dealer.setHand(dealersHand);
-        String expectedOutcome = "win";
         //When
-        String actualOutcome = dealer.playRound(player);
+        String actualOutcome = dealer.playRound(playersCard, dealersCard);
         //Then
         assertEquals(expectedOutcome, actualOutcome);
     }
 
     @Test
-    public void playRound_DealersCardIsHigher_LoseOutcomeReturned(){
+    public void playRound_DealersCardIsHigher_LoseOutcomeReturned() {
         //Given
-        Hand playersHand = new Hand();
-        Hand dealersHand = new Hand();
-        Card playersCard = new Card(Card.CardValue.THREE.name(), Card.Suit.CLUBS.name());
-        Card dealersCard = new Card(Card.CardValue.NINE.name(), Card.Suit.CLUBS.name());
-        playersHand.receiveCard(playersCard);
-        player.setHand(playersHand);
-        dealersHand.receiveCard(dealersCard);
-        dealer.setHand(dealersHand);
         String expectedOutcome = "lose";
+        Card playersCard = new Card(Card.CardValue.TEN.name(), Card.Suit.CLUBS.name());
+        Card dealersCard = new Card(Card.CardValue.KING.name(), Card.Suit.SPADES.name());
         //When
-        String actualOutcome = dealer.playRound(player);
+        String actualOutcome = dealer.playRound(playersCard, dealersCard);
         //Then
         assertEquals(expectedOutcome, actualOutcome);
     }
 
     @Test
-    public void playRound_CardsTie_TieOutcomeReturned(){
+    public void playRound_CardsTie_TieOutcomeReturned() {
         //Given
-        Hand playersHand = new Hand();
-        Hand dealersHand = new Hand();
-        Card playersCard = new Card(Card.CardValue.FIVE.name(), Card.Suit.CLUBS.name());
-        Card dealersCard = new Card(Card.CardValue.FIVE.name(), Card.Suit.CLUBS.name());
-        playersHand.receiveCard(playersCard);
-        player.setHand(playersHand);
-        dealersHand.receiveCard(dealersCard);
-        dealer.setHand(dealersHand);
         String expectedOutcome = "tie";
+        Card playersCard = new Card(Card.CardValue.TEN.name(), Card.Suit.CLUBS.name());
+        Card dealersCard = new Card(Card.CardValue.TEN.name(), Card.Suit.CLUBS.name());
         //When
-        String actualOutcome = dealer.playRound(player);
+        String actualOutcome = dealer.playRound(playersCard, dealersCard);
         //Then
         assertEquals(expectedOutcome, actualOutcome);
     }
 
+    @Test
+    public void processDeterminedOutcome_PlayerWins_WinningsAmountReturned() {
+        //Given
+        String outcome = "win";
+        Bet bet = new Bet();
+        bet.setBetValue(20);
+        dealer.setBet(bet);
+        double expectedWinnings = 20;
+        //When
+        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        //Then
+        assertEquals(expectedWinnings, actualWinnings, 0);
+    }
+
+    @Test
+    public void processDeterminedOutcome_PlayerLoses_ZeroAmountReturned() {
+        //Given
+        String outcome = "lose";
+        Bet bet = new Bet();
+        bet.setBetValue(20);
+        dealer.setBet(bet);
+        double expectedWinnings = 0;
+        //When
+        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        //Then
+        assertEquals(expectedWinnings, actualWinnings, 0);
+    }
+
+    @Test
+    public void processDeterminedOutcome_PlayerTies_NegativeOneAmountReturned() {
+        //Given
+        String outcome = "tie";
+        Bet bet = new Bet();
+        bet.setBetValue(20);
+        dealer.setBet(bet);
+        double expectedWinnings = -1;
+        //When
+        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        //Then
+        assertEquals(expectedWinnings, actualWinnings, 0);
+    }
 }
