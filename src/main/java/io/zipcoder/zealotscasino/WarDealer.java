@@ -10,18 +10,6 @@ public class WarDealer implements CardDealer {
     private Deck deck;
     private Hand hand;
 
-    public Deck getDeck() {
-        return deck;
-    }
-
-    public void setDeck(Deck deck) {
-        this.deck = deck;
-    }
-
-    public Hand getHand() {
-        return hand;
-    }
-
     public void setHand(Hand hand) {
         this.hand = hand;
     }
@@ -50,6 +38,7 @@ public class WarDealer implements CardDealer {
     }
 
     public void play(Player player) {
+        //replace with a method that checks if deck is empty
         if (deck.getDeckQue().size() == 0) {
             deck.buildDeck();
         }

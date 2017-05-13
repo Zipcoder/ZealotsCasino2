@@ -226,16 +226,57 @@ public class TestWarDealer {
     }
 
     @Test
-    public void playRound_PlayersCardIsHigher_WinOutComeReturned(){
+    public void playRound_PlayersCardIsHigher_WinOutcomeReturned(){
         //Given
-        Hand hand = new Hand();
+        Hand playersHand = new Hand();
+        Hand dealersHand = new Hand();
         Card playersCard = new Card(Card.CardValue.TEN.name(), Card.Suit.CLUBS.name());
         Card dealersCard = new Card(Card.CardValue.TWO.name(), Card.Suit.CLUBS.name());
-        hand.receiveCard(playersCard);
-        player.setHand(hand);
-        
+        playersHand.receiveCard(playersCard);
+        player.setHand(playersHand);
+        dealersHand.receiveCard(dealersCard);
+        dealer.setHand(dealersHand);
+        String expectedOutcome = "win";
         //When
-
+        String actualOutcome = dealer.playRound(player);
         //Then
+        assertEquals(expectedOutcome, actualOutcome);
     }
+
+    @Test
+    public void playRound_DealersCardIsHigher_LoseOutcomeReturned(){
+        //Given
+        Hand playersHand = new Hand();
+        Hand dealersHand = new Hand();
+        Card playersCard = new Card(Card.CardValue.THREE.name(), Card.Suit.CLUBS.name());
+        Card dealersCard = new Card(Card.CardValue.NINE.name(), Card.Suit.CLUBS.name());
+        playersHand.receiveCard(playersCard);
+        player.setHand(playersHand);
+        dealersHand.receiveCard(dealersCard);
+        dealer.setHand(dealersHand);
+        String expectedOutcome = "lose";
+        //When
+        String actualOutcome = dealer.playRound(player);
+        //Then
+        assertEquals(expectedOutcome, actualOutcome);
+    }
+
+    @Test
+    public void playRound_CardsTie_TieOutcomeReturned(){
+        //Given
+        Hand playersHand = new Hand();
+        Hand dealersHand = new Hand();
+        Card playersCard = new Card(Card.CardValue.FIVE.name(), Card.Suit.CLUBS.name());
+        Card dealersCard = new Card(Card.CardValue.FIVE.name(), Card.Suit.CLUBS.name());
+        playersHand.receiveCard(playersCard);
+        player.setHand(playersHand);
+        dealersHand.receiveCard(dealersCard);
+        dealer.setHand(dealersHand);
+        String expectedOutcome = "tie";
+        //When
+        String actualOutcome = dealer.playRound(player);
+        //Then
+        assertEquals(expectedOutcome, actualOutcome);
+    }
+
 }
