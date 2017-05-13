@@ -3,6 +3,8 @@ package io.zipcoder.zealotscasino;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -158,6 +160,26 @@ public class TestWarDealer {
         assertEquals("Wallet should now have $80", expected, actual, 0);
     }
 
+    //come back to this when able to mock
+//    @Test
+//    public void processDeterminedOutcome_PlayerTiesAndDoublesBet_PlayerBetsAgain(){
+//        //Given
+//        player.setWallet(100);
+//        player.makeBet(20);
+//        String outcome = "tie";
+//
+//        //When
+//        dealer.processDeterminedOutcome(outcome, player);
+//        String choice = "Y";
+//
+//        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(choice.getBytes());
+//        UserInput userInput = new UserInput(byteArrayInputStream);
+//
+//        //Then
+//
+//
+//    }
+
     @Test
     public void processTieOutcome_PlayerWins_PlayerReceivesOriginalBet(){
         player.setWallet(100);
@@ -201,5 +223,19 @@ public class TestWarDealer {
 
         //Then
         assertEquals("Wallet should now have $140", expected, actual, 0);
+    }
+
+    @Test
+    public void playRound_PlayersCardIsHigher_WinOutComeReturned(){
+        //Given
+        Hand hand = new Hand();
+        Card playersCard = new Card(Card.CardValue.TEN.name(), Card.Suit.CLUBS.name());
+        Card dealersCard = new Card(Card.CardValue.TWO.name(), Card.Suit.CLUBS.name());
+        hand.receiveCard(playersCard);
+        player.setHand(hand);
+        
+        //When
+
+        //Then
     }
 }

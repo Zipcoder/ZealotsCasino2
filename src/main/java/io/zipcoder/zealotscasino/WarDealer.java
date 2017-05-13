@@ -8,6 +8,23 @@ import static io.zipcoder.zealotscasino.UserInput.getStringInput;
  */
 public class WarDealer implements CardDealer {
     private Deck deck;
+    private Hand hand;
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    public Hand getHand() {
+        return hand;
+    }
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
 
     public WarDealer() {
         deck = new Deck();
@@ -33,7 +50,7 @@ public class WarDealer implements CardDealer {
     }
 
     public void play(Player player) {
-        if(deck.getDeckQue().size()==0){
+        if (deck.getDeckQue().size() == 0) {
             deck.buildDeck();
         }
         //get bet
@@ -116,12 +133,17 @@ public class WarDealer implements CardDealer {
     }
 
     public void processDeterminedOutcome(String outcome, Player player) {
-        if (outcome.equals("win")) {
-            pay(player, player.getBet().getBetValue() * 2);
-            UserInput.display("Your card is higher! You win!" + "\n" + player.printWallet() + "\n");
-        } else if (outcome.equals("tie")) processTie(player);
-        else {
-            UserInput.display("Dealer wins!" + "\n" + player.printWallet() + "\n");
+        switch (outcome) {
+            case "win":
+                pay(player, player.getBet().getBetValue() * 2);
+                UserInput.display("Your card is higher! You win!" + "\n" + player.printWallet() + "\n");
+                break;
+            case "lose":
+                UserInput.display("Dealer wins!" + "\n" + player.printWallet() + "\n");
+                break;
+            case "tie":
+                processTie(player);
+                break;
         }
     }
 
@@ -131,10 +153,11 @@ public class WarDealer implements CardDealer {
         UserInput.display("Your card : " + player.getHand().getCards().get(0));
 
         Card dealerCard = deck.surrenderCard();
-        UserInput.display("Dealer's card : " + dealerCard + "\n");
+        hand.receiveCard(dealerCard);
+        UserInput.display("Dealer's card : " + hand.getCards().get(0) + "\n");
 
         //compare cards
-        int dealerCardValue = evaluateCardValue(dealerCard);
+        int dealerCardValue = evaluateCardValue(hand.getCards().get(0));
         int playerCardValue = evaluateCardValue(player.getHand().getCards().get(0));
 
         //determine winner
