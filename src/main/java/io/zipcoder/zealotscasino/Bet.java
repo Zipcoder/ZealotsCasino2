@@ -8,7 +8,7 @@ public class Bet {
     private int bet;
     public final static int MINIMUM_BET = 20;
 
-    public boolean setBetValue(int betValue, Player player) {
+    public boolean makeBet(int betValue, Player player) {
         boolean flag = true;
         while(flag) {
             if (MINIMUM_BET > betValue) {
@@ -20,6 +20,7 @@ public class Bet {
             }
         }
         this.bet = betValue;
+        player.setWallet(player.getWallet() - betValue);
         return true;
     }
 
