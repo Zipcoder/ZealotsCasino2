@@ -43,8 +43,7 @@ public class PokerDealer implements CardDealer
 
     public void play(Player player)
     {
-        if (deck.getDeckQue().size() < 10)
-            deck.buildDeck();
+        deck.buildAnotherDeck();
 
         //get bet
         makeBet(player);
@@ -145,11 +144,16 @@ public class PokerDealer implements CardDealer
 
     public String evaluateFiveRanks(Player player)
     {
-        if (checkRoyalFlush(player)) return "ROYAL FLUSH";
-        else if (checkStraightFlush(player)) return "STRAIGHT FLUSH";
-        else if (checkFlush(player)) return "FLUSH";
-        else if (checkStraight(player)) return "STRAIGHT";
-        else return "NO PAIR";
+        if (checkRoyalFlush(player))
+            return "ROYAL FLUSH";
+        else if (checkStraightFlush(player))
+            return "STRAIGHT FLUSH";
+        else if (checkFlush(player))
+            return "FLUSH";
+        else if (checkStraight(player))
+            return "STRAIGHT";
+        else
+            return "NO PAIR";
     }
 
     public String evaluateTwoRanks(Player player)
@@ -199,9 +203,10 @@ public class PokerDealer implements CardDealer
         ArrayList<Card> playerHand = player.getHand().getCards();
         Collections.sort(playerHand);
 
-        if (returnNumberOfValuesInPlayerHand(player) == 5 && (playerHand.get(0).getValue() == 10))
+        if (returnNumberOfValuesInPlayerHand(player) == 5 && (playerHand.get(0).getValue() == 10) && checkFlush(player))
+        {
             return true;
-
+        }
         return false;
     }
 
@@ -209,23 +214,27 @@ public class PokerDealer implements CardDealer
     {
         ArrayList<Card> playerHand = player.getHand().getCards();
         Collections.sort(playerHand);
-        int value = playerHand.get(0).getValue();
+        int value = 2;
+        int value2 = playerHand.get(0).getValue();
 
         for (int i = 1; i < 4; i++)
         {
-            if ((playerHand.get(i).getValue() == value + 1) && (playerHand.get(4).getFaceValue().equals("ACE")))
+            if ((playerHand.get(i).getValue() == value) && (playerHand.get(4).getFaceValue().equals("ACE")))
             {
+                System.out.println("1: " + i);
                 value++;
                 if (value == 5) return true;
             }
         }
 
-        for (int i = 1; i < 5; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if (playerHand.get(i).getValue() == value + 1) value++;
-            else return false;
+            if (playerHand.get(i).getValue() == (playerHand.get(i+1).getValue()))
+            {
+                System.out.println("b" + i);
+            }
         }
-        return true;
+        return false;
     }
 
     public boolean checkStraightFlush(Player player)
