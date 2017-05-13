@@ -1,8 +1,6 @@
 package io.zipcoder.zealotscasino;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Created by denniskalaygian on 5/10/17.
@@ -279,7 +277,7 @@ public class BlackJackDealer implements CardDealer {
     public void assertBlackJack(Player player){
         if(playerHandValue == 21){
             displayBlackJack();
-            pay(player, player.getBet()*3);
+            pay(player, player.getBet().getBetValue() * 3);
             gameRunning = false;
         }
     }
@@ -296,7 +294,7 @@ public class BlackJackDealer implements CardDealer {
         boolean hit = checkIfPlayerHit();
         while(hit){
             takeHit(player);
-            hit = checkStatus(player, player.getBet());
+            hit = checkStatus(player, player.getBet().getBetValue());
         }
     }
 
@@ -321,7 +319,7 @@ public class BlackJackDealer implements CardDealer {
             pay(player, insuranceValue);
         }
         if(gameRunning == true) {
-            decideWinner(player, player.getBet());
+            decideWinner(player, player.getBet().getBetValue());
             gameRunning = false;
         }
     }
@@ -352,8 +350,8 @@ public class BlackJackDealer implements CardDealer {
     }
 
     public void split(Player player){
-            player.setWallet(player.getWallet() + player.getBet());
-            player.makeBet(player.getBet() * 2);
+            player.setWallet(player.getWallet() + player.getBet().getBetValue());
+            player.makeBet(player.getBet().getBetValue() * 2);
             ArrayList<Card> cards = new ArrayList<>();
             for(int i = 0; i < player.getHand().getCards().size(); i++){
                 cards.add(player.getHand().getCards().get(i));
