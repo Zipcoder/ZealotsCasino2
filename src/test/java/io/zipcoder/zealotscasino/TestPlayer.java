@@ -1,5 +1,6 @@
 package io.zipcoder.zealotscasino;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -55,5 +56,18 @@ public class TestPlayer {
         String actual = player.printWallet();
         //Then
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCanMakeBet_InsufficientFunds_ReturnFalse() {
+        // Given
+        Player player = new Player();
+        player.setWallet(400);
+
+        //When
+        boolean validBet = player.getBet().setBetValue(401);
+
+        //Then
+        Assert.assertTrue("Verify insufficent funds rejected", validBet);
     }
 }

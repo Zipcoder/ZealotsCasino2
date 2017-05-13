@@ -82,31 +82,31 @@ public class PokerDealer implements CardDealer
         switch (rankOfHand)
         {
             case "PAIR":
-                pay(player, player.getBet());
+                pay(player, player.getBet().getBetValue());
                 break;
             case "TWO PAIR":
-                pay(player, player.getBet() * 2);
+                pay(player, player.getBet().getBetValue() * 2);
                 break;
             case "THREE OF A KIND":
-                pay(player, player.getBet() * 3);
+                pay(player, player.getBet().getBetValue() * 3);
                 break;
             case "STRAIGHT":
-                pay(player, player.getBet() * 4);
+                pay(player, player.getBet().getBetValue() * 4);
                 break;
             case "FLUSH":
-                pay(player, player.getBet() * 6);
+                pay(player, player.getBet().getBetValue() * 6);
                 break;
             case "FULL HOUSE":
-                pay(player, player.getBet() * 9);
+                pay(player, player.getBet().getBetValue() * 9);
                 break;
             case "FOUR OF A KIND":
-                pay(player, player.getBet() * 25);
+                pay(player, player.getBet().getBetValue() * 25);
                 break;
             case "STRAIGHT FLUSH":
-                pay(player, player.getBet() * 50);
+                pay(player, player.getBet().getBetValue() * 50);
                 break;
             case "ROYAL FLUSH":
-                pay(player, player.getBet() * 976);
+                pay(player, player.getBet().getBetValue() * 976);
                 break;
             case "NO PAIR":
                 UserInput.display("Sorry, you lose!\nWallet: " + player.getWallet());
@@ -268,9 +268,9 @@ public class PokerDealer implements CardDealer
             UserInput.display("Insufficient Funds.");
             play(player);
             return;
-        } catch (SecurityException e)
-        {
-            UserInput.display("Minimum bet is $20.");
+
+        } catch (SecurityException e) {
+            Bet.displayMinimumBet();
             play(player);
             return;
         }
