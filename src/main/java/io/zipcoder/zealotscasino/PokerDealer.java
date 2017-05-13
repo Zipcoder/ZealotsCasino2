@@ -11,33 +11,39 @@ import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 /**
  * Created by luisgarcia on 5/11/17.
  */
-public class PokerDealer implements CardDealer {
+public class PokerDealer implements CardDealer
+{
     private Deck deck;
 
-    public PokerDealer() {
+    public PokerDealer()
+    {
         deck = new Deck();
         deck.buildDeck();
     }
 
 
-    public void dealCardTo(Player player) {
+    public void dealCardTo(Player player)
+    {
         player.getHand().receiveCard(deck.surrenderCard());
     }
 
 
-    public void dealHandTo(Player player) {
+    public void dealHandTo(Player player)
+    {
         for (int i = 0; i < 5; i++)
             dealCardTo(player);
     }
 
 
-    public void pay(Player player, double payOut) {
+    public void pay(Player player, double payOut)
+    {
         player.collectWinnings(payOut);
         UserInput.display("You win " + payOut + "!\nWallet: " + player.getWallet());
     }
 
-    public void play(Player player) {
-        if(deck.getDeckQue().size() < 10)
+    public void play(Player player)
+    {
+        if (deck.getDeckQue().size() < 10)
             deck.buildDeck();
 
         //get bet
@@ -71,8 +77,10 @@ public class PokerDealer implements CardDealer {
         askPlayAgain(player);
     }
 
-    public void payPlayer(Player player, String rankOfHand) {
-        switch(rankOfHand){
+    public void payPlayer(Player player, String rankOfHand)
+    {
+        switch (rankOfHand)
+        {
             case "PAIR":
                 pay(player, player.getBet());
                 break;
@@ -108,7 +116,8 @@ public class PokerDealer implements CardDealer {
         }
     }
 
-    public void askPlayAgain(Player player) {
+    public void askPlayAgain(Player player)
+    {
         String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit)");
         if (choice.equalsIgnoreCase("Y"))
             play(player);
@@ -116,20 +125,26 @@ public class PokerDealer implements CardDealer {
             UserInput.display("Thanks for playing!\n\n");
     }
 
-    public String calculateHand(Player player) {
+    public String calculateHand(Player player)
+    {
         int numberOfValues = returnNumberOfValuesInPlayerHand(player);
-        if (numberOfValues == 5) {
+        if (numberOfValues == 5)
+        {
             return evaluateFiveRanks(player);
-        } else if (numberOfValues == 4) {
+        } else if (numberOfValues == 4)
+        {
             return "PAIR";
-        } else if (numberOfValues == 3) {
+        } else if (numberOfValues == 3)
+        {
             return evaluateThreeRanks(player);
-        } else {
+        } else
+        {
             return evaluateTwoRanks(player);
         }
     }
 
-    public String evaluateFiveRanks(Player player) {
+    public String evaluateFiveRanks(Player player)
+    {
         if (checkRoyalFlush(player)) return "ROYAL FLUSH";
         else if (checkStraightFlush(player)) return "STRAIGHT FLUSH";
         else if (checkFlush(player)) return "FLUSH";
@@ -137,28 +152,34 @@ public class PokerDealer implements CardDealer {
         else return "NO PAIR";
     }
 
-    public String evaluateTwoRanks(Player player) {
+    public String evaluateTwoRanks(Player player)
+    {
         ArrayList<Card> hand = player.getHand().getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
-        for (Integer key : mapOfHand.keySet()) {
+        for (Integer key : mapOfHand.keySet())
+        {
             if (mapOfHand.get(key) == 4) return "FOUR OF A KIND";
         }
         return "FULL HOUSE";
     }
 
-    public String evaluateThreeRanks(Player player) {
+    public String evaluateThreeRanks(Player player)
+    {
         ArrayList<Card> hand = player.getHand().getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
-        for (Integer key : mapOfHand.keySet()) {
+        for (Integer key : mapOfHand.keySet())
+        {
             if (mapOfHand.get(key) == 3) return "THREE OF A KIND";
         }
         return "TWO PAIR";
     }
 
-    public Map<Integer, Integer> toHashMap(ArrayList<Card> playerHand) {
+    public Map<Integer, Integer> toHashMap(ArrayList<Card> playerHand)
+    {
         Map<Integer, Integer> mapOfValues = new HashMap<>();
 
-        for (int i = 0; i < playerHand.size(); i++) {
+        for (int i = 0; i < playerHand.size(); i++)
+        {
             Integer key = playerHand.get(i).getValue();
             Integer frequency = mapOfValues.get(key);
             mapOfValues.put(key, frequency == null ? 1 : frequency + 1);
@@ -166,13 +187,15 @@ public class PokerDealer implements CardDealer {
         return mapOfValues;
     }
 
-    public int returnNumberOfValuesInPlayerHand(Player player) {
+    public int returnNumberOfValuesInPlayerHand(Player player)
+    {
         Map<Integer, Integer> mapOfValues = toHashMap(player.getHand().getCards());
         Integer amountOfKey = mapOfValues.keySet().size();
         return amountOfKey;
     }
 
-    public boolean checkRoyalFlush(Player player) {
+    public boolean checkRoyalFlush(Player player)
+    {
         ArrayList<Card> playerHand = player.getHand().getCards();
         Collections.sort(playerHand);
 
@@ -182,58 +205,71 @@ public class PokerDealer implements CardDealer {
         return false;
     }
 
-    public boolean checkStraight(Player player) {
+    public boolean checkStraight(Player player)
+    {
         ArrayList<Card> playerHand = player.getHand().getCards();
         Collections.sort(playerHand);
         int value = playerHand.get(0).getValue();
 
-        for (int i = 1; i < 4; i++) {
-            if ((playerHand.get(i).getValue() == value + 1) && (playerHand.get(4).getFaceValue().equals("ACE"))) {
+        for (int i = 1; i < 4; i++)
+        {
+            if ((playerHand.get(i).getValue() == value + 1) && (playerHand.get(4).getFaceValue().equals("ACE")))
+            {
                 value++;
                 if (value == 5) return true;
             }
         }
 
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 5; i++)
+        {
             if (playerHand.get(i).getValue() == value + 1) value++;
             else return false;
         }
         return true;
     }
 
-    public boolean checkStraightFlush(Player player) {
+    public boolean checkStraightFlush(Player player)
+    {
 
-        if (checkFlush(player) && checkStraight(player)) {
+        if (checkFlush(player) && checkStraight(player))
+        {
             return true;
         }
         return false;
     }
 
-    public boolean checkFlush(Player player) {
+    public boolean checkFlush(Player player)
+    {
         ArrayList<Card> playerHand = player.getHand().getCards();
         String myString = playerHand.get(0).getSuit();
 
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 5; i++)
+        {
             if (!playerHand.get(i).getSuit().equals(myString))
                 return false;
         }
         return true;
     }
 
-    public void replace(Player player, int numberToReplace) {
+    public void replace(Player player, int numberToReplace)
+    {
         for (int i = 0; i < numberToReplace; i++)
             dealCardTo(player);
     }
 
 
-    public void makeBet(Player player) {
-        try {
+    public void makeBet(Player player)
+    {
+        try
+        {
             player.makeBet(getDoubleInput("Make a bet"));
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e)
+        {
             UserInput.display("Insufficient Funds.");
             play(player);
             return;
-        } catch (SecurityException e) {
+        } catch (SecurityException e)
+        {
             UserInput.display("Minimum bet is $20.");
             play(player);
             return;
@@ -241,34 +277,42 @@ public class PokerDealer implements CardDealer {
     }
 
 
-    public int discardCards(Player player) {
+    public int discardCards(Player player)
+    {
         double numCardstoDiscard;
-        do{
+        do
+        {
             numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
-            if(numCardstoDiscard > 6){
+            if (numCardstoDiscard > 6)
+            {
                 UserInput.display("You can only discard the card you have");
             }
-        } while(numCardstoDiscard > 6);
+        } while (numCardstoDiscard > 6);
         ArrayList<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < numCardstoDiscard; i++) {
+        for (int i = 0; i < numCardstoDiscard; i++)
+        {
             double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
             indexes.add((int) getDiscard);
         }
         Collections.sort(indexes);
         Hand cloneOfHand = player.getHand();
-        for (int j = indexes.size() - 1; j >= 0; j--) {
+        for (int j = indexes.size() - 1; j >= 0; j--)
+        {
             cloneOfHand.remove(indexes.get(j) - 1);
         }
         player.setHand(cloneOfHand);
         return (int) numCardstoDiscard;
     }
 
-    public void userDisplayHand(Player player) {
+    public void userDisplayHand(Player player)
+    {
         StringBuilder outPut = new StringBuilder(1000);
         ArrayList<Card> cards = player.getHand().getCards();
-        for (int i = 0; i < cards.size(); i++) {
+        for (int i = 0; i < cards.size(); i++)
+        {
             outPut.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");
         }
         UserInput.display(outPut);
     }
+
 }

@@ -32,6 +32,19 @@ public class Card implements Comparable<Card>{
         return faceValue;
     }
 
+    public String getSuitSymbol()
+    {
+        if(suit.equals(Suit.SPADES))
+            return ((char)'\u2660' + " ");
+        else if(suit.equals(Suit.CLUBS))
+            return ((char)'\u2663' + " ");
+        else if(suit.equals(Suit.DIAMONDS))
+            return ((char)'\u2666' + " ");
+        else
+            return ((char)'\u2764' + " ");
+
+    }
+
     public void setFaceValue(String theFaceValue) {
         faceValue = theFaceValue;
     }
@@ -41,8 +54,9 @@ public class Card implements Comparable<Card>{
     }
 
     public String toString(){
-        
-        return String.format("%s of %s", faceValue.charAt(0) + faceValue.substring(1).toLowerCase(), suit.charAt(0) + suit.substring(1).toLowerCase());
+        return ("| " + getFaceValue().substring(0, 1) + " " + getSuitSymbol() + " |");
     }
+
+
 
 }
