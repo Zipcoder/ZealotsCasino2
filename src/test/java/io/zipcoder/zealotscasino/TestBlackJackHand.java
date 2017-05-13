@@ -37,9 +37,11 @@ public class TestBlackJackHand {
     @Test
     public void testExamineHandValue_PlayerHasHand_CorrectValueIsReturned(){
         //Given
-        Card card = new Card("TWO", "Spades");
-        hand.receiveCard(card);
-        int expectedValue = 2;
+        Card card1 = new Card("TWO", "Spades");
+        Card card2 = new Card("THREE", "Spades");
+        hand.receiveCard(card1);
+        hand.receiveCard(card2);
+        int expectedValue = 5;
 
         //When
         int returnValue = hand.examineHandValue();
@@ -132,5 +134,28 @@ public class TestBlackJackHand {
         //Then
         Assert.assertTrue("Checking if valid BlackJack response", hand.checkBlackJack());
         Assert.assertEquals("Checking if valid BlackJack at 21", 21, hand.getPlayerHandValue());
+    }
+
+    @Test
+    public void testAssertBlackJack_PlayerHasBlackJack_PlayerIsPaidProperly() {
+        //Given
+        player.setHand(new BlackJackHand());
+        blackJackDealer.initializeHands(player);
+        Card card1 = new Card("ACE", "Spades");
+        Card card2 = new Card("TEN", "Spades");
+        Hand currentHand = player.getHand();
+        currentHand.receiveCard(card1);
+        currentHand.receiveCard(card2);
+        BlackJackHand hand = (BlackJackHand) player.getHand();
+        blackJackDealer.setPlayerHandValue(hand.examineHandValue());
+        player.setWallet(300);
+        player.makeBet(300);
+        double expected = 900;
+
+        //When
+        blackJackDealer.assertBlackJack(player);
+
+        //Then
+        Assert.assertEquals("Checking to see if player receives proper amount", expected, player.getWallet(), 0);
     }
 }

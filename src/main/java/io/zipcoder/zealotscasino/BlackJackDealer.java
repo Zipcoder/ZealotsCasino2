@@ -227,8 +227,7 @@ public class BlackJackDealer implements CardDealer {
     }
 
     public void assertBlackJack(Player player) {
-        BlackJackHand playerHand = toBlackJackHand(player.getHand());
-        if (playerHand.checkBlackJack()) {
+        if (playerHandValue == 21) {
             displayBlackJack();
             pay(player, player.getBet().getBetValue() * 3);
             gameRunning = false;
