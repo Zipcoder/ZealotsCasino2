@@ -21,6 +21,28 @@ public class TestPokerDealer
         }
 
         @Test
+        public void testBuildAnotherDeck()
+        {
+                //given
+                dealer.dealHandTo(player);
+
+        }
+
+        @Test
+        public void testDealHandTo_FiveCards()
+        {
+                //Given
+                dealer.dealHandTo(player);
+                int expected = 5;
+
+                //When
+                int actual = player.getHand().getCards().size();
+
+                //Then
+                assertEquals("Should deal out five cards", expected, actual);
+        }
+
+        @Test
         public void checkStraight_TwoThroughSix_ReturnTrue()
         {
                 //given
