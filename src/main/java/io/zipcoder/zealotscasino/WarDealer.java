@@ -122,13 +122,7 @@ public class WarDealer {
         this.bet = bet;
     }
 
-    public String determineOutcome(int playerCardValue, int dealerCardValue) {
-        if (playerCardValue > dealerCardValue) {
-            return "win";
-        } else if (playerCardValue < dealerCardValue) {
-            return "lose";
-        } else return "tie";
-    }
+
 
 
 
@@ -152,6 +146,14 @@ public class WarDealer {
         UserInput.display("Your Card: " + playersCard);
         UserInput.display("Your Card: " + dealersCard);
         return determineOutcome(evaluateCardValue(playersCard), evaluateCardValue(dealersCard));
+    }
+
+    public String determineOutcome(int playerCardValue, int dealerCardValue) {
+        if (playerCardValue > dealerCardValue) {
+            return "win";
+        } else if (playerCardValue < dealerCardValue) {
+            return "lose";
+        } else return "tie";
     }
 
 }

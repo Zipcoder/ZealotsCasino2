@@ -75,49 +75,6 @@ public class TestWarDealer {
     }
 
     @Test
-    public void determineOutcome_PlayerCardHigher_ReturnWin() {
-        //Given
-        int playersCardValue = 10;
-        int dealersCardValue = 9;
-        String expected = "win";
-
-        //When
-        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
-
-        //Then
-        assertEquals("Player should have won", expected, actual);
-    }
-
-    @Test
-    public void determineOutcome_PlayerCardLower_ReturnsLose() {
-
-        //: Given
-        int playersCardValue = 9;
-        int dealersCardValue = 10;
-        String expected = "lose";
-
-        //: When
-        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
-
-        //: Then
-        assertEquals("Player should have lost", expected, actual);
-    }
-
-    @Test
-    public void determineOutcome_EqualValue_ReturnsTie() {
-
-        //: Given
-        int playersCardValue = 10;
-        int dealersCardValue = 10;
-        String expected = "tie";
-
-        //: When
-        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
-
-        //: Then
-        assertEquals("The result should be a tie", expected, actual);
-    }
-    @Test
     public void processTieOutcome_PlayerWins_PlayerReceivesOriginalBet() {
         player.setWallet(100);
         player.makeBet(20);
@@ -241,4 +198,49 @@ public class TestWarDealer {
         //Then
         assertEquals(expectedWinnings, actualWinnings);
     }
+
+    @Test
+    public void determineOutcome_PlayerCardHigher_ReturnWin() {
+        //Given
+        int playersCardValue = 10;
+        int dealersCardValue = 9;
+        String expected = "win";
+
+        //When
+        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
+
+        //Then
+        assertEquals("Player should have won", expected, actual);
+    }
+
+    @Test
+    public void determineOutcome_PlayerCardLower_ReturnsLose() {
+
+        //: Given
+        int playersCardValue = 9;
+        int dealersCardValue = 10;
+        String expected = "lose";
+
+        //: When
+        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
+
+        //: Then
+        assertEquals("Player should have lost", expected, actual);
+    }
+
+    @Test
+    public void determineOutcome_EqualValue_ReturnsTie() {
+
+        //: Given
+        int playersCardValue = 10;
+        int dealersCardValue = 10;
+        String expected = "tie";
+
+        //: When
+        String actual = dealer.determineOutcome(playersCardValue, dealersCardValue);
+
+        //: Then
+        assertEquals("The result should be a tie", expected, actual);
+    }
+
 }
