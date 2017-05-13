@@ -3,8 +3,7 @@ package io.zipcoder.zealotscasino;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
-import static io.zipcoder.zealotscasino.UserInput.getStringInput;
+import static io.zipcoder.zealotscasino.UserInput.*;
 
 /**
  * Created by stephenpegram on 5/11/17.
@@ -22,7 +21,7 @@ public class BigSixDealer {
     public void play(Player player) {
         initializeWheelDenominations();
         playRound(player);
-        UserInput.display(player.printWallet());
+        display(player.printWallet());
         askPlayAgain(player);
     }
 
@@ -88,9 +87,9 @@ public class BigSixDealer {
         for (WheelBet wheelBet : wheelBets) {
             if (wheelBet.getLocationOnWheel().equalsIgnoreCase(winningDenomination)) {
                 payOut(player, payOutRatio, wheelBet.getBetAmount());
-                UserInput.display("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " netted " + (wheelBet.getBetAmount() * payOutRatio) + "!!");
+                display("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " netted " + (wheelBet.getBetAmount() * payOutRatio) + "!!");
             } else {
-                UserInput.display("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " did not hit...");
+                display("Your bet of $" + wheelBet.getBetAmount() + " on denomination " + wheelBet.getLocationOnWheel() + " did not hit...");
             }
         }
     }
@@ -100,8 +99,8 @@ public class BigSixDealer {
         String denominationChoice;
 
         do {
-            UserInput.display("Enter a denomination on the wheel to determine your pay out ratio\n1 : You win your bet * 1\n2 : You win your bet * 2\n5: You win your bet * 5\n10 : You win your bet * 10\n20 : You win your bet * 20\nJOKER : You win your bet * 40\nCASINO : You win your bet * 40\n");
-            denominationChoice = UserInput.getStringInput("Which denomination would you like to place a bet on? (or n if done placing bets)");
+            display("Enter a denomination on the wheel to determine your pay out ratio\n1 : You win your bet * 1\n2 : You win your bet * 2\n5: You win your bet * 5\n10 : You win your bet * 10\n20 : You win your bet * 20\nJOKER : You win your bet * 40\nCASINO : You win your bet * 40\n");
+            denominationChoice = getStringInput("Which denomination would you like to place a bet on? (or n if done placing bets)");
 
             if (denominationChoice.equalsIgnoreCase("n")) {
                 break;
@@ -110,21 +109,21 @@ public class BigSixDealer {
                 try {
                     player.makeBet(getDoubleInput("How much would you like to bet?"));
                 } catch (IllegalArgumentException e) {
-                    UserInput.display("Insufficient Funds.");
-                    UserInput.display("\n" + player.printWallet() + "\n");
+                    display("Insufficient Funds.");
+                    display("\n" + player.printWallet() + "\n");
                     takeBetsAndDenominations(player);
                     return;
                 } catch (SecurityException e) {
-                    UserInput.display("Minimum bet is $20.");
-                    UserInput.display("\n" + player.printWallet() + "\n");
+                    display("Minimum bet is $20.");
+                    display("\n" + player.printWallet() + "\n");
                     takeBetsAndDenominations(player);
                     return;
                 }
-                WheelBet wheelbet = new WheelBet(player.getBet().betValue(), denominationChoice);
+                WheelBet wheelbet = new WheelBet(player.getBet().getBetValue(), denominationChoice);
                 wheelBets.add(wheelbet);
-                UserInput.display("\n" + player.printWallet() + "\n");
+                display("\n" + player.printWallet() + "\n");
             } else {
-                UserInput.display("You must enter a valid denomination.");
+                display("You must enter a valid denomination.");
             }
         } while (!denominationChoice.equalsIgnoreCase("n"));
     }
@@ -136,9 +135,9 @@ public class BigSixDealer {
             if (choice.equalsIgnoreCase("Y")) {
                 wheelBets.clear();
                 play(player);
-            } else UserInput.display("Thanks for playing!\n\n");
+            } else display("Thanks for playing!\n\n");
         } else {
-            UserInput.display("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");
+            display("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");
         }
     }
 }

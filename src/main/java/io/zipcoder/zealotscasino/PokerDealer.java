@@ -74,31 +74,31 @@ public class PokerDealer implements CardDealer {
     public void payPlayer(Player player, String rankOfHand) {
         switch(rankOfHand){
             case "PAIR":
-                pay(player, player.getBet().betValue());
+                pay(player, player.getBet().getBetValue());
                 break;
             case "TWO PAIR":
-                pay(player, player.getBet().betValue() * 2);
+                pay(player, player.getBet().getBetValue() * 2);
                 break;
             case "THREE OF A KIND":
-                pay(player, player.getBet().betValue() * 3);
+                pay(player, player.getBet().getBetValue() * 3);
                 break;
             case "STRAIGHT":
-                pay(player, player.getBet().betValue() * 4);
+                pay(player, player.getBet().getBetValue() * 4);
                 break;
             case "FLUSH":
-                pay(player, player.getBet().betValue() * 6);
+                pay(player, player.getBet().getBetValue() * 6);
                 break;
             case "FULL HOUSE":
-                pay(player, player.getBet().betValue() * 9);
+                pay(player, player.getBet().getBetValue() * 9);
                 break;
             case "FOUR OF A KIND":
-                pay(player, player.getBet().betValue() * 25);
+                pay(player, player.getBet().getBetValue() * 25);
                 break;
             case "STRAIGHT FLUSH":
-                pay(player, player.getBet().betValue() * 50);
+                pay(player, player.getBet().getBetValue() * 50);
                 break;
             case "ROYAL FLUSH":
-                pay(player, player.getBet().betValue() * 976);
+                pay(player, player.getBet().getBetValue() * 976);
                 break;
             case "NO PAIR":
                 UserInput.display("Sorry, you lose!\nWallet: " + player.getWallet());

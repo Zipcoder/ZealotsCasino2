@@ -21,19 +21,21 @@ public class Player {
     }
 
     public Bet getBet() {
-        return bet;
+        return this.bet;
     }
 
-    public void makeBet(double bet) {
-        if (bet > wallet) {
+    public void makeBet(double betAmount) {
+        if (betAmount > wallet) {
             throw new IllegalArgumentException("Insufficient Funds");
         }
-        if (bet < MINIMUM_BET){
+        if (betAmount < MINIMUM_BET){
             throw new SecurityException("Minimum bet not achieved");
         }
-        this.bet.makeBet(bet);
-        this.wallet = wallet - bet;
+        this.bet.setBetValue(betAmount);
+        this.wallet = wallet - betAmount;
     }
+
+
 
     public double getWallet() {
         return wallet;
@@ -69,7 +71,7 @@ public class Player {
     }
 
     public boolean canMakeBet() {
-        if (bet.betValue() > wallet || bet.betValue() < MINIMUM_BET) {
+        if (bet.getBetValue() > wallet || bet.getBetValue() < MINIMUM_BET) {
             return false;
         }
         return true;
