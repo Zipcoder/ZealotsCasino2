@@ -24,7 +24,7 @@ public class Bet {
         return true;
     }
 
-    public double getBetValue() {
+    public int getBetValue() {
         return this.bet;
     }
 
