@@ -5,12 +5,19 @@ package io.zipcoder.zealotscasino;
  */
 public class Bet {
 
-    private double bet;
-    private final static double MINIMUM_BET = 20;
+    private int bet;
+    public final static int MINIMUM_BET = 20;
 
-    public boolean setBetValue(double betValue) {
-        if (MINIMUM_BET > betValue) {
-            return false;
+    public boolean setBetValue(int betValue, Player player) {
+        boolean flag = true;
+        while(flag) {
+            if (MINIMUM_BET > betValue) {
+                displayMinimumBet();
+                return false;
+            } else if (player.getWallet() < betValue) {
+                UserInput.display("You do not have enough chips!\n" + player.printWallet());
+                return false;
+            }
         }
         this.bet = betValue;
         return true;
