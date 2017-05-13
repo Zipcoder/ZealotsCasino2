@@ -32,10 +32,30 @@ public class Card implements Comparable<Card>{
         return faceValue;
     }
 
-//    public String getFaceToPrint()
-//    {
-//
-//    }
+    public String getFaceToPrint()
+    {
+        if(getValue() > 10)
+        {
+            if(getValue() == 11)
+            {
+                return getFaceValue().substring(0,1);
+            }
+            else if(getValue() == 12)
+            {
+                return getFaceValue().substring(0,1);
+            }
+            else if(getValue() == 13)
+            {
+                return getFaceValue().substring(0,1);
+            }
+            else
+            {
+                return getFaceValue().substring(0,1);
+            }
+        }
+        else
+            return getValue()+"";
+    }
 
     public String getSuitSymbol()
     {
@@ -61,7 +81,7 @@ public class Card implements Comparable<Card>{
     }
 
     public String toString(){
-        return String.format("| %-2s %2s|", getValue(), getSuitSymbol());
+        return String.format("| %-2s %2s|", getFaceToPrint(), getSuitSymbol());
     }
 
 
