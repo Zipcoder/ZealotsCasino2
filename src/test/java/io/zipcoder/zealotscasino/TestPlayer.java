@@ -65,7 +65,7 @@ public class TestPlayer {
         player.setWallet(400);
 
         //When
-        boolean validBet = player.getBet().makeBet(401);
+        boolean validBet = player.getBet().setBetValue(401);
 
         //Then
         Assert.assertTrue("Verify insufficent funds rejected", validBet);

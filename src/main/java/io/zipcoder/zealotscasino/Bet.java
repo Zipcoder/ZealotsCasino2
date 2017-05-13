@@ -8,16 +8,16 @@ public class Bet {
     private double bet;
     private final static double MINIMUM_BET = 20;
 
-    public boolean makeBet(double betValue) {
-        if (MINIMUM_BET >= betValue) {
+    public boolean setBetValue(double betValue) {
+        if (MINIMUM_BET > betValue) {
             return false;
         }
-        bet = betValue;
+        this.bet = betValue;
         return true;
     }
 
-    public double betValue() {
-        return bet;
+    public double getBetValue() {
+        return this.bet;
     }
 
     public void promptBet() {
