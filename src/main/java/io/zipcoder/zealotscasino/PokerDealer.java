@@ -43,7 +43,7 @@ public class PokerDealer implements CardDealer
 
     public void play(Player player)
     {
-        buildAnotherDeck(deck);//only build if less than 10 cards remain
+        deck.buildAnotherDeck();
 
         //get bet
         makeBet(player);
@@ -74,16 +74,6 @@ public class PokerDealer implements CardDealer
         player.setHand(new Hand());
 
         askPlayAgain(player);
-    }
-
-    public Deck buildAnotherDeck(Deck deck)
-    {
-        if (deck.getDeckQue().size() < 10)
-        {
-            deck.buildDeck();
-            return deck;
-        }
-        return deck;
     }
 
     public void payPlayer(Player player, String rankOfHand)

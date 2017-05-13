@@ -11,7 +11,7 @@ public class TestPokerDealer
 {
         private PokerDealer dealer;
         private Player player;
-
+        private Deck deck;
 
         @Before
         public void setUp()
@@ -19,14 +19,7 @@ public class TestPokerDealer
                 player = new Player();
                 dealer = new PokerDealer();
         }
-
-        @Test
-        public void testBuildAnotherDeck()
-        {
-                //given
-                dealer.dealHandTo(player);
-
-        }
+        
 
         @Test
         public void testDealHandTo_FiveCards()
