@@ -20,11 +20,11 @@ public class Bet {
         return this.bet;
     }
 
-    public void promptBet() {
+    public static void promptBet() {
         UserInput.display("How much would you like to bet?");
     }
 
-    public void displayMiniumBet() {
+    public static void displayMinimumBet() {
         UserInput.display("Minimum bet is $20.");
     }
 

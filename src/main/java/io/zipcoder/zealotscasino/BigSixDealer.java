@@ -114,7 +114,7 @@ public class BigSixDealer {
                     takeBetsAndDenominations(player);
                     return;
                 } catch (SecurityException e) {
-                    display("Minimum bet is $20.");
+                    Bet.displayMinimumBet();
                     display("\n" + player.printWallet() + "\n");
                     takeBetsAndDenominations(player);
                     return;

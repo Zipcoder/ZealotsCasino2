@@ -44,7 +44,7 @@ public class WarDealer implements CardDealer {
             play(player);
             return;
         } catch (SecurityException e) {
-            UserInput.display("Minimum bet is $20.");
+            Bet.displayMinimumBet();
             play(player);
             return;
         }
