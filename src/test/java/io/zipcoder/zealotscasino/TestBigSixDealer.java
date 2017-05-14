@@ -63,11 +63,9 @@ public class TestBigSixDealer {
         bet.makeBet(20, player);
         int payOutRatio = 20;
         double expected = 500;
-
         //When
         wheelDealer.pay(player, payOutRatio * bet.getBetValue());
         double actual = player.getWallet();
-
         //Then
         assertEquals(expected, actual,0);
     } */
@@ -82,11 +80,9 @@ public class TestBigSixDealer {
         bet.makeBet(20, player);
         int payOutRatio = -1;
         double expected = 80;
-
     //When
         wheelDealer.pay(player, payOutRatio * bet.getBetValue());
         double actual = player.getWallet();
-
     //Then
         assertEquals(expected, actual,0);
     } */
