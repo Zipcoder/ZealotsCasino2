@@ -29,7 +29,7 @@ public class WarDealer implements Dealer {
         checkIfDeckIsEmpty(deck);
         Bet.displayMinimumBet();
         do {
-                betValidation = bet.makeBet(UserInput.getDoubleInput("Place a bet."), player);
+            betValidation = bet.makeBet(UserInput.getDoubleInput("Place a bet."), player);
         } while (!betValidation);
         setBet(bet);
 
@@ -51,10 +51,9 @@ public class WarDealer implements Dealer {
         UserInput.display("YOU " + outcome.toUpperCase() + "!");
         pay(player, winnings);
         UserInput.display(player.printWallet());
-        if(player.getWallet() >= Bet.MINIMUM_BET){
+        if (player.getWallet() >= Bet.MINIMUM_BET) {
             askPlayAgain(player);
-        }
-        else{
+        } else {
             UserInput.display("I suggest hitting Leon's Street Casino around the corner, you're too broke for us.");
         }
     }
