@@ -42,6 +42,24 @@ public class TestPokerDealer
         }
 
         @Test
+        public void testSetPlayerHand()
+        {
+                //Given
+                dealer.dealHand();
+                dealer.setPlayerHand(hand);
+                dealer.dealCard();
+                int expected = 1; 
+
+                //When
+                int actual = dealer.showPlayerHand().getCards().size();
+
+                //Then
+                assertEquals("Should deal out five cards", expected, actual);
+        }
+
+
+
+        @Test
         public void checkStraight_TwoThroughSix_ReturnTrue()
         {
                 //given
@@ -263,7 +281,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expected = 19550;
 
                 //when
@@ -279,7 +299,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expected = 1030;
 
                 //when
@@ -295,7 +317,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expected = 530;
 
                 //when
@@ -311,7 +335,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expected = 210;
 
                 //when
@@ -328,7 +354,9 @@ public class TestPokerDealer
                 //given
 
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expeted = 150;
 
                 //when
@@ -344,7 +372,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expected = 110;
 
                 //when
@@ -360,7 +390,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expected = 90;
 
                 //when
@@ -376,7 +408,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
+
                 dealer.getBet().makeBet(20, player); 
+
                 double expected = 70;
 
                 //when
@@ -393,7 +427,9 @@ public class TestPokerDealer
                 //given
 
                 player.setWallet(50);
-                dealer.getBet().makeBet(20, player); 
+
+                dealer.getBet().makeBet(20, player);
+
                 double expeted = 50;
 
                 //when
@@ -425,7 +461,7 @@ public class TestPokerDealer
                 assertEquals("Royal Flush", expected, actual);
 
         }
-/*
+
         @Test
         public void testEvaluateFiveRanks_StraightFlush()
         {
@@ -438,7 +474,7 @@ public class TestPokerDealer
                 String expected = "STRAIGHT FLUSH";
 
                 //when
-                String actual = dealer.evaluateFiveRanks(player);
+                String actual = dealer.evaluateFiveRanks();
 
                 assertEquals("straight flush", expected, actual);
         }
@@ -455,7 +491,7 @@ public class TestPokerDealer
                 String expected = "FLUSH";
 
                 //when
-                String actual = dealer.evaluateFiveRanks(player);
+                String actual = dealer.evaluateFiveRanks();
 
                 assertEquals("Flush", expected, actual);
 
@@ -473,17 +509,12 @@ public class TestPokerDealer
                 String expected = "STRAIGHT";
 
                 //when
-                String actual = dealer.evaluateFiveRanks(player);
+                String actual = dealer.evaluateFiveRanks();
 
                 assertEquals("straight", expected, actual);
 
         }
-*/
-
-
-
-
-
+        
 
 
 }

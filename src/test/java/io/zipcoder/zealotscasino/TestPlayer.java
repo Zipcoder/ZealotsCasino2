@@ -9,20 +9,37 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestPlayer {
     Player player;
+    Player player2;
     @Before
     public void initPlayer(){
         player = new Player(500);
     }
 
+
     @Test
     public void printWalletTest(){
         //Given
-        String expected = "$500";
+
+        String expected = "Wallet: $500.00";
 
         //When
         String actual = player.printWallet();
 
         //Then
         assertEquals("Should be $500", expected, actual);
+    }
+
+    @Test
+    public void printWalletSet(){
+        //given
+        player2 = new Player();
+        player2.setWallet(88);
+        String expected = "Wallet: $88.00";
+
+        //when
+        String actual = player2.printWallet();
+
+        //then
+        assertEquals("Shoud be 88", expected, actual);
     }
 }
