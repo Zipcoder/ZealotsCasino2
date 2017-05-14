@@ -93,7 +93,7 @@ public class BlackJackDealer implements Dealer {
 
     private void buildPlayersHands(Player player){
         initializeHands(player);
-        dealHandTo(player);
+        dealHandTo(playerHand);
         determinePlayerHandValue(playerHand);
     }
 
@@ -141,27 +141,27 @@ public class BlackJackDealer implements Dealer {
         dealerHandValue = toBlackJackHand(hand).examineHandValue();
     }
 
-    public void dealCardTo(Player player) {
+    public void dealCardTo(BlackJackHand hand) {
         Card card = deck.surrenderCard();
         //Hand currentHand = player.getHand();
-        playerHand.receiveCard(card);
-        determinePlayerHandValue(playerHand);
+        hand.receiveCard(card);
+        determinePlayerHandValue(hand);
     }
 
-    private void dealCardToDealer() {
+    /* private void dealCardToDealer() {
         Card card = deck.surrenderCard();
         Hand currentHand = dealerHand;
         currentHand.receiveCard(card);
         determineDealerHandValue(currentHand);
-    }
+    } */
 
-    public void dealHandTo(Player player) {
-        for (int i = 0; i < 2; i++) dealCardTo(player);
-        userDisplayHand(player);
+    public void dealHandTo(BlackJackHand hand) {
+        for (int i = 0; i < 2; i++) dealCardTo(hand);
+        userDisplayHand(hand);
     }
 
     private void dealHandToDealer(Player player) {
-        for (int i = 0; i < 2; i++) dealCardToDealer();
+        dealHandTo(dealerHand);
         displayDealerCardUp();
         if(dealerHand.getCards().get(0).getFaceValue() == "ACE"){
             protectedInsuranceRequest(player);
@@ -178,13 +178,13 @@ public class BlackJackDealer implements Dealer {
     }
 
     private void takeHit(Player player){
-        dealCardTo(player);
-        userDisplayHand(player);
-        }
+        dealCardTo(playerHand);
+        userDisplayHand(playerHand);
+    }
 
-    private void userDisplayHand(Player player) {
+    private void userDisplayHand(BlackJackHand hand) {
         StringBuilder outPut = new StringBuilder(1000);
-        ArrayList<Card> cards = playerHand.getCards();
+        ArrayList<Card> cards = hand.getCards();
         for (Card card : cards) {
             outPut.append(card);
             outPut.append("\n");
@@ -266,7 +266,8 @@ public class BlackJackDealer implements Dealer {
 
     private void checkIfDealerHit() {
         if (dealerHandValue < 17) {
-            dealCardToDealer();
+            dealCardTo(dealerHand);
+            //dealCardToDealer();
         }
     }
 
@@ -318,7 +319,7 @@ public class BlackJackDealer implements Dealer {
                 playerHandValue = 0;
                 playerHand.remove();
                 playerHand.receiveCard(card);
-                dealCardTo(player);
+                dealCardTo(playerHand);
                 assertBlackJack(player);
                 if(playerHandValue != 21) {
                     buildDealerHand(player);
