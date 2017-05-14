@@ -26,7 +26,7 @@ public class BlackJackHand extends Hand {
         }
     }
 
-    private int evaluateCard(Card card) {
+    public int evaluateCard(Card card) {
         int cardValue = 0;
         int cardOrdinal = extractCardOrdinal(card);
         if (cardOrdinal == 12) {
@@ -39,7 +39,7 @@ public class BlackJackHand extends Hand {
         return cardValue;
     }
 
-    private int evaluateAce(){
+    public int evaluateAce(){
         int aceVal = 0;
         if(handValue > 10){
             aceVal++;
@@ -49,7 +49,7 @@ public class BlackJackHand extends Hand {
         return aceVal;
     }
 
-    private int extractCardOrdinal(Card card){
+    public int extractCardOrdinal(Card card){
         return Card.CardValue.valueOf(card.getFaceValue()).ordinal();
     }
 
