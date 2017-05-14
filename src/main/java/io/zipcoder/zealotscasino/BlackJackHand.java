@@ -4,10 +4,15 @@ package io.zipcoder.zealotscasino;
  * Created by aaronlong on 5/13/17.
  */
 public class BlackJackHand extends Hand {
+
     private int handValue = 0;
 
     public int getPlayerHandValue() {
         return handValue;
+    }
+
+    public void setHandValue(int handValue){
+        this.handValue = handValue;
     }
 
     public int examineHandValue() {
