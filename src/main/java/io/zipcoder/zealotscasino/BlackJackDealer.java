@@ -119,13 +119,13 @@ public class BlackJackDealer implements Dealer {
         }
     }
 
-    private void buildPlayerHand(){
+    public void buildPlayerHand(){
         initializeHands();
         dealHandToPlayer();
         playerHand.updateHandValue();
     }
 
-    private void buildDealerHand(Player player){
+    public void buildDealerHand(Player player){
         dealHandToDealer(player);
         dealerHand.updateHandValue();
     }
@@ -145,7 +145,7 @@ public class BlackJackDealer implements Dealer {
         playerHand.updateHandValue();
     }
 
-    private void dealCardToDealer() {
+    public void dealCardToDealer() {
         Card card = deck.surrenderCard();
         dealerHand.receiveCard(card);
         dealerHand.updateHandValue();

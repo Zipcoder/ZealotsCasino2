@@ -25,7 +25,7 @@ public class TestBlackJackDealer {
 
     //dealCardToPlayer
     @Test
-    public void testDealCardToPlayer(){
+    public void testDealCardToPlayer_PlayerHasNoCards_PlayerIsDealtACard(){
         //Given
         int predictedSizeOfHand = 1;
         //When
@@ -36,11 +36,35 @@ public class TestBlackJackDealer {
 
     //dealCardToDealer
     @Test
-    public void testDealCardToDealer(){}
+    public void dealCardToDealer_DealerHasNoCards_DealerIsDealtACard(){
+        //Given
+        int predictedSizeOfHand = 1;
+        //When
+        blackJackDealer.dealCardToDealer();
+        //Then
+        Assert.assertEquals("Checking to see if player received a card", predictedSizeOfHand, blackJackDealer.getDealerHand().getCards().size());
+    }
 
     //buildPlayerHand
     @Test
-    public void testBuildPlayerHand(){}
+    public void testBuildPlayerHand_PlayerHasNoHand_PlayerReceivesTwoCards(){
+        //Given
+        int expectedSize = 2;
+        //When
+        blackJackDealer.buildPlayerHand();
+        //Then
+        Assert.assertEquals("Checking to see if Player received two cards", expectedSize, blackJackDealer.getPlayerHand().getCards().size());
+    }
+
+    @Test
+    public void testBuildPlayerHand_PlayerHasNoHand_PlayerReceivesArrayListOfCards(){
+        //Given
+        Class expectedClass = ArrayList.class;
+        //When
+        blackJackDealer.buildPlayerHand();
+        //Then
+        Assert.assertEquals("Checking to see if Player received two cards", expectedClass, blackJackDealer.getPlayerHand().getCards().getClass());
+    }
 
     //buildDealerHand
     @Test
