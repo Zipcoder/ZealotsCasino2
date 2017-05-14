@@ -77,8 +77,8 @@ public class TestWarDealer {
     @Test
     public void processTieOutcome_PlayerWins_PlayerReceivesOriginalBet() {
         player.setWallet(100);
-        player.makeBet(20);
-        player.makeBet(20); //player doubles bet after tie
+//        player.makeBet(20);
+//        player.makeBet(20); //player doubles bet after tie
         double expected = 120;
 
         //When
@@ -92,8 +92,8 @@ public class TestWarDealer {
     @Test
     public void processTieOutcome_PlayerLoses_WalletDecreasedByTwoBets() {
         player.setWallet(100);
-        player.makeBet(20);
-        player.makeBet(20); //player doubles bet after tie
+//        player.makeBet(20);
+//        player.makeBet(20); //player doubles bet after tie
         double expected = 60;
 
         //When
@@ -107,8 +107,8 @@ public class TestWarDealer {
     @Test
     public void processTieOutcome_PlayerTies_PlayerReceivesDoubleBet() {
         player.setWallet(100);
-        player.makeBet(20);
-        player.makeBet(20);
+//        player.makeBet(20);
+//        player.makeBet(20);
         double expected = 140;
 
         //When
@@ -182,7 +182,7 @@ public class TestWarDealer {
         //When
         int actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
-        assertEquals(expectedWinnings, actualWinnings;
+        assertEquals(expectedWinnings, actualWinnings);
     }
 
     @Test
