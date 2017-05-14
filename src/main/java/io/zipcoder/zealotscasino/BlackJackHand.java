@@ -7,7 +7,7 @@ public class BlackJackHand extends Hand {
 
     private int handValue = 0;
 
-    public int getPlayerHandValue() {
+    public int getHandValue() {
         return handValue;
     }
 
@@ -15,23 +15,22 @@ public class BlackJackHand extends Hand {
         this.handValue = handValue;
     }
 
-    public int examineHandValue() {
+    public void updateHandValue() {
         for(Card card : getCards()) {
-            handValue += examineCardValue(card);
+            handValue += evaluateCard(card);
         }
         for(Card card : getCards()){
-            if(extractCardValue(card) == 12 && handValue > 21){
+            if(extractCardOrdinal(card) == 12 && handValue > 21){
                 handValue -= 10;
             }
         }
-        return handValue;
     }
 
-    private int examineCardValue(Card card) {
+    private int evaluateCard(Card card) {
         int cardValue = 0;
-        int cardOrdinal = extractCardValue(card);
+        int cardOrdinal = extractCardOrdinal(card);
         if (cardOrdinal == 12) {
-            cardValue += examineAceValue();
+            cardValue += evaluateAce();
         } else if (cardOrdinal > 8 && cardOrdinal < 12) {
             cardValue += 10;
         } else if (cardOrdinal <= 8) {
@@ -40,7 +39,7 @@ public class BlackJackHand extends Hand {
         return cardValue;
     }
 
-    private int examineAceValue(){
+    private int evaluateAce(){
         int aceVal = 0;
         if(handValue > 10){
             aceVal++;
@@ -50,19 +49,19 @@ public class BlackJackHand extends Hand {
         return aceVal;
     }
 
-    private int extractCardValue(Card card){
+    private int extractCardOrdinal(Card card){
         return Card.CardValue.valueOf(card.getFaceValue()).ordinal();
     }
 
-    public boolean checkBust(){
-        if(examineHandValue() > 21) {
+    public boolean checkIfBust(){
+        if(getHandValue() > 21) {
             return true;
         }
         return false;
     }
 
-    public boolean checkBlackJack() {
-        if(examineHandValue() == 21){
+    public boolean checkIfBlackJack() {
+        if(getHandValue() == 21){
             return true;
         }
         return false;
