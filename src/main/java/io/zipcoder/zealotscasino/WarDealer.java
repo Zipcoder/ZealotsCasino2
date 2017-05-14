@@ -26,9 +26,19 @@ public class WarDealer implements Dealer {
             deck.buildDeck();
         }
 
-        Bet.displayMinimumBet();
-        int betValue = UserInput.getIntInput("Place a bet.");
-        bet.makeBet(betValue, player);
+        double betValue;
+
+//        boolean betValidation;
+//        do {
+//            Bet.displayMinimumBet();
+//            double betValue = UserInput.getDoubleInput("Place a bet.");
+//            betValidation = bet.makeBet(betValue, player);
+//        }while(!betValidation);
+//
+//        setBet(bet);
+
+        betValue = bet.validateBet(player);
+        setBet(bet);
 
         Card playersCard = deck.surrenderCard();
         Card dealersCard = deck.surrenderCard();
@@ -47,6 +57,12 @@ public class WarDealer implements Dealer {
             } else {
                 winnings = betValue / 2;
             }
+        }
+
+        if (outcome.equals("win")) {
+            UserInput.display("You won!");
+        } else if (outcome.equals("lose")) {
+            UserInput.display("Dealer wins! womp womp");
         }
 
         pay(player, winnings);
@@ -82,7 +98,6 @@ public class WarDealer implements Dealer {
     }
 
 
-
     public void setBet(Bet bet) {
         this.bet = bet;
     }
@@ -94,6 +109,7 @@ public class WarDealer implements Dealer {
     public int evaluateCardValue(Card theCard) {
         return Card.CardValue.valueOf(theCard.getFaceValue()).ordinal() + 2;
     }
+
     public double processDeterminedOutcome(String outcome) {
 
         switch (outcome) {
