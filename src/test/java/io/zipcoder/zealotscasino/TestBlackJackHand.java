@@ -8,14 +8,10 @@ import org.junit.Assert;
  * Created by aaronlong on 5/13/17.
  */
 public class TestBlackJackHand {
-    private Player player;
-    private BlackJackDealer blackJackDealer;
     private BlackJackHand hand;
 
     @Before
     public void setUp() {
-        player = new Player();
-        blackJackDealer = new BlackJackDealer();
         hand = new BlackJackHand();
     }
 
@@ -26,10 +22,8 @@ public class TestBlackJackHand {
         Card card1 = new Card("TWO", "Spades");
         hand.receiveCard(card1);
         int expectedOrdinal = 0;
-
         //When
         int actualOrdinal = hand.extractCardOrdinal(card1);
-
         //Then
         Assert.assertEquals("Checking to see if the correct ordinal of the enum is returned", expectedOrdinal, actualOrdinal);
     }
@@ -40,10 +34,8 @@ public class TestBlackJackHand {
         Card card1 = new Card("KING", "Spades");
         hand.receiveCard(card1);
         int expectedOrdinal = 11;
-
         //When
         int actualOrdinal = hand.extractCardOrdinal(card1);
-
         //Then
         Assert.assertEquals("Checking to see if the correct ordinal of the enum is returned", expectedOrdinal, actualOrdinal);
     }
@@ -54,10 +46,8 @@ public class TestBlackJackHand {
         Card card1 = new Card("ACE", "Spades");
         hand.receiveCard(card1);
         int expectedOrdinal = 12;
-
         //When
         int actualOrdinal = hand.extractCardOrdinal(card1);
-
         //Then
         Assert.assertEquals("Checking to see if the correct ordinal of the enum is returned", expectedOrdinal, actualOrdinal);
     }
@@ -173,7 +163,6 @@ public class TestBlackJackHand {
         Card card1 = new Card("ACE", "Spades");
         Card card2 = new Card("NINE", "Spades");
         Card card3 = new Card("FOUR", "Spades");
-
         hand.receiveCard(card1);
         hand.receiveCard(card2);
         hand.receiveCard(card3);
@@ -191,7 +180,6 @@ public class TestBlackJackHand {
         Card card2 = new Card("NINE", "Spades");
         Card card3 = new Card("FOUR", "Spades");
         Card card4 = new Card("TEN", "Spades");
-
         hand.receiveCard(card1);
         hand.receiveCard(card2);
         hand.receiveCard(card3);
@@ -209,13 +197,10 @@ public class TestBlackJackHand {
         //Given
         hand.setHandValue(23);
         boolean expectedValue = true;
-
         //When
         boolean returnValue = hand.checkIfBust();
-
         //Then
         Assert.assertEquals("Checking to see if method returns the correct boolean value", expectedValue, returnValue);
-
     }
 
     @Test
@@ -223,13 +208,10 @@ public class TestBlackJackHand {
         //Given
         hand.setHandValue(20);
         boolean expectedValue = false;
-
         //When
         boolean returnValue = hand.checkIfBust();
-
         //Then
         Assert.assertEquals("Checking to see if method returns the correct boolean value", expectedValue, returnValue);
-
     }
 
     //checkIfBlackJack
@@ -238,13 +220,10 @@ public class TestBlackJackHand {
         //Given
         hand.setHandValue(23);
         boolean expectedValue = false;
-
         //When
         boolean returnValue = hand.checkIfBlackJack();
-
         //Then
         Assert.assertEquals("Checking to see if method returns the correct boolean value", expectedValue, returnValue);
-
     }
 
     @Test
@@ -252,13 +231,10 @@ public class TestBlackJackHand {
         //Given
         hand.setHandValue(20);
         boolean expectedValue = false;
-
         //When
         boolean returnValue = hand.checkIfBlackJack();
-
         //Then
         Assert.assertEquals("Checking to see if method returns the correct boolean value", expectedValue, returnValue);
-
     }
 
     @Test
@@ -266,14 +242,21 @@ public class TestBlackJackHand {
         //Given
         hand.setHandValue(21);
         boolean expectedValue = true;
-
         //When
         boolean returnValue = hand.checkIfBlackJack();
-
         //Then
         Assert.assertEquals("Checking to see if method returns the correct boolean value", expectedValue, returnValue);
-
     }
 
+    @Test
+    public void testResetHandValue_HandHasValue_ValueIsReset(){
+        //Given
+        hand.setHandValue(21);
+        int expectedValue = 0;
+        //When
+        hand.resetHandValue();
+        //Then
+        Assert.assertEquals("Checking to see if method returns the correct boolean value", expectedValue, hand.getHandValue());
+    }
 }
 

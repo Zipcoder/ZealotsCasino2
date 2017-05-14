@@ -66,4 +66,8 @@ public class BlackJackHand extends Hand {
         }
         return false;
     }
+
+    public void resetHandValue(){
+        handValue = 0;
+    }
 }
