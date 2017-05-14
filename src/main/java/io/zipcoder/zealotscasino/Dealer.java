@@ -8,4 +8,6 @@ public interface Dealer
     void pay(Player player, double payOut);
 
     void play(Player player);
+
+    Bet getBet();
 }

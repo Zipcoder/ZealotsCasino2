@@ -7,7 +7,7 @@ import java.util.Collections;
 /**
  * Created by stephenpegram on 5/11/17.
  */
-public class BigSixDealer {
+public class BigSixDealer implements Dealer {
 
     private ArrayList<String> wheelDenominations = new ArrayList<>();
     private ArrayList<WheelBet> wheelBets = new ArrayList<>();
@@ -27,6 +27,10 @@ public class BigSixDealer {
         bet = new Bet();
     }
 
+    @Override
+    public Bet getBet() {
+        return bet;
+    }
 
     public void initializeWheelDenominations() {
         for (int i = 0; i < 24; i++) wheelDenominations.add("1");
