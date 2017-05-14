@@ -13,6 +13,7 @@ public class WarDealer implements Dealer {
 
     public WarDealer() {
         deck = new Deck();
+        bet = new Bet();
         deck.buildDeck();
     }
 
@@ -23,6 +24,8 @@ public class WarDealer implements Dealer {
     public void play(Player player) {
 
         Bet bet = new Bet();
+        double betValue;
+        boolean betValidation;
 
         //replace with a method that checks if deck is empty
         if (deck.getDeckQue().size() == 0) {
@@ -30,8 +33,12 @@ public class WarDealer implements Dealer {
         }
 
         Bet.displayMinimumBet();
-        double betValue = UserInput.getDoubleInput("Place a bet.");
-        bet.makeBet(betValue, player);
+
+        do {
+
+            betValue = UserInput.getDoubleInput("Place a bet.");
+            betValidation = bet.makeBet(betValue, player);
+        } while (!betValidation);
         setBet(bet);
 
         Card playersCard = deck.surrenderCard();
@@ -48,19 +55,17 @@ public class WarDealer implements Dealer {
                 Card dealersTieCard = deck.surrenderCard();
                 String tieOutcome = playRound(playersTieCard, dealersTieCard);
                 winnings = processTieOutcome(tieOutcome);
-            } else {
-                winnings = betValue / 2;
             }
         }
-        if(outcome.equals("win")){
+
+        if (outcome.equals("win")) {
             UserInput.display("You won!");
-        }
-        else if(outcome.equals("lose")){
+        } else if (outcome.equals("lose")) {
             UserInput.display("Dealer wins! womp womp");
         }
+
         pay(player, winnings);
         UserInput.display(player.printWallet());
-
         askPlayAgain(player);
     }
 
@@ -92,7 +97,6 @@ public class WarDealer implements Dealer {
     }
 
 
-
     public void setBet(Bet bet) {
         this.bet = bet;
     }
@@ -104,6 +108,7 @@ public class WarDealer implements Dealer {
     public int evaluateCardValue(Card theCard) {
         return Card.CardValue.valueOf(theCard.getFaceValue()).ordinal() + 2;
     }
+
     public double processDeterminedOutcome(String outcome) {
 
         switch (outcome) {

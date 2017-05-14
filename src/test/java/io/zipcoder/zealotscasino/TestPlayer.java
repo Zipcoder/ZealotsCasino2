@@ -19,7 +19,8 @@ public class TestPlayer {
     @Test
     public void printWalletTest(){
         //Given
-        String expected = "Wallet: $500.0";
+
+        String expected = "Wallet: $500.00";
 
         //When
         String actual = player.printWallet();
@@ -33,7 +34,7 @@ public class TestPlayer {
         //given
         player2 = new Player();
         player2.setWallet(88);
-        String expected = "Wallet: $88.0";
+        String expected = "Wallet: $88.00";
 
         //when
         String actual = player2.printWallet();
