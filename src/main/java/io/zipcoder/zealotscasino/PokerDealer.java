@@ -25,6 +25,11 @@ public class PokerDealer implements Dealer
         deck.buildDeck();
     }
 
+    @Override
+    public Bet getBet() {
+        return bet;
+    }
+
 
     public void dealCardTo(Player player)
     {
@@ -36,6 +41,14 @@ public class PokerDealer implements Dealer
     {
         for (int i = 0; i < 5; i++)
             dealCardTo(player);
+    }
+
+    public void dealPlayerHand(Hand hand) {
+        playerHand = hand;
+    }
+
+    public Hand showPlayerHand() {
+        return playerHand;
     }
 
 

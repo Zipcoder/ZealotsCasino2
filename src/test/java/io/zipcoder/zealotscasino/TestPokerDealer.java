@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Created by luisgarcia on 5/11/17.
  */
@@ -29,7 +32,7 @@ public class TestPokerDealer
                 int expected = 5;
 
                 //When
-                int actual = player.getHand().getCards().size();
+                int actual = dealer.showPlayerHand().getCards().size();
 
                 //Then
                 assertEquals("Should deal out five cards", expected, actual);
@@ -241,7 +244,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 30;
 
                 //when
@@ -257,7 +260,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 19550;
 
                 //when
@@ -273,7 +276,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 1030;
 
                 //when
@@ -289,7 +292,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 530;
 
                 //when
@@ -305,7 +308,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 210;
 
                 //when
@@ -322,7 +325,7 @@ public class TestPokerDealer
                 //given
 
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expeted = 150;
 
                 //when
@@ -338,7 +341,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 110;
 
                 //when
@@ -354,7 +357,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 90;
 
                 //when
@@ -370,7 +373,7 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expected = 70;
 
                 //when
@@ -387,7 +390,7 @@ public class TestPokerDealer
                 //given
 
                 player.setWallet(50);
-                player.makeBet(20);
+                //player.makeBet(20);
                 double expeted = 50;
 
                 //when
@@ -402,12 +405,16 @@ public class TestPokerDealer
         public void testEvaluateFiveRanks_RoyalFlush()
         {
                 //given
-                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
-                player.getHand().receiveCard(new Card("QUEEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("ACE","DIAMONDS"));
+                Card[] cards = { new Card("TEN","DIAMONDS"),
+                                 new Card("JACK","DIAMONDS"),
+                                 new Card("QUEEN","DIAMONDS"),
+                                 new Card("KING","DIAMONDS"),
+                                 new Card("ACE","DIAMONDS") };
+                ArrayList<Card> cardList = new ArrayList<>();
+                for (Card card : cards) cardList.add(card);
                 String expected = "ROYAL FLUSH";
+                Hand hand = new Hand();
+                hand.receiveCards(cardList);
 
                 //when
                 String actual = dealer.evaluateFiveRanks(player);

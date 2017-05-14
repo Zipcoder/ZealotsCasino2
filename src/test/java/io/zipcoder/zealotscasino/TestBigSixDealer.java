@@ -58,13 +58,14 @@ public class TestBigSixDealer {
         //Given
         BigSixDealer wheelDealer = new BigSixDealer();
         Player player = new Player();
+        Bet bet = new Bet();
         player.setWallet(100);
-        player.makeBet(20);
+        bet.makeBet(20, player);
         int payOutRatio = 20;
         double expected = 500;
 
         //When
-        wheelDealer.payOut(player, payOutRatio, player.getBet().getBetValue());
+        wheelDealer.pay(player, payOutRatio * bet.getBetValue());
         double actual = player.getWallet();
 
         //Then
@@ -75,14 +76,15 @@ public class TestBigSixDealer {
     public void payOut_PlayerDoesNotWinOnAnyDenomination_PlayersWalletDoesNotIncrease(){
     //Given
         BigSixDealer wheelDealer = new BigSixDealer();
+        Bet bet = new Bet();
         Player player = new Player();
         player.setWallet(100);
-        player.makeBet(20);
+        bet.makeBet(20, player);
         int payOutRatio = -1;
         double expected = 80;
 
     //When
-        wheelDealer.payOut(player, payOutRatio, player.getBet().getBetValue());
+        wheelDealer.pay(player, payOutRatio * bet.getBetValue());
         double actual = player.getWallet();
 
     //Then
