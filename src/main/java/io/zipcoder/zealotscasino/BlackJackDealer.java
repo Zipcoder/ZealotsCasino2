@@ -174,7 +174,7 @@ public class BlackJackDealer implements CardDealer {
     private void takeHit(Player player){
         dealCardTo(player);
         userDisplayHand(player);
-        }
+    }
 
     private void userDisplayHand(Player player) {
         StringBuilder outPut = new StringBuilder(1000);
@@ -303,25 +303,25 @@ public class BlackJackDealer implements CardDealer {
     }
 
     public void split(Player player){
-            player.setWallet(player.getWallet() + player.getBet().getBetValue());
-            player.makeBet(player.getBet().getBetValue() * 2);
-            ArrayList<Card> cards = new ArrayList<>();
-            for(int i = 0; i < player.getHand().getCards().size(); i++){
-                cards.add(player.getHand().getCards().get(i));
+        player.setWallet(player.getWallet() + player.getBet().getBetValue());
+        player.makeBet(player.getBet().getBetValue() * 2);
+        ArrayList<Card> cards = new ArrayList<>();
+        for(int i = 0; i < player.getHand().getCards().size(); i++){
+            cards.add(player.getHand().getCards().get(i));
+        }
+        for(Card card : cards){
+            Hand hand = new Hand();
+            playerHandValue = 0;
+            player.setHand(hand);
+            player.getHand().receiveCard(card);
+            dealCardTo(player);
+            assertBlackJack(player);
+            if(playerHandValue != 21) {
+                buildDealerHand(player);
+                hitProcess(player);
+                evaluateResult(player);
+                dealerHandValue = 0;
             }
-            for(Card card : cards){
-                Hand hand = new Hand();
-                playerHandValue = 0;
-                player.setHand(hand);
-                player.getHand().receiveCard(card);
-                dealCardTo(player);
-                assertBlackJack(player);
-                if(playerHandValue != 21) {
-                    buildDealerHand(player);
-                    hitProcess(player);
-                    evaluateResult(player);
-                    dealerHandValue = 0;
-                }
-            }
+        }
     }
 }

@@ -73,7 +73,7 @@ public class TestBigSixDealer {
 
     @Test
     public void payOut_PlayerDoesNotWinOnAnyDenomination_PlayersWalletDoesNotIncrease(){
-    //Given
+        //Given
         BigSixDealer wheelDealer = new BigSixDealer();
         Player player = new Player();
         player.setWallet(100);
@@ -81,11 +81,11 @@ public class TestBigSixDealer {
         int payOutRatio = -1;
         double expected = 80;
 
-    //When
+        //When
         wheelDealer.payOut(player, payOutRatio, player.getBet().getBetValue());
         double actual = player.getWallet();
 
-    //Then
+        //Then
         assertEquals(expected, actual,0);
     }
 
