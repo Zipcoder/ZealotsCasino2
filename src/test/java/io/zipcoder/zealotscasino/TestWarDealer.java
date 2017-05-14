@@ -164,7 +164,7 @@ public class TestWarDealer {
         Bet bet = new Bet();
         bet.makeBet(20, player);
         dealer.setBet(bet);
-        int expectedWinnings = 20;
+        int expectedWinnings = 40;
         //When
         int actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
@@ -192,7 +192,7 @@ public class TestWarDealer {
         Bet bet = new Bet();
         bet.makeBet(20, player);
         dealer.setBet(bet);
-        int expectedWinnings = -1;
+        int expectedWinnings = 20;
         //When
         int actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
