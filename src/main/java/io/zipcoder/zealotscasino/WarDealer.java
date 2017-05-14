@@ -1,6 +1,5 @@
 package io.zipcoder.zealotscasino;
 
-import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
 import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 
 /**
@@ -15,7 +14,7 @@ public class WarDealer {
         deck.buildDeck();
     }
 
-    public void pay(Player player, double payOut) {
+    public void pay(Player player, int payOut) {
         player.collectWinnings(payOut);
     }
 
@@ -42,7 +41,7 @@ public class WarDealer {
 
 
         String outcome = playRound(playersCard, dealersCard);
-        double winnings = processDeterminedOutcome(outcome);
+        int winnings = processDeterminedOutcome(outcome);
         if(winnings == -1){
             String tieChoice = getStringInput("Bet again? (Push  'Y' to double bet, any other key to surrender and receive half of bet");
             processTie(player, tieChoice.toUpperCase());
