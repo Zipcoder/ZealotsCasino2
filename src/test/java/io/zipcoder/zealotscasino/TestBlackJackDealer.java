@@ -222,17 +222,38 @@ public class TestBlackJackDealer {
         Assert.assertTrue("Checking to see if the players hand value increased", blackJackDealer.getDealerHand().getHandValue() > 0);
     }
 
-    //checkIfPlayerHit
-    @Test
-    public void testCheckIfPlayerHit(){}
-
-    //decideWinner
-    @Test
-    public void testDecideWinner(){}
-
     //checkStatus
     @Test
-    public void testCheckStatus(){}
+    public void testCheckStatus_PlayerBusts_ReturnsFalse(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(22);
+        //When
+        boolean returnValue = blackJackDealer.checkStatus(player, 20);
+        //Then
+        Assert.assertTrue("Checking to see if the method returns false", !returnValue);
+    }
+
+    @Test
+    public void testCheckStatus_PlayerHasBlackJack_ReturnsFalse(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(21);
+        //When
+        boolean returnValue = blackJackDealer.checkStatus(player, 20);
+        //Then
+        Assert.assertTrue("Checking to see if the method returns false", !returnValue);
+    }
+
+    @Test
+    public void testCheckStatus_PlayerHasBlackJack_PlayerIsPaid(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(21);
+        player.setWallet(100);
+        double expectedValue = 140;
+        //When
+        boolean returnValue = blackJackDealer.checkStatus(player, 20);
+        //Then
+        Assert.assertEquals("Checking to see if the method pays the player", expectedValue, player.getWallet(), 0);
+    }
 
     //assertBlackJack
     @Test
