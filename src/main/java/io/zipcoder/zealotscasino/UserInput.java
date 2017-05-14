@@ -23,7 +23,7 @@ public class UserInput {
         boolean flag = true;
         int result = 0;
         while(flag){
-            if(NumberUtils.isCreatable(getStringInput(prompt))){
+            if(NumberUtils.isNumber(getStringInput(prompt))){
                 result = Integer.parseInt(getStringInput(prompt));
                 flag = false;
             } else display("Please input a valid amount");

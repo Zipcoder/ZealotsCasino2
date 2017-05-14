@@ -27,13 +27,17 @@ public class Bet {
     public int getBetValue() {
         return this.bet;
     }
+    
+    public void doubleBet(){
+        this.bet *= 2;
+    }
 
     public static void promptBet() {
         UserInput.display("How much would you like to bet?");
     }
 
     public static void displayMinimumBet() {
-        UserInput.display("Minimum bet is $20.");
+        UserInput.display("Minimum bet is " + MINIMUM_BET);
     }
 
 }

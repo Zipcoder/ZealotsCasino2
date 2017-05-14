@@ -11,13 +11,28 @@ public class TestPokerDealer
 {
         private PokerDealer dealer;
         private Player player;
-
+        private Deck deck;
 
         @Before
         public void setUp()
         {
                 player = new Player();
                 dealer = new PokerDealer();
+        }
+
+
+        @Test
+        public void testDealHandTo_FiveCards()
+        {
+                //Given
+                dealer.dealHandTo(player);
+                int expected = 5;
+
+                //When
+                int actual = player.getHand().getCards().size();
+
+                //Then
+                assertEquals("Should deal out five cards", expected, actual);
         }
 
         @Test
@@ -222,7 +237,87 @@ public class TestPokerDealer
         }
 
         @Test
-        public void testPayPlayer_Flush_Win_130()
+        public void testPayPlayer_NoPair_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 30;
+
+                //when
+                dealer.payPlayer(player, "NO PAIR");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing no pair loss", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_RoyalFlush_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 19550;
+
+                //when
+                dealer.payPlayer(player, "ROYAL FLUSH");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_StraightFlush_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 1030;
+
+                //when
+                dealer.payPlayer(player, "STRAIGHT FLUSH");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_FourOfAKind_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 530;
+
+                //when
+                dealer.payPlayer(player, "FOUR OF A KIND");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_FullHouse_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 210;
+
+                //when
+                dealer.payPlayer(player, "FULL HOUSE");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_Flush_PayOut()
         {
                 //given
 
@@ -239,23 +334,55 @@ public class TestPokerDealer
         }
 
         @Test
-        public void testPayPlayer_RoyalFlush()
+        public void testPayPlayer_Straight_PayOut()
         {
                 //given
                 player.setWallet(50);
                 player.makeBet(20);
-                double expeted = 19550;
+                double expected = 110;
 
                 //when
-                dealer.payPlayer(player, "ROYAL FLUSH");
+                dealer.payPlayer(player, "STRAIGHT");
                 double actual = player.getWallet();
 
                 //then
-                assertEquals("Testing flush payout", expeted, actual,0);
+                assertEquals("Testing flush payout", expected, actual,0);
         }
 
         @Test
-        public void testPayPlayer()
+        public void testPayPlayer_ThreeOfAKind_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 90;
+
+                //when
+                dealer.payPlayer(player, "THREE OF A KIND");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_TwoPair_PayOut()
+        {
+                //given
+                player.setWallet(50);
+                player.makeBet(20);
+                double expected = 70;
+
+                //when
+                dealer.payPlayer(player, "TWO PAIR");
+                double actual = player.getWallet();
+
+                //then
+                assertEquals("Testing flush payout", expected, actual,0);
+        }
+
+        @Test
+        public void testPayPlayer_Pair()
         {
                 //given
 
@@ -270,6 +397,81 @@ public class TestPokerDealer
                 //then
                 assertEquals("Testing flush payout", expeted, actual,0);
         }
+
+        @Test
+        public void testEvaluateFiveRanks_RoyalFlush()
+        {
+                //given
+                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
+                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
+                player.getHand().receiveCard(new Card("QUEEN","DIAMONDS"));
+                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
+                player.getHand().receiveCard(new Card("ACE","DIAMONDS"));
+                String expected = "ROYAL FLUSH";
+
+                //when
+                String actual = dealer.evaluateFiveRanks(player);
+
+                assertEquals("Royal Flush", expected, actual);
+
+        }
+
+        @Test
+        public void testEvaluateFiveRanks_StraightFlush()
+        {
+                //given
+                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
+                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
+                player.getHand().receiveCard(new Card("QUEEN","DIAMONDS"));
+                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
+                player.getHand().receiveCard(new Card("NINE","DIAMONDS"));
+                String expected = "STRAIGHT FLUSH";
+
+                //when
+                String actual = dealer.evaluateFiveRanks(player);
+
+                assertEquals("straight flush", expected, actual);
+        }
+
+        @Test
+        public void testEvaluateFiveRanks_Flush()
+        {
+                //given
+                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
+                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
+                player.getHand().receiveCard(new Card("TWO","DIAMONDS"));
+                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
+                player.getHand().receiveCard(new Card("ACE","DIAMONDS"));
+                String expected = "FLUSH";
+
+                //when
+                String actual = dealer.evaluateFiveRanks(player);
+
+                assertEquals("Flush", expected, actual);
+
+        }
+
+        @Test
+        public void testEvaluateFiveRanks_Straight()
+        {
+                //given
+                player.getHand().receiveCard(new Card("TEN","HEARTS"));
+                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
+                player.getHand().receiveCard(new Card("QUEEN","DIAMONDS"));
+                player.getHand().receiveCard(new Card("KING","SPADES"));
+                player.getHand().receiveCard(new Card("NINE","DIAMONDS"));
+                String expected = "STRAIGHT";
+
+                //when
+                String actual = dealer.evaluateFiveRanks(player);
+
+                assertEquals("straight", expected, actual);
+
+        }
+
+
+
+
 
 
 
