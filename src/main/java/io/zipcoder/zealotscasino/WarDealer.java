@@ -21,13 +21,15 @@ public class WarDealer implements Dealer {
 
     public void play(Player player) {
 
+        Bet bet = new Bet();
+
         //replace with a method that checks if deck is empty
         if (deck.getDeckQue().size() == 0) {
             deck.buildDeck();
         }
 
         Bet.displayMinimumBet();
-        int betValue = UserInput.getIntInput("Place a bet.");
+        double betValue = UserInput.getDoubleInput("Place a bet.");
         bet.makeBet(betValue, player);
 
         Card playersCard = deck.surrenderCard();
@@ -111,7 +113,7 @@ public class WarDealer implements Dealer {
 
     public String playRound(Card playersCard, Card dealersCard) {
         UserInput.display("Your Card: " + playersCard);
-        UserInput.display("Your Card: " + dealersCard);
+        UserInput.display("Dealer's Card: " + dealersCard);
         return determineOutcome(evaluateCardValue(playersCard), evaluateCardValue(dealersCard));
     }
 
