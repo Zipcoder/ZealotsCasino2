@@ -23,28 +23,6 @@ public class TestBlackJackDealer {
     }
 
     @Test
-    public void testDealCardTo_DealerGivesCard_PlayersCardIncrease() {
-        // Given
-        // When
-        player.setHand(new BlackJackHand());
-        blackJackDealer.dealCardTo(player);
-
-        // Then
-        Assert.assertTrue("Check if new card is added",  player.getHand().getCards().size() > 0);
-    }
-
-    @Test
-    public void testDealHandTo_DealerGivesHand_PlayerCardIncrease() {
-
-        // When
-        player.setHand(new BlackJackHand());
-        blackJackDealer.dealHandTo(player);
-
-        // Then
-        Assert.assertEquals("Checking if hand is added", player.getHand().getCards().size(), 2);
-    }
-
-    @Test
     public void testPay_PlayerGetsPaid_PlayerWalletIncrease(){
 
         //When

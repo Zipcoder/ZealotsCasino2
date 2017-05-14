@@ -37,7 +37,7 @@ public class TestPokerDealer
                 //Then
                 assertEquals("Should deal out five cards", expected, actual);
         }
-
+/*
         @Test
         public void checkStraight_TwoThroughSix_ReturnTrue()
         {
@@ -237,7 +237,7 @@ public class TestPokerDealer
 
                 //THEN
                 assertEquals("The result should be FULL HOUSE", expected, actual);
-        }
+        } */
 
         @Test
         public void testPayPlayer_NoPair_PayOut()
@@ -422,7 +422,7 @@ public class TestPokerDealer
                 assertEquals("Royal Flush", expected, actual);
 
         }
-
+/*
         @Test
         public void testEvaluateFiveRanks_StraightFlush()
         {
@@ -475,7 +475,7 @@ public class TestPokerDealer
                 assertEquals("straight", expected, actual);
 
         }
-
+*/
 
 
 
