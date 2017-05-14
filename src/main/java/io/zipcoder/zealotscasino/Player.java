@@ -7,28 +7,28 @@ import java.text.NumberFormat;
  */
 public class Player {
 
-    private int wallet;
-    public static final int MINIMUM_BUYIN = 20;
+    private double wallet;
+    //public static final int MINIMUM_BUYIN = 20;
 
     public Player() {
         wallet = 0;
     }
 
-    public Player(int initialWallet){
-        if(initialWallet < MINIMUM_BUYIN){
+    public Player(double initialWallet){
+        if(initialWallet < Bet.MINIMUM_BET){
             this.wallet = initialWallet;
         }
     }
 
-    public int getWallet() {
+    public double getWallet() {
         return wallet;
     }
 
-    public void setWallet(int wallet) {
+    public void setWallet(double wallet) {
         this.wallet = wallet;
     }
 
-    public void collectWinnings(int winnings) {
+    public void collectWinnings(double winnings) {
         wallet += winnings;
     }
 
