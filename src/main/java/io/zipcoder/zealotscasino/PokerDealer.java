@@ -95,7 +95,11 @@ public class PokerDealer implements Dealer
 
         playerHand.remove();
 
-        askPlayAgain(player);
+        if(player.getWallet() > 20){
+            askPlayAgain(player);
+        } else {
+            UserInput.display("You do not have enough chips to continue, returning to main menu.\n");
+        }
     }
 
     public void payPlayer(Player player, String rankOfHand)
