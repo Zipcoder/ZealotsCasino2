@@ -120,8 +120,6 @@ public class TestWarDealer {
         assertEquals("Player nets twice what they bet", expected, actual, 0);
     }
 
-
-    // DONE
     @Test
     public void playRound_PlayersCardIsHigher_WinOutcomeReturned() {
         //Given
@@ -245,6 +243,20 @@ public class TestWarDealer {
 
         //: Then
         assertEquals("The result should be a tie", expected, actual);
+    }
+
+    @Test
+    public void checkIfDeckIsEmpty_DeckHasSurrenderedAllCards_DeckIsBuilt(){
+        //Given
+        for(int i = 0; i < 52; i++){
+            dealer.getDeck().surrenderCard();
+        }
+        int expectedDeckSize = 52;
+        //When
+        dealer.checkIfDeckIsEmpty(dealer.getDeck());
+        //Then
+        int actualDeckSize = dealer.getDeck().getDeckQue().size();
+        assertEquals(expectedDeckSize, actualDeckSize);
     }
 
 }

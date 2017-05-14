@@ -24,20 +24,12 @@ public class WarDealer implements Dealer {
     public void play(Player player) {
 
         Bet bet = new Bet();
-        double betValue;
         boolean betValidation;
 
-        //replace with a method that checks if deck is empty
-        if (deck.getDeckQue().size() == 0) {
-            deck.buildDeck();
-        }
-
+        checkIfDeckIsEmpty(deck);
         Bet.displayMinimumBet();
-
         do {
-
-            betValue = UserInput.getDoubleInput("Place a bet.");
-            betValidation = bet.makeBet(betValue, player);
+                betValidation = bet.makeBet(UserInput.getDoubleInput("Place a bet."), player);
         } while (!betValidation);
         setBet(bet);
 
@@ -48,25 +40,23 @@ public class WarDealer implements Dealer {
 
         double winnings = processDeterminedOutcome(outcome);
         if (outcome.equals("tie")) {
-            UserInput.display("You tied!");
-            String tieChoice = getStringInput("Bet again? (Push  'Y' to double bet, any other key to surrender and receive half of bet");
+            String tieChoice = getStringInput("You tied! Bet again? (Push  'Y' to double bet, any other key to surrender and receive half of bet");
             if (tieChoice.equalsIgnoreCase("y")) {
                 Card playersTieCard = deck.surrenderCard();
                 Card dealersTieCard = deck.surrenderCard();
-                String tieOutcome = playRound(playersTieCard, dealersTieCard);
-                winnings = processTieOutcome(tieOutcome);
+                winnings = processTieOutcome(playRound(playersTieCard, dealersTieCard));
             }
         }
 
-        if (outcome.equals("win")) {
-            UserInput.display("You won!");
-        } else if (outcome.equals("lose")) {
-            UserInput.display("Dealer wins! womp womp");
-        }
-
+        UserInput.display("YOU " + outcome.toUpperCase() + "!");
         pay(player, winnings);
         UserInput.display(player.printWallet());
-        askPlayAgain(player);
+        if(player.getWallet() >= Bet.MINIMUM_BET){
+            askPlayAgain(player);
+        }
+        else{
+            UserInput.display("I suggest hitting Leon's Street Casino around the corner, you're too broke for us.");
+        }
     }
 
     @Override
@@ -75,7 +65,7 @@ public class WarDealer implements Dealer {
     }
 
 
-    public double processTieOutcome(String outcome) {
+    protected double processTieOutcome(String outcome) {
 
         switch (outcome) {
             case "win":
@@ -90,26 +80,22 @@ public class WarDealer implements Dealer {
     }
 
 
-    public void askPlayAgain(Player player) {
+    protected void askPlayAgain(Player player) {
         String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit war)");
         if (choice.equalsIgnoreCase("Y")) play(player);
         else UserInput.display("Thanks for playing!\n\n");
     }
-
 
     public void setBet(Bet bet) {
         this.bet = bet;
     }
 
 
-    //DONE
-
-
-    public int evaluateCardValue(Card theCard) {
+    protected int evaluateCardValue(Card theCard) {
         return Card.CardValue.valueOf(theCard.getFaceValue()).ordinal() + 2;
     }
 
-    public double processDeterminedOutcome(String outcome) {
+    protected double processDeterminedOutcome(String outcome) {
 
         switch (outcome) {
             case "win":
@@ -124,18 +110,29 @@ public class WarDealer implements Dealer {
 
     }
 
-    public String playRound(Card playersCard, Card dealersCard) {
+    protected String playRound(Card playersCard, Card dealersCard) {
         UserInput.display("Your Card: " + playersCard);
         UserInput.display("Dealer's Card: " + dealersCard);
         return determineOutcome(evaluateCardValue(playersCard), evaluateCardValue(dealersCard));
     }
 
-    public String determineOutcome(int playerCardValue, int dealerCardValue) {
+    protected String determineOutcome(int playerCardValue, int dealerCardValue) {
         if (playerCardValue > dealerCardValue) {
             return "win";
         } else if (playerCardValue < dealerCardValue) {
             return "lose";
         } else return "tie";
     }
+
+    protected Deck getDeck() {
+        return deck;
+    }
+
+    protected void checkIfDeckIsEmpty(Deck deck) {
+        if (deck.getDeckQue().size() < 2) {
+            deck.buildDeck();
+        }
+    }
+
 
 }
