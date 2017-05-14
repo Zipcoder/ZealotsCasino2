@@ -53,6 +53,11 @@ public class WarDealer implements Dealer {
         askPlayAgain(player);
     }
 
+    @Override
+    public Bet getBet() {
+        return null;
+    }
+
 
     public double processTieOutcome(String outcome) {
 

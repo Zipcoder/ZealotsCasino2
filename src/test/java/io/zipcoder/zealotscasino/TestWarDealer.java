@@ -77,13 +77,14 @@ public class TestWarDealer {
     @Test
     public void processTieOutcome_PlayerWins_PlayerReceivesOriginalBet() {
         player.setWallet(100);
-//        player.makeBet(20);
-//        player.makeBet(20); //player doubles bet after tie
-        double expected = 120;
+        Bet bet = new Bet();
+        bet.makeBet(20, player);
+        dealer.setBet(bet);
+        double expected = 40;
 
         //When
-        dealer.processTieOutcome("win", player);
-        double actual = player.getWallet();
+        double actual = dealer.processTieOutcome("win");
+
 
         //Then
         assertEquals("Wallet should now have $120 (100 - 20 + 40)", expected, actual, 0);
@@ -92,31 +93,31 @@ public class TestWarDealer {
     @Test
     public void processTieOutcome_PlayerLoses_WalletDecreasedByTwoBets() {
         player.setWallet(100);
-//        player.makeBet(20);
-//        player.makeBet(20); //player doubles bet after tie
-        double expected = 60;
+        Bet bet = new Bet();
+        bet.makeBet(20, player);
+        dealer.setBet(bet);
+        double expected = -20;
 
         //When
-        dealer.processTieOutcome("lose", player);
-        double actual = player.getWallet();
+        double actual = dealer.processTieOutcome("lose");
 
         //Then
-        assertEquals("Wallet should now have $60", expected, actual, 0);
+        assertEquals("Player should have netted -$40", expected, actual, 0);
     }
 
     @Test
     public void processTieOutcome_PlayerTies_PlayerReceivesDoubleBet() {
         player.setWallet(100);
-//        player.makeBet(20);
-//        player.makeBet(20);
-        double expected = 140;
+        Bet bet = new Bet();
+        bet.makeBet(20, player);
+        dealer.setBet(bet);
+        double expected = 60;
 
         //When
-        dealer.processTieOutcome("tie", player);
-        double actual = player.getWallet();
+        double actual = dealer.processTieOutcome("tie");
 
         //Then
-        assertEquals("Wallet should now have $140", expected, actual, 0);
+        assertEquals("Player nets twice what they bet", expected, actual, 0);
     }
 
 
@@ -160,6 +161,7 @@ public class TestWarDealer {
     @Test
     public void processDeterminedOutcome_PlayerWins_WinningsAmountReturned() {
         //Given
+        player.setWallet(100);
         String outcome = "win";
         Bet bet = new Bet();
         bet.makeBet(20, player);
@@ -174,6 +176,7 @@ public class TestWarDealer {
     @Test
     public void processDeterminedOutcome_PlayerLoses_ZeroAmountReturned() {
         //Given
+        player.setWallet(100);
         String outcome = "lose";
         Bet bet = new Bet();
         bet.makeBet(20, player);
@@ -188,6 +191,7 @@ public class TestWarDealer {
     @Test
     public void processDeterminedOutcome_PlayerTies_NegativeOneAmountReturned() {
         //Given
+        player.setWallet(100);
         String outcome = "tie";
         Bet bet = new Bet();
         bet.makeBet(20, player);
