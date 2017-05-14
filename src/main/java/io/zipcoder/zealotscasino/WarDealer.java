@@ -1,6 +1,7 @@
 
 package io.zipcoder.zealotscasino;
 
+import static io.zipcoder.zealotscasino.UserInput.display;
 import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 
 /**
@@ -31,6 +32,7 @@ public class WarDealer implements Dealer {
         Bet.displayMinimumBet();
         double betValue = UserInput.getDoubleInput("Place a bet.");
         bet.makeBet(betValue, player);
+        setBet(bet);
 
         Card playersCard = deck.surrenderCard();
         Card dealersCard = deck.surrenderCard();
@@ -50,8 +52,14 @@ public class WarDealer implements Dealer {
                 winnings = betValue / 2;
             }
         }
-
+        if(outcome.equals("win")){
+            UserInput.display("You won!");
+        }
+        else if(outcome.equals("lose")){
+            UserInput.display("Dealer wins! womp womp");
+        }
         pay(player, winnings);
+        UserInput.display(player.printWallet());
 
         askPlayAgain(player);
     }
