@@ -496,12 +496,7 @@ public class TestPokerDealer
                 assertEquals("straight", expected, actual);
 
         }
-
-
-
-
-
-
+        
 
 
 }
