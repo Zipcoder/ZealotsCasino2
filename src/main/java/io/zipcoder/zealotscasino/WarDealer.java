@@ -41,13 +41,11 @@ public class WarDealer implements Dealer {
             betValidation = bet.makeBet(betValue, player);
         }while(!betValidation);
 
-        betValue = UserInput.getDoubleInput("Place a bet.");
-        bet.makeBet(betValue, player);
-
         setBet(bet);
 
         Card playersCard = deck.surrenderCard();
         Card dealersCard = deck.surrenderCard();
+
 
         String outcome = playRound(playersCard, dealersCard);
 
