@@ -3,8 +3,6 @@ package io.zipcoder.zealotscasino;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -120,8 +118,6 @@ public class TestWarDealer {
         assertEquals("Player nets twice what they bet", expected, actual, 0);
     }
 
-
-    // DONE
     @Test
     public void playRound_PlayersCardIsHigher_WinOutcomeReturned() {
         //Given
@@ -159,7 +155,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void processDeterminedOutcome_PlayerWins_WinningsAmountReturned() {
+    public void processInitialOutcome_PlayerWins_WinningsAmountReturned() {
         //Given
         player.setWallet(100);
         String outcome = "win";
@@ -168,13 +164,13 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 40;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processInitialOutcome(outcome);
         //Then
         assertEquals(expectedWinnings, actualWinnings, .003);
     }
 
     @Test
-    public void processDeterminedOutcome_PlayerLoses_ZeroAmountReturned() {
+    public void processInitialOutcome_PlayerLoses_ZeroAmountReturned() {
         //Given
         player.setWallet(100);
         String outcome = "lose";
@@ -183,13 +179,13 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 0;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processInitialOutcome(outcome);
         //Then
         assertEquals(expectedWinnings, actualWinnings, .003);
     }
 
     @Test
-    public void processDeterminedOutcome_PlayerTies_NegativeOneAmountReturned() {
+    public void processInitialOutcome_PlayerTies_NegativeOneAmountReturned() {
         //Given
         player.setWallet(100);
         String outcome = "tie";
@@ -198,7 +194,7 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 10;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processInitialOutcome(outcome);
         //Then
         assertEquals(expectedWinnings, actualWinnings, .003);
     }
@@ -245,6 +241,20 @@ public class TestWarDealer {
 
         //: Then
         assertEquals("The result should be a tie", expected, actual);
+    }
+
+    @Test
+    public void checkIfDeckIsEmpty_DeckHasSurrenderedAllCards_DeckIsBuilt(){
+        //Given
+        for(int i = 0; i < 52; i++){
+            dealer.getDeck().surrenderCard();
+        }
+        int expectedDeckSize = 52;
+        //When
+        dealer.checkIfDeckIsEmpty(dealer.getDeck());
+        //Then
+        int actualDeckSize = dealer.getDeck().getDeckQue().size();
+        assertEquals(expectedDeckSize, actualDeckSize);
     }
 
 }
