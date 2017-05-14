@@ -17,12 +17,15 @@ public class BigSixDealer {
         return wheelDenominations;
     }
 
+    private Bet bet;
+
 
     public void play(Player player) {
         initializeWheelDenominations();
         playRound(player);
         display(player.printWallet());
         askPlayAgain(player);
+        bet = new Bet();
     }
 
 
@@ -32,7 +35,6 @@ public class BigSixDealer {
         for (int i = 0; i < 7; i++) wheelDenominations.add("5");
         for (int i = 0; i < 4; i++) wheelDenominations.add("10");
         for (int i = 0; i < 2; i++) wheelDenominations.add("20");
-
         wheelDenominations.add("JOKER");
         wheelDenominations.add("CASINO");
     }
@@ -44,6 +46,24 @@ public class BigSixDealer {
         return winningDenomination;
     }
 
+    public void takeBetsAndDenominations(Player player) {
+        boolean quit = false;
+
+        while (!quit){
+            display("Enter a denomination on the wheel to determine your pay out ratio\n1 : You win your bet * 1\n2 : You win your bet * 2\n5: You win your bet * 5\n10 : You win your bet * 10\n20 : You win your bet * 20\nJOKER : You win your bet * 40\nCASINO : You win your bet * 40\n");
+            String denominationChoice = getStringInput("Which denomination would you like to place a bet on? (or n if done placing bets)");
+
+            if (denominationChoice.equalsIgnoreCase("n")) {quit = true;}
+            else if (denominationChoice.equals("1") || denominationChoice.equals("2") || denominationChoice.equals("5") || denominationChoice.equals("10") || denominationChoice.equals("20") || denominationChoice.equalsIgnoreCase("JOKER") || denominationChoice.equalsIgnoreCase("CASINO"))
+            {
+                if(bet.makeBet(getIntInput("How much would you like to bet?"), player)){
+                    wheelBets.add(new WheelBet(bet.getBetValue(), denominationChoice));
+                    display("\n" + player.printWallet() + "\n");
+                }
+            }
+            else {display("You must enter a valid denomination.");}
+        }
+    }
 
     public int checkIfWon(String winningDenomination) {
         int payOutRatio;
@@ -75,7 +95,7 @@ public class BigSixDealer {
         return payOutRatio;
     }
 
-    public void payOut(Player player, int payOutRatio, double betAmount) {
+    public void payOut(Player player, int payOutRatio, int betAmount) {
         player.collectWinnings(betAmount + betAmount * payOutRatio);
     }
 
@@ -95,49 +115,13 @@ public class BigSixDealer {
     }
 
 
-    public void takeBetsAndDenominations(Player player) {
-        String denominationChoice;
-
-        do {
-            display("Enter a denomination on the wheel to determine your pay out ratio\n1 : You win your bet * 1\n2 : You win your bet * 2\n5: You win your bet * 5\n10 : You win your bet * 10\n20 : You win your bet * 20\nJOKER : You win your bet * 40\nCASINO : You win your bet * 40\n");
-            denominationChoice = getStringInput("Which denomination would you like to place a bet on? (or n if done placing bets)");
-
-            if (denominationChoice.equalsIgnoreCase("n")) {
-                break;
-            } else if (denominationChoice.equals("1") || denominationChoice.equals("2") || denominationChoice.equals("5") || denominationChoice.equals("10") || denominationChoice.equals("20") || denominationChoice.equalsIgnoreCase("JOKER") || denominationChoice.equalsIgnoreCase("CASINO")) {
-
-                try {
-                    player.makeBet(getDoubleInput("How much would you like to bet?"));
-                } catch (IllegalArgumentException e) {
-                    display("Insufficient Funds.");
-                    display("\n" + player.printWallet() + "\n");
-                    takeBetsAndDenominations(player);
-                    return;
-                } catch (SecurityException e) {
-                    Bet.displayMinimumBet();
-                    display("\n" + player.printWallet() + "\n");
-                    takeBetsAndDenominations(player);
-                    return;
-                }
-                WheelBet wheelbet = new WheelBet(player.getBet().getBetValue(), denominationChoice);
-                wheelBets.add(wheelbet);
-                display("\n" + player.printWallet() + "\n");
-            } else {
-                display("You must enter a valid denomination.");
-            }
-        } while (!denominationChoice.equalsIgnoreCase("n"));
-    }
-
-
     public void askPlayAgain(Player player) {
-        if (player.getWallet() > player.getMinimumBet()) {
+        if (player.getWallet() > Bet.MINIMUM_BET) {
             String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit big six)");
             if (choice.equalsIgnoreCase("Y")) {
                 wheelBets.clear();
                 play(player);
             } else display("Thanks for playing!\n\n");
-        } else {
-            display("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");
-        }
+        } else {display("You can do a lot with $" + player.getWallet() + ". Just not in here.\n");}
     }
 }

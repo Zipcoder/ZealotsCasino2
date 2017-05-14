@@ -7,15 +7,15 @@ import java.util.ArrayList;
  */
 public class WheelBet {
 
-    private double betAmount;
+    private int betAmount;
     private String locationOnWheel;
 
-    public WheelBet(double betAmount, String locationOnWheel) {
+    public WheelBet(int betAmount, String locationOnWheel) {
         this.betAmount = betAmount;
         this.locationOnWheel = locationOnWheel;
     }
 
-    public double getBetAmount() {
+    public int getBetAmount() {
         return betAmount;
     }
 
