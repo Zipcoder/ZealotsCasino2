@@ -3,8 +3,6 @@ package io.zipcoder.zealotscasino;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -157,7 +155,7 @@ public class TestWarDealer {
     }
 
     @Test
-    public void processDeterminedOutcome_PlayerWins_WinningsAmountReturned() {
+    public void processInitialOutcome_PlayerWins_WinningsAmountReturned() {
         //Given
         player.setWallet(100);
         String outcome = "win";
@@ -166,13 +164,13 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 40;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processInitialOutcome(outcome);
         //Then
         assertEquals(expectedWinnings, actualWinnings, .003);
     }
 
     @Test
-    public void processDeterminedOutcome_PlayerLoses_ZeroAmountReturned() {
+    public void processInitialOutcome_PlayerLoses_ZeroAmountReturned() {
         //Given
         player.setWallet(100);
         String outcome = "lose";
@@ -181,13 +179,13 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 0;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processInitialOutcome(outcome);
         //Then
         assertEquals(expectedWinnings, actualWinnings, .003);
     }
 
     @Test
-    public void processDeterminedOutcome_PlayerTies_NegativeOneAmountReturned() {
+    public void processInitialOutcome_PlayerTies_NegativeOneAmountReturned() {
         //Given
         player.setWallet(100);
         String outcome = "tie";
@@ -196,7 +194,7 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 10;
         //When
-        double actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processInitialOutcome(outcome);
         //Then
         assertEquals(expectedWinnings, actualWinnings, .003);
     }
