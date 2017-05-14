@@ -9,7 +9,6 @@ public class Bet {
     public final static int MINIMUM_BET = 20;
 
     public boolean makeBet(double betValue, Player player) {
-
         if (MINIMUM_BET > betValue) {
             displayMinimumBet();
             return false;
