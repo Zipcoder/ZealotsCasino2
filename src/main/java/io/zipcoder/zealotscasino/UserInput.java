@@ -31,6 +31,14 @@ public class UserInput {
         return result;
     }
 
+    public static Double getDoubleInput(String prompt) {
+        try {
+            return Double.parseDouble(getStringInput(prompt)); //needs to take double to two places
+        } catch(IllegalArgumentException e){
+            return getDoubleInput("Please input a valid number"); // Recursively call the method with a prompt describing the issue.
+        }
+    }
+
     public static void display(Object output) {
         System.out.println(output.toString());
     }

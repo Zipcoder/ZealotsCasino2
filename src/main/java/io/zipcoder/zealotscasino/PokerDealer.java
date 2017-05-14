@@ -11,20 +11,24 @@ import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 /**
  * Created by luisgarcia on 5/11/17.
  */
-public class PokerDealer implements CardDealer
+public class PokerDealer implements Dealer
 {
     private Deck deck;
+    private Hand playerHand;
+    private Bet bet;
 
     public PokerDealer()
     {
+        bet = new Bet();
         deck = new Deck();
+        playerHand = new Hand();
         deck.buildDeck();
     }
 
 
     public void dealCardTo(Player player)
     {
-        player.getHand().receiveCard(deck.surrenderCard());
+        playerHand.receiveCard(deck.surrenderCard());
     }
 
 
@@ -71,7 +75,7 @@ public class PokerDealer implements CardDealer
         // determine winnings and pay
         payPlayer(player, rankOfHand);
 
-        player.setHand(new Hand());
+        playerHand.remove();
 
         askPlayAgain(player);
     }
@@ -81,31 +85,31 @@ public class PokerDealer implements CardDealer
         switch (rankOfHand)
         {
             case "PAIR":
-                pay(player, player.getBet().getBetValue());
+                pay(player, bet.getBetValue());
                 break;
             case "TWO PAIR":
-                pay(player, player.getBet().getBetValue() * 2);
+                pay(player, bet.getBetValue() * 2);
                 break;
             case "THREE OF A KIND":
-                pay(player, player.getBet().getBetValue() * 3);
+                pay(player, bet.getBetValue() * 3);
                 break;
             case "STRAIGHT":
-                pay(player, player.getBet().getBetValue() * 4);
+                pay(player, bet.getBetValue() * 4);
                 break;
             case "FLUSH":
-                pay(player, player.getBet().getBetValue() * 6);
+                pay(player, bet.getBetValue() * 6);
                 break;
             case "FULL HOUSE":
-                pay(player, player.getBet().getBetValue() * 9);
+                pay(player, bet.getBetValue() * 9);
                 break;
             case "FOUR OF A KIND":
-                pay(player, player.getBet().getBetValue() * 25);
+                pay(player, bet.getBetValue() * 25);
                 break;
             case "STRAIGHT FLUSH":
-                pay(player, player.getBet().getBetValue() * 50);
+                pay(player, bet.getBetValue() * 50);
                 break;
             case "ROYAL FLUSH":
-                pay(player, player.getBet().getBetValue() * 976);
+                pay(player, bet.getBetValue() * 976);
                 break;
             case "NO PAIR":
                 UserInput.display("Sorry, you lose!\nWallet: " + player.getWallet());
@@ -158,7 +162,7 @@ public class PokerDealer implements CardDealer
 
     public String evaluateTwoRanks(Player player)
     {
-        ArrayList<Card> hand = player.getHand().getCards();
+        ArrayList<Card> hand = playerHand.getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
         for (Integer key : mapOfHand.keySet())
         {
@@ -169,7 +173,7 @@ public class PokerDealer implements CardDealer
 
     public String evaluateThreeRanks(Player player)
     {
-        ArrayList<Card> hand = player.getHand().getCards();
+        ArrayList<Card> hand = playerHand.getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
         for (Integer key : mapOfHand.keySet())
         {
@@ -193,17 +197,17 @@ public class PokerDealer implements CardDealer
 
     public int returnNumberOfValuesInPlayerHand(Player player)
     {
-        Map<Integer, Integer> mapOfValues = toHashMap(player.getHand().getCards());
+        Map<Integer, Integer> mapOfValues = toHashMap(playerHand.getCards());
         Integer amountOfKey = mapOfValues.keySet().size();
         return amountOfKey;
     }
 
     public boolean checkRoyalFlush(Player player)
     {
-        ArrayList<Card> playerHand = player.getHand().getCards();
-        Collections.sort(playerHand);
+        ArrayList<Card> playerCards = playerHand.getCards();
+        Collections.sort(playerCards);
 
-        if (returnNumberOfValuesInPlayerHand(player) == 5 && (playerHand.get(0).getValue() == 10) && checkFlush(player))
+        if (returnNumberOfValuesInPlayerHand(player) == 5 && (playerCards.get(0).getValue() == 10) && checkFlush(player))
         {
             return true;
         }
@@ -212,14 +216,14 @@ public class PokerDealer implements CardDealer
 
     public boolean checkStraight(Player player)
     {
-        ArrayList<Card> playerHand = player.getHand().getCards();
-        Collections.sort(playerHand);
+        ArrayList<Card> playerCards = playerHand.getCards();
+        Collections.sort(playerCards);
         int value = 2;
-        int value2 = playerHand.get(0).getValue();
+        //int value2 = playerCards.get(0).getValue();
 
         for (int i = 1; i < 4; i++)
         {
-            if ((playerHand.get(i).getValue() == value) && (playerHand.get(4).getFaceValue().equals("ACE")))
+            if ((playerCards.get(i).getValue() == value) && (playerCards.get(4).getFaceValue().equals("ACE")))
             {
                 System.out.println("1: " + i);
                 value++;
@@ -229,7 +233,7 @@ public class PokerDealer implements CardDealer
 
         for (int i = 0; i < 4; i++)
         {
-            if (playerHand.get(i).getValue() == (playerHand.get(i+1).getValue()))
+            if (playerCards.get(i).getValue() == (playerCards.get(i+1).getValue()))
             {
                 System.out.println("b" + i);
             }
@@ -249,12 +253,12 @@ public class PokerDealer implements CardDealer
 
     public boolean checkFlush(Player player)
     {
-        ArrayList<Card> playerHand = player.getHand().getCards();
-        String myString = playerHand.get(0).getSuit();
+        ArrayList<Card> playerCards = playerHand.getCards();
+        String myString = playerCards.get(0).getSuit();
 
         for (int i = 1; i < 5; i++)
         {
-            if (!playerHand.get(i).getSuit().equals(myString))
+            if (!playerCards.get(i).getSuit().equals(myString))
                 return false;
         }
         return true;
@@ -271,7 +275,7 @@ public class PokerDealer implements CardDealer
     {
         try
         {
-            player.makeBet(getDoubleInput("Make a bet"));
+            bet.makeBet(getDoubleInput("Make a bet"), player);
         } catch (IllegalArgumentException e)
         {
             UserInput.display("Insufficient Funds.");
@@ -304,19 +308,19 @@ public class PokerDealer implements CardDealer
             indexes.add((int) getDiscard);
         }
         Collections.sort(indexes);
-        Hand cloneOfHand = player.getHand();
+        //Hand cloneOfHand = playerHand.getCards();
         for (int j = indexes.size() - 1; j >= 0; j--)
         {
-            cloneOfHand.remove(indexes.get(j) - 1);
+            playerHand.remove(indexes.get(j) - 1);
         }
-        player.setHand(cloneOfHand);
+        //player.setHand(cloneOfHand);
         return (int) numCardstoDiscard;
     }
 
     public void userDisplayHand(Player player)
     {
         StringBuilder outPut = new StringBuilder(1000);
-        ArrayList<Card> cards = player.getHand().getCards();
+        ArrayList<Card> cards = playerHand.getCards();
         for (int i = 0; i < cards.size(); i++)
         {
             outPut.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");

@@ -29,4 +29,6 @@ public class Hand {
         cards.remove(index);
     }
 
+    public void remove() { cards = new ArrayList<>(); }
+
 }
