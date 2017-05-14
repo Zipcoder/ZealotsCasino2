@@ -25,7 +25,7 @@ public class Bet {
     public double getBetValue() {
         return this.bet;
     }
-    
+
     public void doubleBet(){
         this.bet *= 2;
     }

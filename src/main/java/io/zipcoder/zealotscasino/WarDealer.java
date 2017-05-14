@@ -1,3 +1,4 @@
+
 package io.zipcoder.zealotscasino;
 
 import static io.zipcoder.zealotscasino.UserInput.getStringInput;
