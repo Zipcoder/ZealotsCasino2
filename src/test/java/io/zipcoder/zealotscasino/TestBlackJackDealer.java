@@ -257,18 +257,46 @@ public class TestBlackJackDealer {
 
     //assertBlackJack
     @Test
-    public void testAssertBlackJack(){}
+    public void testAssertBlackJack_PlayerHasBlackJack_GameIsNoLongerRunning(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(21);
+        blackJackDealer.setGameRunning(true);
+        //When
+        blackJackDealer.assertBlackJack(player);
+        //Then
+        Assert.assertTrue("Checking to see if method registered blackjack", !blackJackDealer.isGameRunning());
+    }
 
-    //hitProcess
     @Test
-    public void testHitProcess(){}
+    public void testAssertBlackJack_PlayerDoesntHaveBlackJack_GameIsStillRunning(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(20);
+        blackJackDealer.setGameRunning(true);
+        //When
+        blackJackDealer.assertBlackJack(player);
+        //Then
+        Assert.assertTrue("Checking to see if method registered blackjack", blackJackDealer.isGameRunning());
+    }
 
-    //evaluateResult
     @Test
-    public void testEvaluateResult(){}
+    public void testAssertBlackJack_PlayerBusts_PlayerDoesntReceiveBlackJack(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(22);
+        blackJackDealer.setGameRunning(true);
+        //When
+        blackJackDealer.assertBlackJack(player);
+        //Then
+        Assert.assertTrue("Checking to see if method registered blackjack", blackJackDealer.isGameRunning());
+    }
 
     //payPlayer
     @Test
     public void testPayPlayer(){}
+    
+    //evaluateResult
+    @Test
+    public void testEvaluateResult(){}
+
+
 
 }
