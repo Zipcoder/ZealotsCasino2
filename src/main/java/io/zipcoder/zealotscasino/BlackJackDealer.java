@@ -56,6 +56,11 @@ public class BlackJackDealer implements Dealer {
         }
     }
 
+    @Override
+    public Bet getBet() {
+        return bet;
+    }
+
     public void displayPlayerWallet(Player player){
         UserInput.display("You have $" + player.getWallet() + " remaining.");
     }
@@ -271,7 +276,7 @@ public class BlackJackDealer implements Dealer {
             UserInput.display("Dealer had BlackJack - good call! ");
             pay(player, insuranceValue);
         }
-        if(gameRunning == true) {
+        if(gameRunning) {
             decideWinner(player);
             gameRunning = false;
         }
