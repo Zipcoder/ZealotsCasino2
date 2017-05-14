@@ -12,6 +12,7 @@ public class WarDealer implements Dealer {
 
     public WarDealer() {
         deck = new Deck();
+        bet = new Bet();
         deck.buildDeck();
     }
 
@@ -20,24 +21,21 @@ public class WarDealer implements Dealer {
     }
 
     public void play(Player player) {
-
         //replace with a method that checks if deck is empty
         if (deck.getDeckQue().size() == 0) {
             deck.buildDeck();
         }
 
         double betValue;
+        boolean betValidation;
 
-//        boolean betValidation;
-//        do {
-//            Bet.displayMinimumBet();
-//            double betValue = UserInput.getDoubleInput("Place a bet.");
-//            betValidation = bet.makeBet(betValue, player);
-//        }while(!betValidation);
-//
-//        setBet(bet);
+        Bet.displayMinimumBet();
+        do {
 
-        betValue = bet.validateBet(player);
+            betValue = UserInput.getDoubleInput("Place a bet.");
+            betValidation = bet.makeBet(betValue, player);
+        }while(!betValidation);
+
         setBet(bet);
 
         Card playersCard = deck.surrenderCard();
@@ -54,8 +52,6 @@ public class WarDealer implements Dealer {
                 Card dealersTieCard = deck.surrenderCard();
                 String tieOutcome = playRound(playersTieCard, dealersTieCard);
                 winnings = processTieOutcome(tieOutcome);
-            } else {
-                winnings = betValue / 2;
             }
         }
 
@@ -66,7 +62,7 @@ public class WarDealer implements Dealer {
         }
 
         pay(player, winnings);
-
+        UserInput.display(player.printWallet());
         askPlayAgain(player);
     }
 

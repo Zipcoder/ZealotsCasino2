@@ -37,16 +37,5 @@ public class Bet {
     public static void displayMinimumBet() {
         UserInput.display("Minimum bet is " + MINIMUM_BET);
     }
-    public double validateBet(Player player){
-        boolean betValidation;
-        double betValue;
-        do {
-            Bet.displayMinimumBet();
-            betValue = UserInput.getDoubleInput("Place a bet.");
-            betValidation = makeBet(betValue, player);
-        }while(!betValidation);
-        return betValue;
-    }
-
 
 }
