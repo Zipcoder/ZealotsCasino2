@@ -8,13 +8,27 @@ package io.zipcoder.zealotscasino;
 public class Game
 {
     private Player player;
-    private CardDealer dealer;
+    private Dealer dealer;
     private BigSixDealer bigSixDealer;
     UserInput user;
 
     public Game(Player player){
-        this.player = player;
+        //this.player = player;
         user = new UserInput();
+    }
+
+    public static Dealer makeDealer(int dealer) {
+        switch(dealer) {
+            case 1:
+                return new WarDealer();
+            case 2:
+                return new BlackJackDealer();
+            case 3:
+                return new PokerDealer();
+            default:
+                UserInput.display("Invalid Entry. Try Again");
+                return null;
+        }
     }
 
 
@@ -55,7 +69,7 @@ public class Game
     public void chooseGame()
     {
         double gameChoice;
-        if(player.getWallet() < player.getMinimumBet()){
+        if(player.getWallet() < Bet.MINIMUM_BET){
             UserInput.display("Just kidding, you broke fam");
             gameChoice = 6;
         }
@@ -99,7 +113,7 @@ public class Game
         UserInput.display("--------------------Zealot's Casino--------------------");
         double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?");
         try{
-            player.initializeWallet(startWallet);
+            player = new Player(startWallet);
         }catch(IllegalArgumentException e){
             UserInput.display("Must have at least $20 to enter Zealot's Casino.");
             displayIntro();
@@ -110,13 +124,12 @@ public class Game
 
     public void displayMenu()
     {
-        UserInput.display("What would you like to play?");
-        UserInput.display("(1) War");
-        UserInput.display("(2) Blackjack");
-        UserInput.display("(3) Poker");
-        UserInput.display("(4) Roulette");
-        UserInput.display("(5) BigSix");
-        UserInput.display("(6) Quit");
+        String displayPrompt = "What would you like to play?\n"
+                        + "(1) War\n"
+                        + "(2) Blackjack\n"
+                        + "(3) Poker\n"
+                        + "(4) BigSix\n";
+        UserInput.display(displayPrompt);
         this.chooseGame();
     }
 

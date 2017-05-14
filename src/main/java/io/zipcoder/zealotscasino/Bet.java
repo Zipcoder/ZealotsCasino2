@@ -5,10 +5,10 @@ package io.zipcoder.zealotscasino;
  */
 public class Bet {
 
-    private int bet;
+    private double bet;
     public final static int MINIMUM_BET = 20;
 
-    public boolean makeBet(int betValue, Player player) {
+    public boolean makeBet(double betValue, Player player) {
         boolean flag = true;
         while(flag) {
             if (MINIMUM_BET > betValue) {
@@ -24,7 +24,7 @@ public class Bet {
         return true;
     }
 
-    public int getBetValue() {
+    public double getBetValue() {
         return this.bet;
     }
     

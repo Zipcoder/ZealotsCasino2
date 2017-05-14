@@ -166,9 +166,9 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 20;
         //When
-        int actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
-        assertEquals(expectedWinnings, actualWinnings);
+        assertEquals(expectedWinnings, actualWinnings, .003);
     }
 
     @Test
@@ -180,9 +180,9 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = 0;
         //When
-        int actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
-        assertEquals(expectedWinnings, actualWinnings);
+        assertEquals(expectedWinnings, actualWinnings, .003);
     }
 
     @Test
@@ -194,9 +194,9 @@ public class TestWarDealer {
         dealer.setBet(bet);
         int expectedWinnings = -1;
         //When
-        int actualWinnings = dealer.processDeterminedOutcome(outcome);
+        double actualWinnings = dealer.processDeterminedOutcome(outcome);
         //Then
-        assertEquals(expectedWinnings, actualWinnings);
+        assertEquals(expectedWinnings, actualWinnings, .003);
     }
 
     @Test

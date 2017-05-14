@@ -5,7 +5,7 @@ import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 /**
  * Created by andrewwong on 5/10/17.
  */
-public class WarDealer {
+public class WarDealer implements Dealer {
     private Deck deck;
     private Bet bet;
 
@@ -14,7 +14,7 @@ public class WarDealer {
         deck.buildDeck();
     }
 
-    public void pay(Player player, int payOut) {
+    public void pay(Player player, double payOut) {
         player.collectWinnings(payOut);
     }
 
@@ -41,7 +41,7 @@ public class WarDealer {
 
 
         String outcome = playRound(playersCard, dealersCard);
-        int winnings = processDeterminedOutcome(outcome);
+        double winnings = processDeterminedOutcome(outcome);
         if(winnings == -1){
             String tieChoice = getStringInput("Bet again? (Push  'Y' to double bet, any other key to surrender and receive half of bet");
             processTie(player, tieChoice.toUpperCase());
@@ -127,7 +127,7 @@ public class WarDealer {
 
 
     //DONE
-    public int processDeterminedOutcome(String outcome) {
+    public double processDeterminedOutcome(String outcome) {
         switch (outcome) {
             case "win":
                 return bet.getBetValue();
