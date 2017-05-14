@@ -15,12 +15,15 @@ public class TestPokerDealer
         private PokerDealer dealer;
         private Player player;
         private Deck deck;
+        private Hand hand;
 
         @Before
         public void setUp()
         {
                 player = new Player();
                 dealer = new PokerDealer();
+                hand = new Hand();
+                deck = new Deck();
         }
 
 
@@ -28,7 +31,7 @@ public class TestPokerDealer
         public void testDealHandTo_FiveCards()
         {
                 //Given
-                dealer.dealHandTo(player);
+                dealer.dealHand();
                 int expected = 5;
 
                 //When
@@ -37,19 +40,19 @@ public class TestPokerDealer
                 //Then
                 assertEquals("Should deal out five cards", expected, actual);
         }
-/*
+
         @Test
         public void checkStraight_TwoThroughSix_ReturnTrue()
         {
                 //given
-                player.getHand().receiveCard(new Card("SIX","CLUBS"));
-                player.getHand().receiveCard(new Card("TWO","CLUBS"));
-                player.getHand().receiveCard(new Card("THREE","CLUBS"));
-                player.getHand().receiveCard(new Card("FOUR","CLUBS"));
-                player.getHand().receiveCard(new Card("FIVE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("TWO","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("THREE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("FOUR","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","CLUBS"));
 
                 //when
-                boolean actual = dealer.checkStraight(player);
+                boolean actual = dealer.checkStraight();
 
                 //then
                 assertTrue("Should return true", actual);
@@ -59,14 +62,14 @@ public class TestPokerDealer
         public void checkStraight_LowStraigt_ReturnTrue()
         {
                 //given
-                player.getHand().receiveCard(new Card("ACE","CLUBS"));
-                player.getHand().receiveCard(new Card("TWO","CLUBS"));
-                player.getHand().receiveCard(new Card("THREE","CLUBS"));
-                player.getHand().receiveCard(new Card("FOUR","CLUBS"));
-                player.getHand().receiveCard(new Card("FIVE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("TWO","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("THREE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("FOUR","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","CLUBS"));
 
                 //when
-                boolean actual = dealer.checkStraight(player);
+                boolean actual = dealer.checkStraight();
 
                 //then
                 assertTrue("Should return true", actual);
@@ -76,14 +79,14 @@ public class TestPokerDealer
         public void checkFlush_AllDiamonds_ReturnTrue()
         {
                 //given
-                player.getHand().receiveCard(new Card("SIX","DIAMONDS"));
-                player.getHand().receiveCard(new Card("TWO","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("FOUR","DIAMONDS"));
-                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TWO","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("FOUR","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","DIAMONDS"));
 
                 //when
-                boolean actual = dealer.checkFlush(player);
+                boolean actual = dealer.checkFlush();
 
                 //then
                 assertTrue("All Diamonds should be flush", actual);
@@ -93,14 +96,14 @@ public class TestPokerDealer
         public void checkFlush_AllDiamonds_Straight_ReturnTrue()
         {
                 //given
-                player.getHand().receiveCard(new Card("SIX","DIAMONDS"));
-                player.getHand().receiveCard(new Card("TWO","DIAMONDS"));
-                player.getHand().receiveCard(new Card("THREE","DIAMONDS"));
-                player.getHand().receiveCard(new Card("FOUR","DIAMONDS"));
-                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TWO","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("THREE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("FOUR","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","DIAMONDS"));
 
                 //when
-                boolean actual = dealer.checkStraightFlush(player);
+                boolean actual = dealer.checkStraightFlush();
 
                 //then
                 assertTrue("All Diamonds and 5 number in a row should return straight flush.", actual);
@@ -111,14 +114,14 @@ public class TestPokerDealer
         public void checkRoyalFlush_AllDiamonds_Straight_ReturnTrue()
         {
                 //given
-                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
-                player.getHand().receiveCard(new Card("QUEEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("ACE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("QUEEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","DIAMONDS"));
 
                 //when
-                boolean actual = dealer.checkRoyalFlush(player);
+                boolean actual = dealer.checkRoyalFlush();
 
                 //then
                 assertTrue("All Diamonds and 5 number in a row should return straight flush.", actual);
@@ -128,15 +131,15 @@ public class TestPokerDealer
         public void testReturnNumberOfValuesInPlayerHand(){
 
                 //Given
-                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
-                player.getHand().receiveCard(new Card("JACK","HEARTS"));
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("TEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","HEARTS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","SPADES"));
                 int expected = 3;
 
                 //When
-                int actual = dealer.returnNumberOfValuesInPlayerHand(player);
+                int actual = dealer.returnNumberOfValuesInPlayerHand();
 
                 //Then
                 assertEquals("There should be three different values", expected, actual);
@@ -148,15 +151,15 @@ public class TestPokerDealer
         {
                 //Given
                 boolean bool = false;
-                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
-                player.getHand().receiveCard(new Card("TEN","SPADES"));
-                player.getHand().receiveCard(new Card("SIX","HEARTS"));
-                player.getHand().receiveCard(new Card("TEN","CLUBS"));
-                player.getHand().receiveCard(new Card("KING","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TEN","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","HEARTS"));
+                dealer.getPlayerHand().receiveCard(new Card("TEN","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","SPADES"));
                 String expected = "PAIR";
 
                 //WHEN
-                String actual = dealer.calculateHand(player);
+                String actual = dealer.calculateHand();
 
                 //THEN
                 assertEquals("There should be a pair of Tens", expected, actual);
@@ -167,15 +170,15 @@ public class TestPokerDealer
         {
                 //Given
                 boolean bool = false;
-                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
-                player.getHand().receiveCard(new Card("FIVE","SPADES"));
-                player.getHand().receiveCard(new Card("SIX","HEARTS"));
-                player.getHand().receiveCard(new Card("SIX","CLUBS"));
-                player.getHand().receiveCard(new Card("KING","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","HEARTS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","SPADES"));
                 String expected = "TWO PAIR";
 
                 //WHEN
-                String actual = dealer.evaluateThreeRanks(player);
+                String actual = dealer.evaluateThreeRanks();
 
                 //THEN
                 assertEquals("The result should be TWO PAIR", expected, actual);
@@ -186,15 +189,15 @@ public class TestPokerDealer
         {
                 //Given
                 boolean bool = false;
-                player.getHand().receiveCard(new Card("FIVE","DIAMONDS"));
-                player.getHand().receiveCard(new Card("FOUR","SPADES"));
-                player.getHand().receiveCard(new Card("FIVE","HEARTS"));
-                player.getHand().receiveCard(new Card("FIVE","CLUBS"));
-                player.getHand().receiveCard(new Card("SIX","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("FOUR","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","HEARTS"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","SPADES"));
                 String expected = "THREE OF A KIND";
 
                 //WHEN
-                String actual = dealer.evaluateThreeRanks(player);
+                String actual = dealer.evaluateThreeRanks();
 
                 //THEN
                 assertEquals("The result should be THREE OF A KIND", expected, actual);
@@ -205,15 +208,15 @@ public class TestPokerDealer
         {
                 //Given
                 boolean bool = false;
-                player.getHand().receiveCard(new Card("ACE","DIAMONDS"));
-                player.getHand().receiveCard(new Card("ACE","SPADES"));
-                player.getHand().receiveCard(new Card("ACE","HEARTS"));
-                player.getHand().receiveCard(new Card("ACE","CLUBS"));
-                player.getHand().receiveCard(new Card("SIX","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","HEARTS"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","SPADES"));
                 String expected = "FOUR OF A KIND";
 
                 //WHEN
-                String actual = dealer.evaluateTwoRanks(player);
+                String actual = dealer.evaluateTwoRanks();
 
                 //THEN
                 assertEquals("The result should be FOUR OF A KIND", expected, actual);
@@ -225,26 +228,26 @@ public class TestPokerDealer
         {
                 //Given
                 boolean bool = false;
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("SIX","SPADES"));
-                player.getHand().receiveCard(new Card("KING","HEARTS"));
-                player.getHand().receiveCard(new Card("SIX","CLUBS"));
-                player.getHand().receiveCard(new Card("KING","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","HEARTS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","SPADES"));
                 String expected = "FULL HOUSE";
 
                 //WHEN
-                String actual = dealer.evaluateTwoRanks(player);
+                String actual = dealer.evaluateTwoRanks();
 
                 //THEN
                 assertEquals("The result should be FULL HOUSE", expected, actual);
-        } */
+        }
 
         @Test
         public void testPayPlayer_NoPair_PayOut()
         {
                 //given
                 player.setWallet(50);
-                //player.makeBet(20);
+                dealer.getBet().makeBet(20, player);
                 double expected = 30;
 
                 //when
@@ -414,10 +417,10 @@ public class TestPokerDealer
                 for (Card card : cards) cardList.add(card);
                 String expected = "ROYAL FLUSH";
                 Hand hand = new Hand();
-                hand.receiveCards(cardList);
+                dealer.getPlayerHand().receiveCards(cardList);
 
                 //when
-                String actual = dealer.evaluateFiveRanks(player);
+                String actual = dealer.evaluateFiveRanks();
 
                 assertEquals("Royal Flush", expected, actual);
 
@@ -427,11 +430,11 @@ public class TestPokerDealer
         public void testEvaluateFiveRanks_StraightFlush()
         {
                 //given
-                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
-                player.getHand().receiveCard(new Card("QUEEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("NINE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("QUEEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("NINE","DIAMONDS"));
                 String expected = "STRAIGHT FLUSH";
 
                 //when
@@ -444,11 +447,11 @@ public class TestPokerDealer
         public void testEvaluateFiveRanks_Flush()
         {
                 //given
-                player.getHand().receiveCard(new Card("TEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
-                player.getHand().receiveCard(new Card("TWO","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","DIAMONDS"));
-                player.getHand().receiveCard(new Card("ACE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TWO","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","DIAMONDS"));
                 String expected = "FLUSH";
 
                 //when
@@ -462,11 +465,11 @@ public class TestPokerDealer
         public void testEvaluateFiveRanks_Straight()
         {
                 //given
-                player.getHand().receiveCard(new Card("TEN","HEARTS"));
-                player.getHand().receiveCard(new Card("JACK","DIAMONDS"));
-                player.getHand().receiveCard(new Card("QUEEN","DIAMONDS"));
-                player.getHand().receiveCard(new Card("KING","SPADES"));
-                player.getHand().receiveCard(new Card("NINE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("TEN","HEARTS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("QUEEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","SPADES"));
+                dealer.getPlayerHand().receiveCard(new Card("NINE","DIAMONDS"));
                 String expected = "STRAIGHT";
 
                 //when

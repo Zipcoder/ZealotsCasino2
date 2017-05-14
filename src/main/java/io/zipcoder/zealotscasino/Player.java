@@ -15,7 +15,7 @@ public class Player {
     }
 
     public Player(double initialWallet){
-        if(initialWallet < Bet.MINIMUM_BET){
+        if(initialWallet > Bet.MINIMUM_BET){
             this.wallet = initialWallet;
         }
     }

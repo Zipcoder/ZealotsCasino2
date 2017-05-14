@@ -9,15 +9,13 @@ public class Bet {
     public final static int MINIMUM_BET = 20;
 
     public boolean makeBet(double betValue, Player player) {
-        boolean flag = true;
-        while(flag) {
-            if (MINIMUM_BET > betValue) {
-                displayMinimumBet();
-                return false;
-            } else if (player.getWallet() < betValue) {
-                UserInput.display("You do not have enough chips!\n" + player.printWallet());
-                return false;
-            }
+
+        if (MINIMUM_BET > betValue) {
+            displayMinimumBet();
+            return false;
+        } else if (player.getWallet() < betValue) {
+            UserInput.display("You do not have enough chips!\n" + player.printWallet());
+            return false;
         }
         this.bet = betValue;
         player.setWallet(player.getWallet() - betValue);
