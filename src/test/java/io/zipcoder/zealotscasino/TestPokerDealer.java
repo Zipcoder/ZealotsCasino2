@@ -42,6 +42,24 @@ public class TestPokerDealer
         }
 
         @Test
+        public void testSetPlayerHand()
+        {
+                //Given
+                dealer.dealHand();
+                dealer.setPlayerHand(hand);
+                dealer.dealCard();
+                int expected = 1; 
+
+                //When
+                int actual = dealer.showPlayerHand().getCards().size();
+
+                //Then
+                assertEquals("Should deal out five cards", expected, actual);
+        }
+
+
+
+        @Test
         public void checkStraight_TwoThroughSix_ReturnTrue()
         {
                 //given
@@ -425,7 +443,7 @@ public class TestPokerDealer
                 assertEquals("Royal Flush", expected, actual);
 
         }
-/*
+
         @Test
         public void testEvaluateFiveRanks_StraightFlush()
         {
@@ -438,7 +456,7 @@ public class TestPokerDealer
                 String expected = "STRAIGHT FLUSH";
 
                 //when
-                String actual = dealer.evaluateFiveRanks(player);
+                String actual = dealer.evaluateFiveRanks();
 
                 assertEquals("straight flush", expected, actual);
         }
@@ -455,7 +473,7 @@ public class TestPokerDealer
                 String expected = "FLUSH";
 
                 //when
-                String actual = dealer.evaluateFiveRanks(player);
+                String actual = dealer.evaluateFiveRanks();
 
                 assertEquals("Flush", expected, actual);
 
@@ -473,12 +491,12 @@ public class TestPokerDealer
                 String expected = "STRAIGHT";
 
                 //when
-                String actual = dealer.evaluateFiveRanks(player);
+                String actual = dealer.evaluateFiveRanks();
 
                 assertEquals("straight", expected, actual);
 
         }
-*/
+
 
 
 
