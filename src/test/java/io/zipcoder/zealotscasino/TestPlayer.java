@@ -17,7 +17,7 @@ public class TestPlayer {
     @Test
     public void printWalletTest(){
         //Given
-        String expected = "$500";
+        String expected = "Wallet: $500.0";
 
         //When
         String actual = player.printWallet();
