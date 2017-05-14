@@ -93,13 +93,9 @@ public class BlackJackDealer implements Dealer {
 
 
 
-    public void displayPlayerWallet(Player player){
-        UserInput.display("You have $" + player.getWallet() + " remaining.");
-    }
-
     public void takeTurn(Player player) {
         protectedBetProcess(player);
-        buildPlayersHands(player);
+        buildPlayerHand();
         if(checkIfSplit(player)){
             split(player);
         }else {
@@ -123,8 +119,8 @@ public class BlackJackDealer implements Dealer {
         }
     }
 
-    private void buildPlayersHands(Player player){
-        initializeHands(player);
+    private void buildPlayerHand(){
+        initializeHands();
         dealHandToPlayer();
         playerHand.updateHandValue();
     }
@@ -134,29 +130,14 @@ public class BlackJackDealer implements Dealer {
         dealerHand.updateHandValue();
     }
 
-    public void initializeHands(Player player) {
+    public void initializeHands() {
         playerHand.remove();
         dealerHand = new BlackJackHand();
-        initializePlayerHandValue();
-        initializeDealerHandValue();
-    }
-
-    public void initializeDealerHandValue() {
-        dealerHand.setHandValue(0);
+        playerHand.resetHandValue();
+        dealerHand.resetHandValue();
     }
 
 
-    public void initializePlayerHandValue(){
-        playerHand.setHandValue(0);
-    }
-
-    private void displayLoseGame() {
-        UserInput.display("Busted!");
-    }
-
-    private void displayBlackJack() {
-        UserInput.display("BlackJack!");
-    }
 
     public void dealCardToPlayer() {
         Card card = deck.surrenderCard();
@@ -187,16 +168,12 @@ public class BlackJackDealer implements Dealer {
         }
     }
 
-    private void displayDealerCardUp(){
-        UserInput.display("Exposed card of dealer: " + dealerHand.getCards().get(0));
-    }
-
     @Override
     public void pay(Player player, double payOut) {
         player.collectWinnings(payOut);
     }
 
-    private void takeHit(Player player){
+    private void takeHit(){
         dealCardToPlayer();
         userDisplayHand();
     }
@@ -210,6 +187,22 @@ public class BlackJackDealer implements Dealer {
         }
         outPut.append("\nTotal Player value: " + playerHand.getHandValue());
         UserInput.display(outPut);
+    }
+
+    private void displayDealerCardUp(){
+        UserInput.display("Exposed card of dealer: " + dealerHand.getCards().get(0));
+    }
+
+    private void displayLoseGame() {
+        UserInput.display("Busted!");
+    }
+
+    private void displayBlackJack() {
+        UserInput.display("BlackJack!");
+    }
+
+    public void displayPlayerWallet(Player player){
+        UserInput.display("You have $" + player.getWallet() + " remaining.");
     }
 
     private boolean checkIfPlayerHit(){
@@ -269,7 +262,7 @@ public class BlackJackDealer implements Dealer {
     private void hitProcess(Player player){
         boolean hit = checkIfPlayerHit();
         while(hit){
-            takeHit(player);
+            takeHit();
             hit = checkStatus(player, bet.getBetValue());
         }
     }

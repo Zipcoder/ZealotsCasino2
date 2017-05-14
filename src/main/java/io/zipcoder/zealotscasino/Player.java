@@ -33,6 +33,8 @@ public class Player {
     }
 
     public String printWallet(){
-        return ("Wallet: $" + wallet);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String walletString = formatter.format(wallet);
+        return ("Wallet: " + walletString);
     }
  }
