@@ -30,27 +30,29 @@ public class PokerDealer implements Dealer
         return bet;
     }
 
+    public Hand getPlayerHand() {
+        return playerHand;
+    }
 
-    public void dealCardTo(Player player)
+    public void setPlayerHand(Hand playerHand) {
+        this.playerHand = playerHand;
+    }
+
+    public void dealCard()
     {
         playerHand.receiveCard(deck.surrenderCard());
     }
 
 
-    public void dealHandTo(Player player)
+    public void dealHand()
     {
         for (int i = 0; i < 5; i++)
-            dealCardTo(player);
-    }
-
-    public void dealPlayerHand(Hand hand) {
-        playerHand = hand;
+            dealCard();
     }
 
     public Hand showPlayerHand() {
         return playerHand;
     }
-
 
     public void pay(Player player, double payOut)
     {
@@ -63,26 +65,29 @@ public class PokerDealer implements Dealer
         deck.buildAnotherDeck();
 
         //get bet
-        makeBet(player);
+        boolean quit = false;
+        while(!quit){
+            quit = bet.makeBet(UserInput.getDoubleInput("How much do you want to bet?"), player);
+        }
 
         //deal cards to player
-        dealHandTo(player);
+        dealHand();
 
         //display
-        userDisplayHand(player);
+        userDisplayHand();
 
         //discard cards
-        int numberToReplace = discardCards(player);
+        int numberToReplace = discardCards();
 
         //replace discarded cards
-        replace(player, numberToReplace);
+        replace(numberToReplace);
 
         //display new hand
         UserInput.display("Updated Hand: ");
-        userDisplayHand(player);
+        userDisplayHand();
 
         //calculate hand
-        String rankOfHand = calculateHand(player);
+        String rankOfHand = calculateHand();
         UserInput.display("You got a " + rankOfHand);
 
         // determine winnings and pay
@@ -141,39 +146,39 @@ public class PokerDealer implements Dealer
             UserInput.display("Thanks for playing!\n\n");
     }
 
-    public String calculateHand(Player player)
+    public String calculateHand()
     {
-        int numberOfValues = returnNumberOfValuesInPlayerHand(player);
+        int numberOfValues = returnNumberOfValuesInPlayerHand();
         if (numberOfValues == 5)
         {
-            return evaluateFiveRanks(player);
+            return evaluateFiveRanks();
         } else if (numberOfValues == 4)
         {
             return "PAIR";
         } else if (numberOfValues == 3)
         {
-            return evaluateThreeRanks(player);
+            return evaluateThreeRanks();
         } else
         {
-            return evaluateTwoRanks(player);
+            return evaluateTwoRanks();
         }
     }
 
-    public String evaluateFiveRanks(Player player)
+    public String evaluateFiveRanks()
     {
-        if (checkRoyalFlush(player))
+        if (checkRoyalFlush())
             return "ROYAL FLUSH";
-        else if (checkStraightFlush(player))
+        else if (checkStraightFlush())
             return "STRAIGHT FLUSH";
-        else if (checkFlush(player))
+        else if (checkFlush())
             return "FLUSH";
-        else if (checkStraight(player))
+        else if (checkStraight())
             return "STRAIGHT";
         else
             return "NO PAIR";
     }
 
-    public String evaluateTwoRanks(Player player)
+    public String evaluateTwoRanks()
     {
         ArrayList<Card> hand = playerHand.getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
@@ -184,7 +189,7 @@ public class PokerDealer implements Dealer
         return "FULL HOUSE";
     }
 
-    public String evaluateThreeRanks(Player player)
+    public String evaluateThreeRanks()
     {
         ArrayList<Card> hand = playerHand.getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
@@ -208,63 +213,50 @@ public class PokerDealer implements Dealer
         return mapOfValues;
     }
 
-    public int returnNumberOfValuesInPlayerHand(Player player)
+    public int returnNumberOfValuesInPlayerHand()
     {
         Map<Integer, Integer> mapOfValues = toHashMap(playerHand.getCards());
         Integer amountOfKey = mapOfValues.keySet().size();
         return amountOfKey;
     }
 
-    public boolean checkRoyalFlush(Player player)
+    public boolean checkRoyalFlush()
     {
         ArrayList<Card> playerCards = playerHand.getCards();
         Collections.sort(playerCards);
 
-        if (returnNumberOfValuesInPlayerHand(player) == 5 && (playerCards.get(0).getValue() == 10) && checkFlush(player))
+        if (returnNumberOfValuesInPlayerHand() == 5 && (playerCards.get(0).getValue() == 10) && checkFlush())
         {
             return true;
         }
         return false;
     }
 
-    public boolean checkStraight(Player player)
+    public boolean checkStraight()
     {
         ArrayList<Card> playerCards = playerHand.getCards();
         Collections.sort(playerCards);
-        int value = 2;
-        //int value2 = playerCards.get(0).getValue();
-
-        for (int i = 1; i < 4; i++)
-        {
-            if ((playerCards.get(i).getValue() == value) && (playerCards.get(4).getFaceValue().equals("ACE")))
-            {
-                System.out.println("1: " + i);
-                value++;
-                if (value == 5) return true;
-            }
-        }
-
-        for (int i = 0; i < 4; i++)
-        {
-            if (playerCards.get(i).getValue() == (playerCards.get(i+1).getValue()))
-            {
-                System.out.println("b" + i);
-            }
-        }
-        return false;
+        int firstCard = playerCards.get(0).getValue();
+        int fourthCard = playerCards.get(3).getValue();
+        int fifthCard = playerCards.get(4).getValue();
+        if(fifthCard - firstCard == 4){
+            return true;
+        } else if((firstCard == 2 && fourthCard == 5) && fifthCard == 14){
+            return true;
+        } else return false;
     }
 
-    public boolean checkStraightFlush(Player player)
+    public boolean checkStraightFlush()
     {
 
-        if (checkFlush(player) && checkStraight(player))
+        if (checkFlush() && checkStraight())
         {
             return true;
         }
         return false;
     }
 
-    public boolean checkFlush(Player player)
+    public boolean checkFlush()
     {
         ArrayList<Card> playerCards = playerHand.getCards();
         String myString = playerCards.get(0).getSuit();
@@ -277,33 +269,16 @@ public class PokerDealer implements Dealer
         return true;
     }
 
-    public void replace(Player player, int numberToReplace)
+    public void replace(int numberToReplace)
     {
         for (int i = 0; i < numberToReplace; i++)
-            dealCardTo(player);
+            dealCard();
     }
 
 
-    public void makeBet(Player player)
-    {
-        try
-        {
-            bet.makeBet(getDoubleInput("Make a bet"), player);
-        } catch (IllegalArgumentException e)
-        {
-            UserInput.display("Insufficient Funds.");
-            play(player);
-            return;
-
-        } catch (SecurityException e) {
-            Bet.displayMinimumBet();
-            play(player);
-            return;
-        }
-    }
 
 
-    public int discardCards(Player player)
+    public int discardCards()
     {
         double numCardstoDiscard;
         do
@@ -330,7 +305,7 @@ public class PokerDealer implements Dealer
         return (int) numCardstoDiscard;
     }
 
-    public void userDisplayHand(Player player)
+    public void userDisplayHand()
     {
         StringBuilder outPut = new StringBuilder(1000);
         ArrayList<Card> cards = playerHand.getCards();
