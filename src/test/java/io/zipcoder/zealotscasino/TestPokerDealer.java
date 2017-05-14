@@ -281,11 +281,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expected = 19550;
 
                 //when
@@ -301,11 +299,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expected = 1030;
 
                 //when
@@ -321,11 +317,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expected = 530;
 
                 //when
@@ -341,11 +335,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expected = 210;
 
                 //when
@@ -362,11 +354,9 @@ public class TestPokerDealer
                 //given
 
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expeted = 150;
 
                 //when
@@ -382,11 +372,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expected = 110;
 
                 //when
@@ -402,11 +390,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expected = 90;
 
                 //when
@@ -422,11 +408,9 @@ public class TestPokerDealer
         {
                 //given
                 player.setWallet(50);
-<<<<<<< HEAD
+
                 dealer.getBet().makeBet(20, player); 
-=======
-                dealer.getBet().makeBet(20, player);
->>>>>>> pokerSunday
+
                 double expected = 70;
 
                 //when
