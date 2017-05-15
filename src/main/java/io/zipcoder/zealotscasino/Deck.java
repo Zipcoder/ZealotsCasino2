@@ -35,7 +35,7 @@ public class Deck {
 
     public void buildAnotherDeck()
     {
-        if(deckQue.size() <= 5)
+        if(deckQue.size() <= 10)
         {
             buildDeck();
         }
