@@ -291,8 +291,6 @@ public class PokerDealer implements Dealer
     }
 
 
-
-
     public void discardCards(ArrayList<Integer> discardIndexes, Hand playerHand)
     {
         Collections.sort(discardIndexes);

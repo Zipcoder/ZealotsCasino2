@@ -34,7 +34,7 @@ public class Bet {
     }
 
     public static void displayMinimumBet() {
-        UserInput.display("Minimum bet is " + MINIMUM_BET);
+        UserInput.display("Minimum bet is $" + MINIMUM_BET);
     }
 
 }
