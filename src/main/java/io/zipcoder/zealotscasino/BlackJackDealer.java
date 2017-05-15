@@ -76,8 +76,8 @@ public class BlackJackDealer implements Dealer {
     public void play(Player player) {
         setGameRunning(true);
         while(gameRunning){
-            if(player.getWallet() < 20){
-                UserInput.display("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
+            if(checkIfPlayerIsBroke(player)){
+                tellPlayerToLeave(player);
                 break;
             }
             displayPlayerWallet(player);
@@ -91,7 +91,16 @@ public class BlackJackDealer implements Dealer {
         }
     }
 
+    public boolean checkIfPlayerIsBroke(Player player){
+        if(player.getWallet() < 20){
+            return true;
+        }
+        return false;
+    }
 
+    public void tellPlayerToLeave(Player player){
+        UserInput.display("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
+    }
 
     public void takeTurn(Player player) {
         protectedBetProcess(player);
@@ -132,12 +141,12 @@ public class BlackJackDealer implements Dealer {
 
     public void initializeHands() {
         playerHand.remove();
+        dealerHand.remove();
+        playerHand = new BlackJackHand();
         dealerHand = new BlackJackHand();
         playerHand.resetHandValue();
         dealerHand.resetHandValue();
     }
-
-
 
     public void dealCardToPlayer() {
         Card card = deck.surrenderCard();
