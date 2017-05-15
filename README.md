@@ -5,18 +5,18 @@
 [![Build Status](https://travis-ci.org/Zipcoder/ZealotsCasino2.svg?branch=master)](https://travis-ci.org/Zipcoder/ZealotsCasino2)
 
 
-###*Dev*
+### *Dev*
 
-![Build Status](https://travis-ci.org/Zipcoder/ZealotsCasino2.svg?branch=master)](https://travis-ci.org/Zipcoder/ZealotsCasino2)
+[![Build Status](https://travis-ci.org/Zipcoder/ZealotsCasino2.svg?branch=master)](https://travis-ci.org/Zipcoder/ZealotsCasino2)
 
-##Our Games:
+## Our Games:
 
 - Big Six
 - BlackJack
 - Poker
 - War
 
-###Our Team
+### Our Team
 
 - Aaron Long
 - Andrew Wong
@@ -25,7 +25,7 @@
 - Luis Garcia
 - Stephen Pegram
 
-#Our Mission
+# Our Mission
 
 To create the best flipping casino that Froilan has ever seen.
 

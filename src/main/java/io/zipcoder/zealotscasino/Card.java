@@ -5,7 +5,8 @@ package io.zipcoder.zealotscasino;
  */
 public class Card implements Comparable<Card>{
 
-
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String RESET = "\u001B[0m";
     private String suit;
     private String faceValue;
 
@@ -32,6 +33,46 @@ public class Card implements Comparable<Card>{
         return faceValue;
     }
 
+    public String getFaceToPrint()
+    {
+        if(getValue() > 10)
+        {
+            if(getValue() == 11)
+            {
+                return getFaceValue().substring(0,1);
+            }
+            else if(getValue() == 12)
+            {
+                return getFaceValue().substring(0,1);
+            }
+            else if(getValue() == 13)
+            {
+                return getFaceValue().substring(0,1);
+            }
+            else
+            {
+                return getFaceValue().substring(0,1);
+            }
+        }
+        else
+            return getValue()+"";
+    }
+
+    public String getSuitSymbol()
+    {
+        if(suit.equals("SPADES"))
+            return ((char)'\u2660' + " ");
+        else if(suit.equals("CLUBS"))
+            return ((char)'\u2663' + " ");
+        else if(suit.equals("DIAMONDS"))
+            return (ANSI_RED + '\u2666' + " " + RESET);
+        else if(suit.equals("HEARTS"))
+            return (ANSI_RED+ '\u2764' + " " + RESET);
+        else
+            return "Invalid Symbol";
+
+    }
+
     public void setFaceValue(String theFaceValue) {
         faceValue = theFaceValue;
     }
@@ -41,8 +82,9 @@ public class Card implements Comparable<Card>{
     }
 
     public String toString(){
-        
-        return String.format("%s of %s", faceValue.charAt(0) + faceValue.substring(1).toLowerCase(), suit.charAt(0) + suit.substring(1).toLowerCase());
+        return String.format("| %-2s %2s|", getFaceToPrint(), getSuitSymbol());
     }
+
+
 
 }

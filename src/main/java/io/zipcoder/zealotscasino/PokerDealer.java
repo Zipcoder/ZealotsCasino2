@@ -11,154 +11,205 @@ import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 /**
  * Created by luisgarcia on 5/11/17.
  */
-public class PokerDealer implements CardDealer {
+public class PokerDealer implements Dealer
+{
     private Deck deck;
+    private Hand playerHand;
+    private Bet bet;
 
-    public PokerDealer() {
+    public PokerDealer()
+    {
+        bet = new Bet();
         deck = new Deck();
+        playerHand = new Hand();
         deck.buildDeck();
     }
 
+    @Override
+    public Bet getBet() {
+        return bet;
+    }
 
-    public void dealCardTo(Player player) {
-        player.getHand().receiveCard(deck.surrenderCard());
+    public Hand getPlayerHand() {
+        return playerHand;
+    }
+
+    public void setPlayerHand(Hand playerHand) {
+        this.playerHand = playerHand;
+    }
+
+    public void dealCard()
+    {
+        playerHand.receiveCard(deck.surrenderCard());
     }
 
 
-    public void dealHandTo(Player player) {
+    public void dealHand()
+    {
         for (int i = 0; i < 5; i++)
-            dealCardTo(player);
+            dealCard();
     }
 
+    public Hand showPlayerHand() {
+        return playerHand;
+    }
 
-    public void pay(Player player, double payOut) {
+    public void pay(Player player, double payOut)
+    {
         player.collectWinnings(payOut);
-        System.out.println("You win " + payOut + "!\nWallet: " + player.getWallet());
+        UserInput.display("You win " + payOut + "!\nWallet: " + player.getWallet());
     }
 
-    public void play(Player player) {
-        if(deck.getDeckQue().size() < 10)
-            deck.buildDeck();
+    public void play(Player player)
+    {
+        deck.buildAnotherDeck();
 
         //get bet
-        makeBet(player);
+        boolean quit = false;
+        while(!quit){
+            quit = bet.makeBet(UserInput.getDoubleInput("How much do you want to bet?"), player);
+        }
 
         //deal cards to player
-        dealHandTo(player);
+        dealHand();
 
         //display
-        userDisplayHand(player);
+        userDisplayHand();
 
         //discard cards
-        int numberToReplace = discardCards(player);
+        int numberToReplace = discardCards();
 
         //replace discarded cards
-        replace(player, numberToReplace);
+        replace(numberToReplace);
 
         //display new hand
-        System.out.println("Updated Hand: ");
-        userDisplayHand(player);
+        UserInput.display("Updated Hand: ");
+        userDisplayHand();
 
         //calculate hand
-        String rankOfHand = calculateHand(player);
-        System.out.println("You got a " + rankOfHand);
+        String rankOfHand = calculateHand();
+        UserInput.display("You got a " + rankOfHand);
 
         // determine winnings and pay
         payPlayer(player, rankOfHand);
 
-        player.setHand(new Hand());
+        playerHand.remove();
 
-        askPlayAgain(player);
+        if(player.getWallet() > 20){
+            askPlayAgain(player);
+        } else {
+            UserInput.display("You do not have enough chips to continue, returning to main menu.\n");
+        }
     }
 
-    public void payPlayer(Player player, String rankOfHand) {
-        switch(rankOfHand){
+    public void payPlayer(Player player, String rankOfHand)
+    {
+        switch (rankOfHand)
+        {
             case "PAIR":
-                pay(player, player.getBet());
+                pay(player, bet.getBetValue());
                 break;
             case "TWO PAIR":
-                pay(player, player.getBet() * 2);
+                pay(player, bet.getBetValue() * 2);
                 break;
             case "THREE OF A KIND":
-                pay(player, player.getBet() * 3);
+                pay(player, bet.getBetValue() * 3);
                 break;
             case "STRAIGHT":
-                pay(player, player.getBet() * 4);
+                pay(player, bet.getBetValue() * 4);
                 break;
             case "FLUSH":
-                pay(player, player.getBet() * 6);
+                pay(player, bet.getBetValue() * 6);
                 break;
             case "FULL HOUSE":
-                pay(player, player.getBet() * 9);
+                pay(player, bet.getBetValue() * 9);
                 break;
             case "FOUR OF A KIND":
-                pay(player, player.getBet() * 25);
+                pay(player, bet.getBetValue() * 25);
                 break;
             case "STRAIGHT FLUSH":
-                pay(player, player.getBet() * 50);
+                pay(player, bet.getBetValue() * 50);
                 break;
             case "ROYAL FLUSH":
-                pay(player, player.getBet() * 976);
+                pay(player, bet.getBetValue() * 976);
                 break;
             case "NO PAIR":
-                System.out.println("Sorry, you lose!\nWallet: " + player.getWallet());
+                UserInput.display("Sorry, you lose!\nWallet: " + player.getWallet());
                 break;
             default:
                 break;
         }
     }
 
-    public void askPlayAgain(Player player) {
+    public void askPlayAgain(Player player)
+    {
         String choice = getStringInput("Would you like to play again? (Push 'Y' to play again, 'Any other key' to quit)");
         if (choice.equalsIgnoreCase("Y"))
             play(player);
         else
-            System.out.println("Thanks for playing!\n\n");
+            UserInput.display("Thanks for playing!\n\n");
     }
 
-    public String calculateHand(Player player) {
-        int numberOfValues = returnNumberOfValuesInPlayerHand(player);
-        if (numberOfValues == 5) {
-            return evaluateFiveRanks(player);
-        } else if (numberOfValues == 4) {
+    public String calculateHand()
+    {
+        int numberOfValues = returnNumberOfValuesInPlayerHand();
+        if (numberOfValues == 5)
+        {
+            return evaluateFiveRanks();
+        } else if (numberOfValues == 4)
+        {
             return "PAIR";
-        } else if (numberOfValues == 3) {
-            return evaluateThreeRanks(player);
-        } else {
-            return evaluateTwoRanks(player);
+        } else if (numberOfValues == 3)
+        {
+            return evaluateThreeRanks();
+        } else
+        {
+            return evaluateTwoRanks();
         }
     }
 
-    public String evaluateFiveRanks(Player player) {
-        if (checkRoyalFlush(player)) return "ROYAL FLUSH";
-        else if (checkStraightFlush(player)) return "STRAIGHT FLUSH";
-        else if (checkFlush(player)) return "FLUSH";
-        else if (checkStraight(player)) return "STRAIGHT";
-        else return "NO PAIR";
+    public String evaluateFiveRanks()
+    {
+        if (checkRoyalFlush())
+            return "ROYAL FLUSH";
+        else if (checkStraightFlush())
+            return "STRAIGHT FLUSH";
+        else if (checkFlush())
+            return "FLUSH";
+        else if (checkStraight())
+            return "STRAIGHT";
+        else
+            return "NO PAIR";
     }
 
-    public String evaluateTwoRanks(Player player) {
-        ArrayList<Card> hand = player.getHand().getCards();
+    public String evaluateTwoRanks()
+    {
+        ArrayList<Card> hand = playerHand.getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
-        for (Integer key : mapOfHand.keySet()) {
+        for (Integer key : mapOfHand.keySet())
+        {
             if (mapOfHand.get(key) == 4) return "FOUR OF A KIND";
         }
         return "FULL HOUSE";
     }
 
-    public String evaluateThreeRanks(Player player) {
-        ArrayList<Card> hand = player.getHand().getCards();
+    public String evaluateThreeRanks()
+    {
+        ArrayList<Card> hand = playerHand.getCards();
         Map<Integer, Integer> mapOfHand = toHashMap(hand);
-        for (Integer key : mapOfHand.keySet()) {
+        for (Integer key : mapOfHand.keySet())
+        {
             if (mapOfHand.get(key) == 3) return "THREE OF A KIND";
         }
         return "TWO PAIR";
     }
 
-    public Map<Integer, Integer> toHashMap(ArrayList<Card> playerHand) {
+    public Map<Integer, Integer> toHashMap(ArrayList<Card> playerHand)
+    {
         Map<Integer, Integer> mapOfValues = new HashMap<>();
 
-        for (int i = 0; i < playerHand.size(); i++) {
+        for (int i = 0; i < playerHand.size(); i++)
+        {
             Integer key = playerHand.get(i).getValue();
             Integer frequency = mapOfValues.get(key);
             mapOfValues.put(key, frequency == null ? 1 : frequency + 1);
@@ -166,109 +217,107 @@ public class PokerDealer implements CardDealer {
         return mapOfValues;
     }
 
-    public int returnNumberOfValuesInPlayerHand(Player player) {
-        Map<Integer, Integer> mapOfValues = toHashMap(player.getHand().getCards());
+    public int returnNumberOfValuesInPlayerHand()
+    {
+        Map<Integer, Integer> mapOfValues = toHashMap(playerHand.getCards());
         Integer amountOfKey = mapOfValues.keySet().size();
         return amountOfKey;
     }
 
-    public boolean checkRoyalFlush(Player player) {
-        ArrayList<Card> playerHand = player.getHand().getCards();
-        Collections.sort(playerHand);
+    public boolean checkRoyalFlush()
+    {
+        ArrayList<Card> playerCards = playerHand.getCards();
+        Collections.sort(playerCards);
 
-        if (returnNumberOfValuesInPlayerHand(player) == 5 && (playerHand.get(0).getValue() == 10))
-            return true;
-
-        return false;
-    }
-
-    public boolean checkStraight(Player player) {
-        ArrayList<Card> playerHand = player.getHand().getCards();
-        Collections.sort(playerHand);
-        int value = playerHand.get(0).getValue();
-
-        for (int i = 1; i < 4; i++) {
-            if ((playerHand.get(i).getValue() == value + 1) && (playerHand.get(4).getFaceValue().equals("ACE"))) {
-                value++;
-                if (value == 5) return true;
-            }
-        }
-
-        for (int i = 1; i < 5; i++) {
-            if (playerHand.get(i).getValue() == value + 1) value++;
-            else return false;
-        }
-        return true;
-    }
-
-    public boolean checkStraightFlush(Player player) {
-
-        if (checkFlush(player) && checkStraight(player)) {
+        if (returnNumberOfValuesInPlayerHand() == 5 && (playerCards.get(0).getValue() == 10) && checkFlush())
+        {
             return true;
         }
         return false;
     }
 
-    public boolean checkFlush(Player player) {
-        ArrayList<Card> playerHand = player.getHand().getCards();
-        String myString = playerHand.get(0).getSuit();
+    public boolean checkStraight()
+    {
+        ArrayList<Card> playerCards = playerHand.getCards();
+        Collections.sort(playerCards);
+        int firstCard = playerCards.get(0).getValue();
+        int fourthCard = playerCards.get(3).getValue();
+        int fifthCard = playerCards.get(4).getValue();
+        if(fifthCard - firstCard == 4){
+            return true;
+        } else if((firstCard == 2 && fourthCard == 5) && fifthCard == 14){
+            return true;
+        } else return false;
+    }
 
-        for (int i = 1; i < 5; i++) {
-            if (!playerHand.get(i).getSuit().equals(myString))
+    public boolean checkStraightFlush()
+    {
+
+        if (checkFlush() && checkStraight())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkFlush()
+    {
+        ArrayList<Card> playerCards = playerHand.getCards();
+        String myString = playerCards.get(0).getSuit();
+
+        for (int i = 1; i < 5; i++)
+        {
+            if (!playerCards.get(i).getSuit().equals(myString))
                 return false;
         }
         return true;
     }
 
-    public void replace(Player player, int numberToReplace) {
+    public void replace(int numberToReplace)
+    {
         for (int i = 0; i < numberToReplace; i++)
-            dealCardTo(player);
+            dealCard();
     }
 
 
-    public void makeBet(Player player) {
-        try {
-            player.makeBet(getDoubleInput("Make a bet"));
-        } catch (IllegalArgumentException e) {
-            System.out.println("Insufficient Funds.");
-            play(player);
-            return;
-        } catch (SecurityException e) {
-            System.out.println("Minimum bet is $20.");
-            play(player);
-            return;
-        }
-    }
 
 
-    public int discardCards(Player player) {
+    public int discardCards()
+    {
         double numCardstoDiscard;
-        do{
+        do
+        {
             numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
-            if(numCardstoDiscard > 6){
-                System.out.println("You can only discard the card you have");
+            if (numCardstoDiscard > 6)
+            {
+                UserInput.display("You can only discard the card you have");
             }
-        } while(numCardstoDiscard > 6);
+        } while (numCardstoDiscard > 6);
         ArrayList<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < numCardstoDiscard; i++) {
+        for (int i = 0; i < numCardstoDiscard; i++)
+        {
             double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
             indexes.add((int) getDiscard);
         }
         Collections.sort(indexes);
-        Hand cloneOfHand = player.getHand();
-        for (int j = indexes.size() - 1; j >= 0; j--) {
-            cloneOfHand.remove(indexes.get(j) - 1);
+        //Hand cloneOfHand = playerHand.getCards();
+        for (int j = indexes.size() - 1; j >= 0; j--)
+        {
+            playerHand.remove(indexes.get(j) - 1);
         }
-        player.setHand(cloneOfHand);
+        //player.setHand(cloneOfHand);
         return (int) numCardstoDiscard;
     }
 
-    public void userDisplayHand(Player player) {
+    public void userDisplayHand()
+    {
         StringBuilder outPut = new StringBuilder(1000);
-        ArrayList<Card> cards = player.getHand().getCards();
-        for (int i = 0; i < cards.size(); i++) {
+        ArrayList<Card> cards = playerHand.getCards();
+        for (int i = 0; i < cards.size(); i++)
+        {
             outPut.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");
         }
-        System.out.println(outPut);
+        UserInput.display(outPut);
     }
+
 }

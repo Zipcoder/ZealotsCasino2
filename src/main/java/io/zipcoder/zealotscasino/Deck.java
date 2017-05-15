@@ -32,4 +32,12 @@ public class Deck {
         deckQue.remove(0);
         return card;
     }
+
+    public void buildAnotherDeck()
+    {
+        if(deckQue.size() <= 10)
+        {
+            buildDeck();
+        }
+    }
 }

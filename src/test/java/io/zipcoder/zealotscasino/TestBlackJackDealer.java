@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -14,154 +15,333 @@ import java.util.Collections;
 public class TestBlackJackDealer {
     private Player player;
     private BlackJackDealer blackJackDealer;
+    private Deck deck;
 
     @Before
     public void setUp() {
         player = new Player();
         blackJackDealer = new BlackJackDealer();
-
+        deck = new Deck();
     }
 
+    //checkIfPlayerIsBroke
     @Test
-    public void testDealCardTo_DealerGivesCard_PlayersCardIncrease() {
-        // Given
-        // When
-        blackJackDealer.dealCardTo(player);
-
-        // Then
-        Assert.assertTrue("Check if new card is added",  player.getHand().getCards().size() > 0);
-    }
-
-    @Test
-    public void testDealHandTo_DealerGivesHand_PlayerCardIncrease() {
-
-        // When
-        blackJackDealer.dealHandTo(player);
-
-        // Then
-        Assert.assertEquals("Checking if hand is added", player.getHand().getCards().size(), 2);
-    }
-
-    @Test
-    public void testPay_PlayerGetsPaid_PlayerWalletIncrease(){
-
-        //When
-        blackJackDealer.pay(player, 10.0);
-
-        //System.out.println(Card.CardValue.valueOf("THREE").ordinal());
-
-        //Then
-        Assert.assertEquals("Checking if player is paid correctly", player.getWallet(), 10.0, 0);
-    }
-
-    @Test
-    public void testExamineHandValue_PlayerHasHand_ValueIsReturned(){
+    public void testCheckIfPlayerIsBroke_PlayerHasLessThanTwenty_ReturnTrue(){
         //Given
-        blackJackDealer.initializeHands(player);
-        blackJackDealer.dealHandTo(player);
-
+        player.setWallet(10);
         //When
-        int returnValue = blackJackDealer.examineHandValue(player.getHand());
-
+        boolean result = blackJackDealer.checkIfPlayerIsBroke(player);
         //Then
-        Assert.assertTrue("Checking if player received a value for their hand", returnValue > 0);
+        Assert.assertTrue("Checking to see if method returns true", result);
     }
 
     @Test
-    public void testExamineHandValue_PlayerHasHand_CorrectValueIsReturned(){
+    public void testCheckIfPlayerIsBroke_PlayerHasMoreThanTwenty_ReturnFalse(){
         //Given
-        blackJackDealer.initializeHands(player);
-        Card card = new Card("TWO", "Spades");
-        Hand currentHand = player.getHand();
-        currentHand.receiveCard(card);
-        int expectedValue = 2;
-
+        player.setWallet(30);
         //When
-        int returnValue = blackJackDealer.examineHandValue(player.getHand());
-
+        boolean result = blackJackDealer.checkIfPlayerIsBroke(player);
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
+        Assert.assertFalse("Checking to see if method returns true", result);
+    }
+
+    //dealCardToPlayer
+    @Test
+    public void testDealCardToPlayer_PlayerHasNoCards_PlayerIsDealtACard(){
+        //Given
+        int predictedSizeOfHand = 1;
+        //When
+        blackJackDealer.dealCardToPlayer();
+        //Then
+        Assert.assertEquals("Checking to see if player received a card", predictedSizeOfHand, blackJackDealer.getPlayerHand().getCards().size());
+    }
+
+    //dealCardToDealer
+    @Test
+    public void dealCardToDealer_DealerHasNoCards_DealerIsDealtACard(){
+        //Given
+        int predictedSizeOfHand = 1;
+        //When
+        blackJackDealer.dealCardToDealer();
+        //Then
+        Assert.assertEquals("Checking to see if player received a card", predictedSizeOfHand, blackJackDealer.getDealerHand().getCards().size());
+    }
+
+    //buildPlayerHand
+    @Test
+    public void testBuildPlayerHand_PlayerHasNoHand_PlayerReceivesTwoCards(){
+        //Given
+        int expectedSize = 2;
+        //When
+        blackJackDealer.buildPlayerHand();
+        //Then
+        Assert.assertEquals("Checking to see if Player received two cards", expectedSize, blackJackDealer.getPlayerHand().getCards().size());
     }
 
     @Test
-    public void testExamineHandValue_PlayerHasHand_CorrectValueIsReturnedForAce(){
+    public void testBuildPlayerHand_PlayerHasNoHand_PlayerReceivesArrayListOfCards(){
         //Given
-        blackJackDealer.initializeHands(player);
-        Card card1 = new Card("ACE", "Spades");
-        Card card2 = new Card("ACE", "Hearts");
-        Hand currentHand = player.getHand();
-        currentHand.receiveCard(card1);
-        currentHand.receiveCard(card2);
-        int expectedValue = 12;
-
+        Class expectedClass = ArrayList.class;
         //When
-        int returnValue = blackJackDealer.examineHandValue(player.getHand());
-
+        blackJackDealer.buildPlayerHand();
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
+        Assert.assertEquals("Checking to see if Player received two cards", expectedClass, blackJackDealer.getPlayerHand().getCards().getClass());
+    }
+
+    //buildDealerHand
+    @Test
+    public void testBuildDealerHand_DealerHasNoHand_DealerReceivesTwoCards(){
+        //Given
+        int expectedSize = 2;
+        //When
+        blackJackDealer.buildDealerHand();
+        //Then
+        Assert.assertEquals("Checking to see if Dealer received two cards", expectedSize, blackJackDealer.getDealerHand().getCards().size());
     }
 
     @Test
-    public void testExamineHandValue_PlayerHasHand_AceIsDynamic(){
+    public void testBuildDealerHand_DealerHasNoHand_DealerReceivesArrayListOfCards(){
         //Given
-        blackJackDealer.initializeHands(player);
-        Card card1 = new Card("ACE", "Spades");
-        Card card2 = new Card("NINE", "Hearts");
-        Card card3 = new Card("TEN", "Spades");
-        Hand currentHand = player.getHand();
-        currentHand.receiveCard(card1);
-        currentHand.receiveCard(card2);
-        currentHand.receiveCard(card3);
-        int expectedValue = 20;
-
+        Class expectedClass = ArrayList.class;
         //When
-        int returnValue = blackJackDealer.examineHandValue(player.getHand());
-
+        blackJackDealer.buildDealerHand();
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
+        Assert.assertEquals("Checking to see if Player received two cards", expectedClass, blackJackDealer.getPlayerHand().getCards().getClass());
+    }
+
+    //initializeHands
+    @Test
+    public void testInitializeHands_PlayerHasAHand_PlayersHandValueIsReset(){
+        //Given
+        int expectedValue = 0;
+        blackJackDealer.dealCardToPlayer();
+        //When
+        blackJackDealer.initializeHands();
+        //Then
+        Assert.assertEquals("Checking to see if player hand value is zero", expectedValue, blackJackDealer.getPlayerHand().getHandValue());
     }
 
     @Test
-    public void testExamineHandValue_PlayerHasHand_AceIsStaticPostDynamic(){
+    public void testInitializeHands_DealerHasAHand_DealersHandValueIsReset(){
         //Given
-        blackJackDealer.initializeHands(player);
-        Card card1 = new Card("ACE", "Spades");
-        Card card2 = new Card("JACK", "Hearts");
-        Card card3 = new Card("TWO", "Spades");
-        Card card4 = new Card("NINE", "Spades");
-        Hand currentHand = player.getHand();
-        currentHand.receiveCard(card1);
-        currentHand.receiveCard(card2);
-        currentHand.receiveCard(card3);
-        currentHand.receiveCard(card4);
-        int expectedValue = 22;
-
+        int expectedValue = 0;
+        blackJackDealer.dealCardToDealer();
         //When
-        int returnValue = blackJackDealer.examineHandValue(player.getHand());
-
+        blackJackDealer.initializeHands();
         //Then
-        Assert.assertEquals("Checking if player received a correct value for their hand", expectedValue, returnValue);
+        Assert.assertEquals("Checking to see if player hand value is zero", expectedValue, blackJackDealer.getDealerHand().getHandValue());
+    }
+
+
+    //dealHandToPlayer
+    @Test
+    public void testDealHandToPlayer_PlayerHasNoHand_PlayerHasTwoCards(){
+        //Given
+        int expectedCardAmount = 2;
+        //When
+        blackJackDealer.dealHandToPlayer();
+        //Then
+        Assert.assertEquals("Checking to see if the player receives two cards", expectedCardAmount, blackJackDealer.getPlayerHand().getCards().size());
     }
 
     @Test
-    public void testAssertBlackJack_PlayerHasBlackJack_PlayerIsPaidProperly() {
+    public void testDealHandToPlayer_PlayerHasNoHand_PlayerHasArrayOfTwoCards(){
         //Given
-        blackJackDealer.initializeHands(player);
-        Card card1 = new Card("ACE", "Spades");
-        Card card2 = new Card("TEN", "Spades");
-        Hand currentHand = player.getHand();
-        currentHand.receiveCard(card1);
-        currentHand.receiveCard(card2);
-        blackJackDealer.setPlayerHandValue(blackJackDealer.examineHandValue(player.getHand()));
-        player.setWallet(300);
-        player.makeBet(300);
-        double expected = 900;
+        Class expectedClass = ArrayList.class;
+        //When
+        blackJackDealer.dealHandToPlayer();
+        //Then
+        Assert.assertEquals("Checking to see if the player receives an array of two cards", expectedClass, blackJackDealer.getPlayerHand().getCards().getClass());
+    }
 
+    @Test
+    public void testDealHandToPlayer_PlayerHasNoHand_PlayersHandValueUpdates(){
+        //When
+        blackJackDealer.dealHandToPlayer();
+        //Then
+        Assert.assertTrue("Checking to see if the players hand value updates", blackJackDealer.getPlayerHand().getHandValue() > 0);
+    }
+
+    //dealHandToDealer
+    @Test
+    public void testDealHandToDealer_DealerHasNoHand_DealerHasTwoCards(){
+        //Given
+        int expectedCardAmount = 2;
+        //When
+        blackJackDealer.dealHandToDealer();
+        //Then
+        Assert.assertEquals("Checking to see if the dealer receives two cards", expectedCardAmount, blackJackDealer.getDealerHand().getCards().size());
+    }
+
+    @Test
+    public void testDealHandToDealer_DealerHasNoHand_DealerHasArrayOfTwoCards(){
+        //Given
+        Class expectedClass = ArrayList.class;
+        //When
+        blackJackDealer.dealCardToDealer();
+        //Then
+        Assert.assertEquals("Checking to see if the dealer receives an array of two cards", expectedClass, blackJackDealer.getDealerHand().getCards().getClass());
+    }
+
+    @Test
+    public void testDealHandToDealer_DealerHasNoHand_DealersHandValueUpdates(){
+        //When
+        blackJackDealer.dealCardToDealer();
+        //Then
+        Assert.assertTrue("Checking to see if the dealers hand value updates", blackJackDealer.getDealerHand().getHandValue() > 0);
+    }
+
+    //pay
+    @Test
+    public void testPay_PlayerWins_PlayerIsPaid(){
+        //Given
+        int expectedAmount = 220;
+        player.setWallet(200);
+        //When
+        blackJackDealer.pay(player, 20);
+        //Then
+        Assert.assertEquals("Checking to see if the player is paid the proper amount", expectedAmount, player.getWallet(), 0);
+    }
+
+    //takeHit
+    @Test
+    public void testTakeHit_PlayerTakesAHit_PlayerReceivesACard(){
+        //Given
+        blackJackDealer.dealHandToPlayer();
+        int expectedCardCount = 3;
+        //When
+        blackJackDealer.takeHit();
+        //Then
+        Assert.assertEquals("Checking to see if the player received a card", expectedCardCount, blackJackDealer.getPlayerHand().getCards().size());
+    }
+
+    @Test
+    public void testTakeHit_PlayerTakesAHit_PlayerHandValueIncreases(){
+        //When
+        blackJackDealer.takeHit();
+        //Then
+        Assert.assertTrue("Checking to see if the players hand value increased", blackJackDealer.getPlayerHand().getHandValue() > 0);
+    }
+
+    //checkIfDealerHit
+    @Test
+    public void testCheckIfDealerHit_DealerTakesAHit_DealerReceivesACard(){
+        //Given
+        BlackJackHand hand = new BlackJackHand();
+        hand.setHandValue(2);
+        blackJackDealer.setDealerHand(hand);
+        //When
+        blackJackDealer.checkIfDealerHit();
+        //Then
+        Assert.assertTrue("Checking to see if the dealer received a card", blackJackDealer.getDealerHand().getCards().size() > 1);
+    }
+
+    @Test
+    public void testCheckIfDealerHit_DealerHasTwenty_DealerDoesNotReceiveACard(){
+        //Given
+        BlackJackHand hand = new BlackJackHand();
+        hand.setHandValue(20);
+        blackJackDealer.setDealerHand(hand);
+        //When
+        blackJackDealer.checkIfDealerHit();
+        //Then
+        Assert.assertTrue("Checking to see if the dealer didn't receive a card", blackJackDealer.getDealerHand().getCards().size() == 0);
+    }
+
+    @Test
+    public void testCheckIfDealerHit_DealerTakesAHit_DealerHandValueIncreases(){
+        //When
+        blackJackDealer.checkIfDealerHit();
+        //Then
+        Assert.assertTrue("Checking to see if the players hand value increased", blackJackDealer.getDealerHand().getHandValue() > 0);
+    }
+
+    //checkStatus
+    @Test
+    public void testCheckStatus_PlayerBusts_ReturnsFalse(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(22);
+        Bet bet = new Bet();
+        bet.makeBet(20, player);
+        blackJackDealer.setBet(bet);
+        //When
+        boolean returnValue = blackJackDealer.checkStatus(player);
+        //Then
+        Assert.assertTrue("Checking to see if the method returns false", !returnValue);
+    }
+
+    @Test
+    public void testCheckStatus_PlayerHasBlackJack_ReturnsFalse(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(21);
+        Bet bet = new Bet();
+        bet.makeBet(20, player);
+        blackJackDealer.setBet(bet);
+        //When
+        boolean returnValue = blackJackDealer.checkStatus(player);
+        //Then
+        Assert.assertFalse("Checking to see if the method returns false", returnValue);
+    }
+
+    @Test
+    public void testCheckStatus_PlayerHasBlackJack_PlayerIsPaid(){
+        //Given
+        BlackJackHand hand = new BlackJackHand();
+        hand.setHandValue(21);
+        blackJackDealer.setPlayerHand(hand);
+        player.setWallet(120);
+        double expectedValue = 140;
+        Bet bet = new Bet();
+        bet.makeBet(20, player);
+        blackJackDealer.setBet(bet);
+        //When
+        blackJackDealer.checkStatus(player);
+        //Then
+        Assert.assertEquals("Checking to see if the method pays the player", expectedValue, player.getWallet(), 0);
+    }
+
+    //assertBlackJack
+    @Test
+    public void testAssertBlackJack_PlayerHasBlackJack_GameIsNoLongerRunning(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(21);
+        blackJackDealer.setGameRunning(true);
         //When
         blackJackDealer.assertBlackJack(player);
-
         //Then
-        Assert.assertEquals("Checking to see if player receives proper amount", expected, player.getWallet(), 0);
+        Assert.assertTrue("Checking to see if method registered blackjack", !blackJackDealer.isGameRunning());
     }
+
+    @Test
+    public void testAssertBlackJack_PlayerDoesntHaveBlackJack_GameIsStillRunning(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(20);
+        blackJackDealer.setGameRunning(true);
+        //When
+        blackJackDealer.assertBlackJack(player);
+        //Then
+        Assert.assertTrue("Checking to see if method registered blackjack", blackJackDealer.isGameRunning());
+    }
+
+    @Test
+    public void testAssertBlackJack_PlayerBusts_PlayerDoesntReceiveBlackJack(){
+        //Given
+        blackJackDealer.getPlayerHand().setHandValue(22);
+        blackJackDealer.setGameRunning(true);
+        //When
+        blackJackDealer.assertBlackJack(player);
+        //Then
+        Assert.assertTrue("Checking to see if method registered blackjack", blackJackDealer.isGameRunning());
+    }
+
+    //payPlayer
+    @Test
+    public void testPayPlayer(){}
+    
+    //evaluateResult
+    @Test
+    public void testEvaluateResult(){}
+
+
 
 }

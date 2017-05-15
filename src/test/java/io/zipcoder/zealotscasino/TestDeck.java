@@ -53,4 +53,23 @@ public class TestDeck {
         assertEquals("Deck did not surrender card", expectedDeckSize, actualDeckSize);
     }
 
+    @Test
+    public void testBuildAnotherDeck()
+    {
+        //given
+        deck.buildDeck();
+        for(int i = 0; i < 50; i++)
+        {
+            deck.surrenderCard();
+        }
+        deck.buildAnotherDeck();
+        int expected = 54;
+
+        //when
+        int actual = deck.getDeckQue().size();
+
+        assertEquals("Should add a new deck", expected, actual);
+
+    }
+
 }

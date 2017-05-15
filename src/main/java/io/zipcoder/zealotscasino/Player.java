@@ -6,56 +6,26 @@ import java.text.NumberFormat;
  * Created by luisgarcia on 5/9/17.
  */
 public class Player {
-    private double bet;
-    private double wallet;
-    private Hand hand;
-    private final static double MINIMUM_BET = 20;
 
-    public static double getMinimumBet() {
-        return MINIMUM_BET;
-    }
+    private double wallet;
+    //public static final int MINIMUM_BUYIN = 20;
 
     public Player() {
-        hand = new Hand();
-
+        wallet = 0;
     }
 
-    public double getBet() {
-        return bet;
-    }
-
-    public void makeBet(double bet) {
-        if (bet > wallet) {
-            throw new IllegalArgumentException("Insufficient Funds");
+    public Player(double initialWallet){
+        if(initialWallet >= Bet.MINIMUM_BET){
+            this.wallet = initialWallet;
         }
-        if (bet < MINIMUM_BET){
-            throw new SecurityException("Minimum bet not achieved");
-        }
-        this.bet = bet;
-        this.wallet = wallet - bet;
     }
 
     public double getWallet() {
         return wallet;
     }
 
-    public void initializeWallet(double initialWallet) {
-        if(initialWallet < MINIMUM_BET){
-            throw new IllegalArgumentException("Not enough money to play");
-        }
-        this.wallet = initialWallet;
-    }
-
     public void setWallet(double wallet) {
         this.wallet = wallet;
-    }
-
-    public Hand getHand() {
-        return hand;
-    }
-
-    public void setHand(Hand hand) {
-        this.hand = hand;
     }
 
     public void collectWinnings(double winnings) {
@@ -65,6 +35,6 @@ public class Player {
     public String printWallet(){
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String walletString = formatter.format(wallet);
-        return "Wallet: " + walletString;
+        return ("Wallet: " + walletString);
     }
-}
+ }
