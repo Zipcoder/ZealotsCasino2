@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
+import static io.zipcoder.zealotscasino.UserInput.getIntInput;
 import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 
 /**
@@ -77,10 +78,19 @@ public class PokerDealer implements Dealer
         String output = userDisplayHand(playerHand);
         UserInput.display(output);
         //discard cards
-        int numberToReplace = discardCards();
+        int numCardsToDiscard;
+        numCardsToDiscard = getIntInput("How many cards do you want to discard? ");
+        ArrayList<Integer> discardIndexes = new ArrayList<>(numCardsToDiscard);
+        for (int i = 0; i < numCardsToDiscard; i++)
+        {
+            double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
+            discardIndexes.add((int) getDiscard);
+        }
+
+        discardCards(discardIndexes, playerHand);
 
         //replace discarded cards
-        replace(numberToReplace);
+        replace(discardIndexes.size());
 
         //display new hand
         UserInput.display("Updated Hand: ");
@@ -283,31 +293,14 @@ public class PokerDealer implements Dealer
 
 
 
-    public int discardCards()
+    public void discardCards(ArrayList<Integer> discardIndexes, Hand playerHand)
     {
-        double numCardstoDiscard;
-        do
-        {
-            numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
-            if (numCardstoDiscard > 6)
-            {
-                UserInput.display("You can only discard the card you have");
-            }
-        } while (numCardstoDiscard > 6);
-        ArrayList<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < numCardstoDiscard; i++)
-        {
-            double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
-            indexes.add((int) getDiscard);
-        }
-        Collections.sort(indexes);
+        Collections.sort(discardIndexes);
         //Hand cloneOfHand = playerHand.getCards();
-        for (int j = indexes.size() - 1; j >= 0; j--)
+        for (int j = discardIndexes.size() - 1; j >= 0; j--)
         {
-            playerHand.remove(indexes.get(j) - 1);
+            playerHand.remove(discardIndexes.get(j) - 1);
         }
-        //player.setHand(cloneOfHand);
-        return (int) numCardstoDiscard;
     }
 
     public String userDisplayHand(Hand playerHand)

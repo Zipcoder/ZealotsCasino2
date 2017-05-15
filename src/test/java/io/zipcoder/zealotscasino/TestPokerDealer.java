@@ -572,6 +572,25 @@ public class TestPokerDealer {
         String actual = dealer.userDisplayHand(dealer.getPlayerHand());
         //Then
         assertEquals("Hand not displayed properly", expected, actual);
+    }
+
+    @Test
+    public void discardCards_TwoLastCardsDiscarded_HandHasTwoLessCards(){
+        //Given
+        dealer.getPlayerHand().receiveCard(new Card("TEN", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("JACK", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("QUEEN", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("KING", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("NINE", "SPADES"));
+        ArrayList<Integer> discardIndexes = new ArrayList<>();
+        discardIndexes.add(4);
+        discardIndexes.add(5);
+        int expected = 3;
+        //When
+        dealer.discardCards(discardIndexes, dealer.getPlayerHand());
+        int actual = dealer.getPlayerHand().getCards().size();
+        //Then
+        assertEquals("Cards not discarded", expected, actual);
 
     }
 
