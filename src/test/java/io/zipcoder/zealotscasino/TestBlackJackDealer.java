@@ -24,6 +24,27 @@ public class TestBlackJackDealer {
         deck = new Deck();
     }
 
+    //checkIfPlayerIsBroke
+    @Test
+    public void testCheckIfPlayerIsBroke_PlayerHasLessThanTwenty_ReturnTrue(){
+        //Given
+        player.setWallet(10);
+        //When
+        boolean result = blackJackDealer.checkIfPlayerIsBroke(player);
+        //Then
+        Assert.assertTrue("Checking to see if method returns true", result);
+    }
+
+    @Test
+    public void testCheckIfPlayerIsBroke_PlayerHasMoreThanTwenty_ReturnFalse(){
+        //Given
+        player.setWallet(30);
+        //When
+        boolean result = blackJackDealer.checkIfPlayerIsBroke(player);
+        //Then
+        Assert.assertFalse("Checking to see if method returns true", result);
+    }
+
     //dealCardToPlayer
     @Test
     public void testDealCardToPlayer_PlayerHasNoCards_PlayerIsDealtACard(){

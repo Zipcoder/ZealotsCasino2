@@ -76,8 +76,8 @@ public class BlackJackDealer implements Dealer {
     public void play(Player player) {
         setGameRunning(true);
         while(gameRunning){
-            if(player.getWallet() < 20){
-                UserInput.display("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
+            if(checkIfPlayerIsBroke(player)){
+                tellPlayerToLeave(player);
                 break;
             }
             displayPlayerWallet(player);
@@ -91,7 +91,16 @@ public class BlackJackDealer implements Dealer {
         }
     }
 
+    public boolean checkIfPlayerIsBroke(Player player){
+        if(player.getWallet() < 20){
+            return true;
+        }
+        return false;
+    }
 
+    public void tellPlayerToLeave(Player player){
+        UserInput.display("You only have $" + player.getWallet() + ", you should probably save that money for the bus.");
+    }
 
     public void takeTurn(Player player) {
         protectedBetProcess(player);
@@ -103,9 +112,20 @@ public class BlackJackDealer implements Dealer {
             assertBlackJack(player);
             if (playerHand.getHandValue() != 21) {
                 buildDealerHand();
+                if(dealerHand.getCards().get(0).getFaceValue().equals("ACE")){
+                    protectedInsuranceRequest(player);
+                }
                 hitProcess(player);
+                checkIfInsurancePays(player);
+                checkIfDealerHit();
                 evaluateResult(player);
             }
+        }
+    }
+
+    public void checkIfInsurancePays(Player player){
+        if(dealerHand.getHandValue() == 21){
+            player.setWallet(player.getWallet() + insuranceValue);
         }
     }
 
@@ -132,12 +152,12 @@ public class BlackJackDealer implements Dealer {
 
     public void initializeHands() {
         playerHand.remove();
+        dealerHand.remove();
+        playerHand = new BlackJackHand();
         dealerHand = new BlackJackHand();
         playerHand.resetHandValue();
         dealerHand.resetHandValue();
     }
-
-
 
     public void dealCardToPlayer() {
         Card card = deck.surrenderCard();
@@ -213,14 +233,26 @@ public class BlackJackDealer implements Dealer {
 
     public void decideWinner(Player player){
         if((dealerHand.getHandValue() - playerHand.getHandValue()) > 0 && dealerHand.getHandValue() < 22){
-            UserInput.display("Dealer wins with a hand value of: " + dealerHand.getHandValue());
+            displayDealerWins();
         } else if(dealerHand.getHandValue() == playerHand.getHandValue()){
-            UserInput.display("Tie!");
-            pay(player, bet.getBetValue());
+            executeTie(player);
         } else{
-            UserInput.display("Player wins, dealer hand was " + dealerHand.getHandValue());
-            pay(player, bet.getBetValue() * 2);
+            executePlayerWins(player);
         }
+    }
+
+    public void displayDealerWins(){
+        UserInput.display("Dealer wins with a hand value of: " + dealerHand.getHandValue());
+    }
+
+    public void executeTie(Player player){
+        UserInput.display("Tie!");
+        pay(player, bet.getBetValue());
+    }
+
+    public void executePlayerWins(Player player){
+        UserInput.display("Player wins, dealer hand was " + dealerHand.getHandValue());
+        pay(player, bet.getBetValue() * 2);
     }
 
     public boolean checkStatus(Player player, double bet){
@@ -232,10 +264,7 @@ public class BlackJackDealer implements Dealer {
             return false;
         }
         if(blackJack){
-            displayBlackJack();
-            pay(player, bet*2);
-            setGameRunning(false);
-            return false;
+            executePlayerWins(player);
         }
         boolean hit = checkIfPlayerHit();
         return hit;
@@ -275,7 +304,7 @@ public class BlackJackDealer implements Dealer {
     }
 
     public void checkIfDealerHit() {
-        if (dealerHand.getHandValue() < 17) {
+        while(dealerHand.getHandValue() < 17) {
             dealCardToDealer();
         }
     }
@@ -318,16 +347,14 @@ public class BlackJackDealer implements Dealer {
     }
 
     public void split(Player player){
-        player.setWallet(player.getWallet() + bet.getBetValue());
-        bet.makeBet(bet.getBetValue() * 2, player);
+        player.setWallet(player.getWallet() - bet.getBetValue());
         ArrayList<Card> cards = playerHand.getCards();
         for(Card card : cards){
-            playerHand.setHandValue(0);
-            playerHand.remove();
+            initializeHands();
             playerHand.receiveCard(card);
             dealCardToPlayer();
             assertBlackJack(player);
-            if(playerHand.getHandValue() != 21) {
+            if(playerHand.getHandValue() < 21) {
                 buildDealerHand();
                 hitProcess(player);
                 evaluateResult(player);
