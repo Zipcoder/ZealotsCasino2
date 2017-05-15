@@ -16,6 +16,7 @@ public class BlackJackHand extends Hand {
     }
 
     public void updateHandValue() {
+        handValue = 0;
         for(Card card : getCards()) {
             handValue += evaluateCard(card);
         }

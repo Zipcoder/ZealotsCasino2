@@ -25,10 +25,18 @@ public class Game
                 return new BlackJackDealer();
             case 3:
                 return new PokerDealer();
+            /*case 6:
+                UserInput.display("Thanks for playing!");
+                break; */
             default:
                 UserInput.display("Invalid Entry. Try Again");
                 return null;
         }
+    }
+
+    private void play(Dealer dealer) {
+        dealer.play(player);
+        displayMenu();
     }
 
 
@@ -74,7 +82,7 @@ public class Game
             gameChoice = 6;
         }
         else{
-            gameChoice = user.getDoubleInput("Choose your # of choice: ");
+            gameChoice = user.getIntInput("Choose your # of choice: ");
         }
 
         if(gameChoice == 1)

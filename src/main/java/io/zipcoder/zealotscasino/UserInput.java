@@ -20,15 +20,11 @@ public class UserInput {
     }
 
     public static int getIntInput(String prompt) {
-        boolean flag = true;
-        int result = 0;
-        while(flag){
-            if(NumberUtils.isNumber(getStringInput(prompt))){
-                result = Integer.parseInt(getStringInput(prompt));
-                flag = false;
-            } else display("Please input a valid amount");
+        try {
+            return Integer.parseInt(getStringInput(prompt));
+        } catch (NumberFormatException e) {
+            return getIntInput("Please input a valid number");
         }
-        return result;
     }
 
     public static Double getDoubleInput(String prompt) {
