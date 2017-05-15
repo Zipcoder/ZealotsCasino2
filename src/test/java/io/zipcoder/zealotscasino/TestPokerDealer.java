@@ -94,6 +94,42 @@ public class TestPokerDealer
         }
 
         @Test
+        public void checkStraight_LowStraigt_ReturnFalse_NoAce()
+        {
+                //given
+                dealer.getPlayerHand().receiveCard(new Card("NINE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("TWO","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("THREE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("FOUR","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("FIVE","CLUBS"));
+                boolean expected = false;
+
+                //when
+                boolean actual = dealer.checkStraight();
+
+                //then
+                assertEquals("Should return true", expected, actual);
+        }
+
+        @Test
+        public void checkStraight_LowStraigt_ReturnFalse_NoFive()
+        {
+                //given
+                dealer.getPlayerHand().receiveCard(new Card("ACE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("TWO","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("THREE","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("FOUR","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("SIX","CLUBS"));
+                boolean expected = false;
+
+                //when
+                boolean actual = dealer.checkStraight();
+
+                //then
+                assertEquals("Should return true", expected, actual);
+        }
+
+        @Test
         public void checkFlush_AllDiamonds_ReturnTrue()
         {
                 //given
@@ -143,6 +179,42 @@ public class TestPokerDealer
 
                 //then
                 assertTrue("All Diamonds and 5 number in a row should return straight flush.", actual);
+        }
+
+        @Test
+        public void checkRoyalFlush_NoTen_Straight_ReturnTrue()
+        {
+                //given
+                dealer.getPlayerHand().receiveCard(new Card("NINE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("QUEEN","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","DIAMONDS"));
+                boolean expected = false;
+
+                //when
+                boolean actual = dealer.checkRoyalFlush();
+
+                //then
+                assertEquals("All Diamonds and 5 number in a row should return straight flush.", expected, actual);
+        }
+
+        @Test
+        public void checkRoyalFlush_OneOffSuit()
+        {
+                //given
+                dealer.getPlayerHand().receiveCard(new Card("NINE","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("JACK","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("QUEEN","CLUBS"));
+                dealer.getPlayerHand().receiveCard(new Card("KING","DIAMONDS"));
+                dealer.getPlayerHand().receiveCard(new Card("ACE","DIAMONDS"));
+                boolean expected = false;
+
+                //when
+                boolean actual = dealer.checkRoyalFlush();
+
+                //then
+                assertEquals("All Diamonds and 5 number in a row should return straight flush.", expected, actual);
         }
 
         @Test
