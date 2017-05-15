@@ -235,7 +235,7 @@ public class TestPokerDealer {
         String expected = "PAIR";
 
         //WHEN
-        String actual = dealer.calculateHand();
+        String actual = dealer.calculateHand(4);
 
         //THEN
         assertEquals("There should be a pair of Tens", expected, actual);
@@ -244,7 +244,6 @@ public class TestPokerDealer {
     @Test
     public void evaluateThreeRanks_TwoPair_ReturnsTwoPair() {
         //Given
-        boolean bool = false;
         dealer.getPlayerHand().receiveCard(new Card("FIVE", "DIAMONDS"));
         dealer.getPlayerHand().receiveCard(new Card("FIVE", "SPADES"));
         dealer.getPlayerHand().receiveCard(new Card("SIX", "HEARTS"));
@@ -262,7 +261,6 @@ public class TestPokerDealer {
     @Test
     public void evaluateThreeRanks_ThreeFives_ReturnsThreeOfAKind() {
         //Given
-        boolean bool = false;
         dealer.getPlayerHand().receiveCard(new Card("FIVE", "DIAMONDS"));
         dealer.getPlayerHand().receiveCard(new Card("FOUR", "SPADES"));
         dealer.getPlayerHand().receiveCard(new Card("FIVE", "HEARTS"));
@@ -280,7 +278,6 @@ public class TestPokerDealer {
     @Test
     public void evaluateTwoRanks_FourAces_ReturnsFourOfAKind() {
         //Given
-        boolean bool = false;
         dealer.getPlayerHand().receiveCard(new Card("ACE", "DIAMONDS"));
         dealer.getPlayerHand().receiveCard(new Card("ACE", "SPADES"));
         dealer.getPlayerHand().receiveCard(new Card("ACE", "HEARTS"));
@@ -299,7 +296,6 @@ public class TestPokerDealer {
     @Test
     public void evaluateTwoRanks_KingsAndSixes_ReturnsFullHouse() {
         //Given
-        boolean bool = false;
         dealer.getPlayerHand().receiveCard(new Card("KING", "DIAMONDS"));
         dealer.getPlayerHand().receiveCard(new Card("SIX", "SPADES"));
         dealer.getPlayerHand().receiveCard(new Card("KING", "HEARTS"));
@@ -556,6 +552,23 @@ public class TestPokerDealer {
     }
 
     @Test
+    public void testEvaluateFiveRanks_NoPair() {
+        //given
+        dealer.getPlayerHand().receiveCard(new Card("TEN", "HEARTS"));
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "DIAMONDS"));
+        dealer.getPlayerHand().receiveCard(new Card("QUEEN", "DIAMONDS"));
+        dealer.getPlayerHand().receiveCard(new Card("KING", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("NINE", "DIAMONDS"));
+        String expected = "NO PAIR";
+
+        //when
+        String actual = dealer.evaluateFiveRanks();
+
+        assertEquals("straight", expected, actual);
+
+    }
+
+    @Test
     public void displayHand_HandIsGiven_CorrectStringReturned() {
         //Given
         dealer.getPlayerHand().receiveCard(new Card("TEN", "SPADES"));
@@ -609,4 +622,67 @@ public class TestPokerDealer {
         //When
         assertEquals("Cards not replaced", expectedSize, actualSize);
     }
+
+    @Test
+    public void calculateHand_HandHasFiveCards_CorrectCalculation(){
+        //Given
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("THREE", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("FOUR", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("FIVE", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("SIX", "SPADES"));
+        String expected = "STRAIGHT";
+        //When
+        String actual = dealer.calculateHand(5);
+        //Then
+        assertEquals("Incorrect hand calculation", expected, actual);
+    }
+
+    @Test
+    public void calculateHand_HandHasPair_CorrectCalculation(){
+        //Given
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("FOUR", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("FIVE", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("SIX", "SPADES"));
+        String expected = "PAIR";
+        //When
+        String actual = dealer.calculateHand(4);
+        //Then
+        assertEquals("Incorrect hand calculation", expected, actual);
+    }
+
+    @Test
+    public void calculateHand_HandHasThreeOfAKind_CorrectCalculation(){
+        //Given
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "DIAMONDS"));
+        dealer.getPlayerHand().receiveCard(new Card("FIVE", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("SIX", "SPADES"));
+        String expected = "THREE OF A KIND";
+        //When
+        String actual = dealer.calculateHand(3);
+        //Then
+        assertEquals("Incorrect hand calculation", expected, actual);
+    }
+
+    @Test
+    public void calculateHand_HandHasFourOfAKind_CorrectCalculation(){
+        //Given
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "DIAMONDS"));
+        dealer.getPlayerHand().receiveCard(new Card("TWO", "HEARTS"));
+        dealer.getPlayerHand().receiveCard(new Card("SIX", "SPADES"));
+        String expected = "FOUR OF A KIND";
+        //When
+        String actual = dealer.calculateHand(2);
+        //Then
+        assertEquals("Incorrect hand calculation", expected, actual);
+    }
+
+
+
 }

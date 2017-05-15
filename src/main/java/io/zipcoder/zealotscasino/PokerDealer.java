@@ -98,7 +98,8 @@ public class PokerDealer implements Dealer
         UserInput.display(output);
 
         //calculate hand
-        String rankOfHand = calculateHand();
+        String rankOfHand = calculateHand(returnNumberOfValuesInPlayerHand());
+
         UserInput.display("You got a " + rankOfHand);
 
         // determine winnings and pay
@@ -161,16 +162,15 @@ public class PokerDealer implements Dealer
             UserInput.display("Thanks for playing!\n\n");
     }
 
-    public String calculateHand()
+    public String calculateHand(int numOfValues)
     {
-        int numberOfValues = returnNumberOfValuesInPlayerHand();
-        if (numberOfValues == 5)
+        if (numOfValues == 5)
         {
             return evaluateFiveRanks();
-        } else if (numberOfValues == 4)
+        } else if (numOfValues == 4)
         {
             return "PAIR";
-        } else if (numberOfValues == 3)
+        } else if (numOfValues == 3)
         {
             return evaluateThreeRanks();
         } else
