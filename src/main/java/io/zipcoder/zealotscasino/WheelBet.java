@@ -7,14 +7,15 @@ import java.util.ArrayList;
  */
 public class WheelBet extends Bet {
 
-    //private double betAmount;
     private String locationOnWheel;
 
-    public WheelBet(Player player, double theBetAmount, String wheelLocation) {
-        super.makeBet(theBetAmount, player);
-        locationOnWheel = wheelLocation;
+    public boolean makeWheelBet(String location, double betValue, Player player) {
+        if (super.makeBet(betValue, player)) {
+            locationOnWheel = location;
+            return true;
+        }
+        return false;
     }
-
 
     public String getLocationOnWheel() {
         return locationOnWheel;

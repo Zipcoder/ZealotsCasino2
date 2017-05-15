@@ -1,6 +1,6 @@
-#ZealotsCasino 
+# ZealotsCasino 
 
-###*Master*
+### *Master*
 
 [![Build Status](https://travis-ci.org/Zipcoder/ZealotsCasino2.svg?branch=master)](https://travis-ci.org/Zipcoder/ZealotsCasino2)
 
@@ -28,4 +28,3 @@
 # Our Mission
 
 To create the best flipping casino that Froilan has ever seen.
-
