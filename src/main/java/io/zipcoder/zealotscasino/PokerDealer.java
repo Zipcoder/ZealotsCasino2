@@ -74,8 +74,8 @@ public class PokerDealer implements Dealer
         dealHand();
 
         //display
-        userDisplayHand();
-
+        String output = userDisplayHand(playerHand);
+        UserInput.display(output);
         //discard cards
         int numberToReplace = discardCards();
 
@@ -84,7 +84,8 @@ public class PokerDealer implements Dealer
 
         //display new hand
         UserInput.display("Updated Hand: ");
-        userDisplayHand();
+        output = userDisplayHand(playerHand);
+        UserInput.display(output);
 
         //calculate hand
         String rankOfHand = calculateHand();
@@ -309,15 +310,17 @@ public class PokerDealer implements Dealer
         return (int) numCardstoDiscard;
     }
 
-    public void userDisplayHand()
+    public String userDisplayHand(Hand playerHand)
     {
-        StringBuilder outPut = new StringBuilder(1000);
+        StringBuilder outputSB = new StringBuilder(1000);
+        String output;
         ArrayList<Card> cards = playerHand.getCards();
         for (int i = 0; i < cards.size(); i++)
         {
-            outPut.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");
+            outputSB.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");
         }
-        UserInput.display(outPut);
+        output = outputSB.toString();
+        return output;
     }
 
 }
