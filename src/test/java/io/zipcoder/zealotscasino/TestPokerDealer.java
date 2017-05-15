@@ -594,5 +594,19 @@ public class TestPokerDealer {
 
     }
 
+    @Test
+    public void replaceCards_HandHad3Cards_2CardsReplaced(){
+        //Given
+        dealer.getPlayerHand().receiveCard(new Card("TEN", "SPADES"));
+        dealer.getPlayerHand().receiveCard(new Card("JACK", "CLUBS"));
+        dealer.getPlayerHand().receiveCard(new Card("QUEEN", "SPADES"));
+        int numOfCardsToReplace = 2;
+        int expectedSize = 5;
+        //Then
+        dealer.replace(numOfCardsToReplace);
+        int actualSize = dealer.getPlayerHand().getCards().size();
 
+        //When
+        assertEquals("Cards not replaced", expectedSize, actualSize);
+    }
 }

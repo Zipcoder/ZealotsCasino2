@@ -90,7 +90,7 @@ public class PokerDealer implements Dealer
         discardCards(discardIndexes, playerHand);
 
         //replace discarded cards
-        replace(discardIndexes.size());
+        replace(numCardsToDiscard);
 
         //display new hand
         UserInput.display("Updated Hand: ");
