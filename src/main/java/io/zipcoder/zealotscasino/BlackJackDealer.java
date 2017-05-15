@@ -320,10 +320,7 @@ public class BlackJackDealer implements Dealer {
     public void split(Player player){
         player.setWallet(player.getWallet() + bet.getBetValue());
         bet.makeBet(bet.getBetValue() * 2, player);
-        ArrayList<Card> cards = new ArrayList<>();
-        for(int i = 0; i < playerHand.getCards().size(); i++){
-            cards.add(playerHand.getCards().get(i));
-        }
+        ArrayList<Card> cards = playerHand.getCards();
         for(Card card : cards){
             playerHand.setHandValue(0);
             playerHand.remove();
