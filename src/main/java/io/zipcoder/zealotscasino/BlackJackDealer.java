@@ -106,20 +106,19 @@ public class BlackJackDealer implements Dealer {
         protectedBetProcess(player);
         initializeHands();
         buildPlayerHand();
-        if(checkIfSplit(player)){
+        /*if(checkIfSplit(player)){
             split(player);
-        }else {
-            assertBlackJack(player);
-            if (playerHand.getHandValue() != 21) {
-                buildDealerHand();
-                if(dealerHand.getCards().get(0).getFaceValue().equals("ACE")){
-                    protectedInsuranceRequest(player);
-                }
-                hitProcess(player);
-                checkIfInsurancePays(player);
-                checkIfDealerHit();
-                evaluateResult(player);
+        }else {*/
+        assertBlackJack(player);
+        if (playerHand.getHandValue() != 21) {
+            buildDealerHand();
+            if(dealerHand.getCards().get(0).getFaceValue().equals("ACE")){
+                protectedInsuranceRequest(player);
             }
+            hitProcess(player);
+            checkIfInsurancePays(player);
+            checkIfDealerHit();
+            evaluateResult(player);
         }
     }
 
@@ -255,7 +254,7 @@ public class BlackJackDealer implements Dealer {
         pay(player, bet.getBetValue() * 2);
     }
 
-    public boolean checkStatus(Player player, double bet){
+    public boolean checkStatus(Player player){/////////////////////////////////////////////////////////////////////////////
         boolean bust = playerHand.checkIfBust();
         boolean blackJack = playerHand.checkIfBlackJack();
         if(bust){
@@ -265,9 +264,11 @@ public class BlackJackDealer implements Dealer {
         }
         if(blackJack){
             executePlayerWins(player);
+            setGameRunning(false);
+            return false;
         }
-        boolean hit = checkIfPlayerHit();
-        return hit;
+        return true;
+
     }
 
     public void assertBlackJack(Player player) {
@@ -286,11 +287,14 @@ public class BlackJackDealer implements Dealer {
         return false;
     }
 
-    private void hitProcess(Player player){
+    private void hitProcess(Player player){/////////////////////////////////////////////////////////////////////////////
         boolean hit = checkIfPlayerHit();
         while(hit){
             takeHit();
-            hit = checkStatus(player, bet.getBetValue());
+            hit = checkStatus(player);
+            if(hit){
+                hit = checkIfPlayerHit();
+            }
         }
     }
 
@@ -346,7 +350,7 @@ public class BlackJackDealer implements Dealer {
         return false;
     }
 
-    public void split(Player player){
+    /*public void split(Player player){
         player.setWallet(player.getWallet() - bet.getBetValue());
         ArrayList<Card> cards = playerHand.getCards();
         for(Card card : cards){
@@ -361,5 +365,5 @@ public class BlackJackDealer implements Dealer {
                 dealerHand.setHandValue(0);
             }
         }
-    }
+    }*/
 }
