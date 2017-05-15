@@ -34,7 +34,7 @@ public class WarDealer implements Dealer {
 
         Card playersCard = deck.surrenderCard();
         Card dealersCard = deck.surrenderCard();
-
+        
         String outcome = playRound(playersCard, dealersCard);
         String tieOutcome;
 
