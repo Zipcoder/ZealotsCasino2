@@ -116,6 +116,7 @@ public class BigSixDealer implements Dealer {
                 UserInput.display("Your bet of $" + wheelBet.getBetValue() + " on denomination " + wheelBet.getLocationOnWheel() + " netted " + (wheelBet.getBetValue() * payOutRatio) + "!!");
             } else {
                 UserInput.display("Your bet of $" + wheelBet.getBetValue() + " on denomination " + wheelBet.getLocationOnWheel() + " did not hit...");
+                UserInput.display("Sorry, the winning denomination was" + winningDenomination);
             }
         }
     }
