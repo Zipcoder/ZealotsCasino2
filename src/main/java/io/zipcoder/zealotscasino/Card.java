@@ -5,7 +5,8 @@ package io.zipcoder.zealotscasino;
  */
 public class Card implements Comparable<Card>{
 
-
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String RESET = "\u001B[0m";
     private String suit;
     private String faceValue;
 
@@ -64,9 +65,9 @@ public class Card implements Comparable<Card>{
         else if(suit.equals("CLUBS"))
             return ((char)'\u2663' + " ");
         else if(suit.equals("DIAMONDS"))
-            return ((char)'\u2666' + " ");
+            return (ANSI_RED + '\u2666' + " " + RESET);
         else if(suit.equals("HEARTS"))
-            return ((char)'\u2764' + " ");
+            return (ANSI_RED+ '\u2764' + " " + RESET);
         else
             return "Invalid Symbol";
 
