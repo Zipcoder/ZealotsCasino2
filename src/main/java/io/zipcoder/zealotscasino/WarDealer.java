@@ -36,6 +36,7 @@ public class WarDealer implements Dealer {
         Card dealersCard = deck.surrenderCard();
 
         String outcome = playRound(playersCard, dealersCard);
+        String tieOutcome;
 
         double winnings = processInitialOutcome(outcome);
         if (outcome.equals("tie")) {
@@ -43,11 +44,26 @@ public class WarDealer implements Dealer {
             if (tieChoice.equalsIgnoreCase("y")) {
                 Card playersTieCard = deck.surrenderCard();
                 Card dealersTieCard = deck.surrenderCard();
-                winnings = processTieOutcome(playRound(playersTieCard, dealersTieCard));
+                tieOutcome = playRound(playersTieCard, dealersTieCard);
+                winnings = processTieOutcome(tieOutcome);
+                switch (tieOutcome) {
+                    case "win":
+                        UserInput.display("YOU " + tieOutcome.toUpperCase() + " YOUR ORIGINAL BET!");
+                        break;
+                    case "lose":
+                        UserInput.display("YOU " + tieOutcome.toUpperCase() + "!");
+                        break;
+                    case "tie":
+                        UserInput.display("NICE! YOU " + tieOutcome.toUpperCase() + "D! TAKE TWICE YOUR ORIGINAL BET");
+                        break;
+                }
             }
         }
+        if (!outcome.equalsIgnoreCase("tie"))
+        {
+            UserInput.display("YOU " + outcome.toUpperCase() + "!");
 
-        UserInput.display("YOU " + outcome.toUpperCase() + "!");
+        }
         pay(player, winnings);
         UserInput.display(player.printWallet());
         if (player.getWallet() >= Bet.MINIMUM_BET) {
