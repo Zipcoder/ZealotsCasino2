@@ -282,7 +282,8 @@ public class BlackJackDealer implements Dealer {
         }
     }
 
-    private boolean requestInsuranceValue(){
+    private boolean requestInsuranceValue(Player player){
+        displayPlayerWallet(player);
         String answer = UserInput.getStringInput("Take insurance? Enter Yes if you would like to. " );
         if(answer.equalsIgnoreCase("yes")){
             return true;
@@ -329,10 +330,13 @@ public class BlackJackDealer implements Dealer {
     }
 
     private void protectedInsuranceRequest(Player player){
-        boolean response = requestInsuranceValue();
+        boolean response = requestInsuranceValue(player);
         while(response){
             try {
                 setInsuranceValue(UserInput.getDoubleInput("How much would you like to put on it?"));
+                while(insuranceValue > player.getWallet()){
+                    setInsuranceValue(UserInput.getDoubleInput("You do not have enough."));
+                }
                 double postInsuranceWallet = player.getWallet() - getInsuranceValue();
                 player.setWallet(postInsuranceWallet);
                 break;
