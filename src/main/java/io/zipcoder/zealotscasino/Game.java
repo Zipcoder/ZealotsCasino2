@@ -9,7 +9,6 @@ public class Game
 {
     private Player player;
     private Dealer dealer;
-    private BigSixDealer bigSixDealer;
     UserInput user;
 
     public Game(Player player){
@@ -25,9 +24,8 @@ public class Game
                 return new BlackJackDealer();
             case 3:
                 return new PokerDealer();
-            /*case 6:
-                UserInput.display("Thanks for playing!");
-                break; */
+            case 4:
+                return new BigSixDealer();
             default:
                 UserInput.display("Invalid Entry. Try Again");
                 return null;
@@ -35,48 +33,16 @@ public class Game
     }
 
     private void play(Dealer dealer) {
-        dealer.play(player);
-        displayMenu();
-    }
-
-
-    public void playBlackJack()
-    {
-        dealer = new BlackJackDealer();
-        dealer.play(player);
-        displayMenu();
-    }
-
-    public void playWar()
-    {
-        dealer = new WarDealer();
-        dealer.play(player);
-        displayMenu();
-    }
-
-    public void playPoker()
-    {
-        dealer = new PokerDealer();
-        dealer.play(player);
-        displayMenu();
-    }
-/*
-    public void playRoulette()
-    {
-        dealer = new RouletteDealer();
-    }*/
-
-    public void playBigSix()
-    {
-        bigSixDealer = new BigSixDealer();
-        bigSixDealer.play(player);
-        displayMenu();
+        if (dealer != null) {
+            dealer.play(player);
+            displayMenu();
+        } else chooseGame();
     }
 
 
     public void chooseGame()
     {
-        double gameChoice;
+        int gameChoice;
         if(player.getWallet() < Bet.MINIMUM_BET){
             UserInput.display("Just kidding, you broke fam");
             gameChoice = 6;
@@ -85,35 +51,8 @@ public class Game
             gameChoice = user.getIntInput("Choose your # of choice: ");
         }
 
-        if(gameChoice == 1)
-        {
-            this.playWar();
-        }
-        else if(gameChoice == 2)
-        {
-            this.playBlackJack();
-        }
-        else if(gameChoice == 3)
-        {
-            this.playPoker();
-        }
-        /*else if(gameChoice == 4)
-        {
-            this.playRoulette();
-        }*/
-        else if(gameChoice == 5)
-        {
-            this.playBigSix();
-        }
-        else if(gameChoice == 6)
-        {
-            UserInput.display("Thanks for playing!");
-        }
-        else
-        {
-            UserInput.display("Invalid Entry. Try Again");
-            this.chooseGame();
-        }
+        dealer = makeDealer(gameChoice);
+        play(dealer);
     }
 
     public void displayIntro()
