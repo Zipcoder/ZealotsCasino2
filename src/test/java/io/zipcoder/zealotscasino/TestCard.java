@@ -9,9 +9,12 @@ import org.junit.Test;
  */
 public class TestCard {
 
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String RESET = "\u001B[0m";
     private Card card1;
     private Card card2;
     private Card card3;
+
 
 
     @Before
@@ -146,7 +149,7 @@ public class TestCard {
     {
         //Given
         Card diamond = new Card("JACK", "DIAMONDS");
-        String expected = "♦ ";
+        String expected = ANSI_RED + '\u2666' + " " + RESET;
 
         //When
         String actual = diamond.getSuitSymbol();
@@ -172,7 +175,7 @@ public class TestCard {
     {
         //Given
         Card symbol = new Card("TEN", "HEARTS");
-        String expected = "❤ ";
+        String expected = ANSI_RED+ '\u2764' + " " + RESET;
 
         //When
         String actual = symbol.getSuitSymbol();
