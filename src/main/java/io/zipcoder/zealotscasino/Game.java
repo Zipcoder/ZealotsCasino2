@@ -58,7 +58,7 @@ public class Game
     public void displayIntro()
     {
         UserInput.display("--------------------Zealot's Casino--------------------");
-        double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?");
+        double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?\nMinimum is $20.");
         try{
             //System.out.println(startWallet);
             player = new Player(startWallet);
