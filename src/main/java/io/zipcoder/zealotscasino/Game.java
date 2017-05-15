@@ -43,9 +43,9 @@ public class Game
     public void chooseGame()
     {
         int gameChoice;
-        if(player.getWallet() < Bet.MINIMUM_BET){
+        if(Bet.MINIMUM_BET > player.getWallet()) {
             UserInput.display("Just kidding, you broke fam");
-            gameChoice = 6;
+            return;
         }
         else{
             gameChoice = user.getIntInput("Choose your # of choice: ");
@@ -60,6 +60,7 @@ public class Game
         UserInput.display("--------------------Zealot's Casino--------------------");
         double startWallet = UserInput.getDoubleInput("How much money do you want to start your wallet with?");
         try{
+            System.out.println(startWallet);
             player = new Player(startWallet);
         }catch(IllegalArgumentException e){
             UserInput.display("Must have at least $20 to enter Zealot's Casino.");
