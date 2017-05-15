@@ -1,5 +1,6 @@
 package io.zipcoder.zealotscasino;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -218,7 +219,9 @@ public class BlackJackDealer implements Dealer {
     }
 
     public void displayPlayerWallet(Player player){
-        UserInput.display("You have $" + player.getWallet() + " remaining.");
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String walletString = formatter.format(player.getWallet());
+        UserInput.display("You have " + walletString + " remaining.");
     }
 
     private boolean checkIfPlayerHit(){
