@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.zipcoder.zealotscasino.UserInput.getDoubleInput;
+import static io.zipcoder.zealotscasino.UserInput.getIntInput;
 import static io.zipcoder.zealotscasino.UserInput.getStringInput;
 
 /**
@@ -74,20 +75,31 @@ public class PokerDealer implements Dealer
         dealHand();
 
         //display
-        userDisplayHand();
-
+        String output = userDisplayHand(playerHand);
+        UserInput.display(output);
         //discard cards
-        int numberToReplace = discardCards();
+        int numCardsToDiscard;
+        numCardsToDiscard = getIntInput("How many cards do you want to discard? ");
+        ArrayList<Integer> discardIndexes = new ArrayList<>(numCardsToDiscard);
+        for (int i = 0; i < numCardsToDiscard; i++)
+        {
+            double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
+            discardIndexes.add((int) getDiscard);
+        }
+
+        discardCards(discardIndexes, playerHand);
 
         //replace discarded cards
-        replace(numberToReplace);
+        replace(numCardsToDiscard);
 
         //display new hand
         UserInput.display("Updated Hand: ");
-        userDisplayHand();
+        output = userDisplayHand(playerHand);
+        UserInput.display(output);
 
         //calculate hand
-        String rankOfHand = calculateHand();
+        String rankOfHand = calculateHand(returnNumberOfValuesInPlayerHand());
+
         UserInput.display("You got a " + rankOfHand);
 
         // determine winnings and pay
@@ -150,16 +162,15 @@ public class PokerDealer implements Dealer
             UserInput.display("Thanks for playing!\n\n");
     }
 
-    public String calculateHand()
+    public String calculateHand(int numOfValues)
     {
-        int numberOfValues = returnNumberOfValuesInPlayerHand();
-        if (numberOfValues == 5)
+        if (numOfValues == 5)
         {
             return evaluateFiveRanks();
-        } else if (numberOfValues == 4)
+        } else if (numOfValues == 4)
         {
             return "PAIR";
-        } else if (numberOfValues == 3)
+        } else if (numOfValues == 3)
         {
             return evaluateThreeRanks();
         } else
@@ -280,44 +291,27 @@ public class PokerDealer implements Dealer
     }
 
 
-
-
-    public int discardCards()
+    public void discardCards(ArrayList<Integer> discardIndexes, Hand playerHand)
     {
-        double numCardstoDiscard;
-        do
-        {
-            numCardstoDiscard = getDoubleInput("How many cards do you want to discard? ");
-            if (numCardstoDiscard > 6)
-            {
-                UserInput.display("You can only discard the card you have");
-            }
-        } while (numCardstoDiscard > 6);
-        ArrayList<Integer> indexes = new ArrayList<>();
-        for (int i = 0; i < numCardstoDiscard; i++)
-        {
-            double getDiscard = getDoubleInput("Please enter the index of the card that is to be discarded: ");
-            indexes.add((int) getDiscard);
-        }
-        Collections.sort(indexes);
+        Collections.sort(discardIndexes);
         //Hand cloneOfHand = playerHand.getCards();
-        for (int j = indexes.size() - 1; j >= 0; j--)
+        for (int j = discardIndexes.size() - 1; j >= 0; j--)
         {
-            playerHand.remove(indexes.get(j) - 1);
+            playerHand.remove(discardIndexes.get(j) - 1);
         }
-        //player.setHand(cloneOfHand);
-        return (int) numCardstoDiscard;
     }
 
-    public void userDisplayHand()
+    public String userDisplayHand(Hand playerHand)
     {
-        StringBuilder outPut = new StringBuilder(1000);
+        StringBuilder outputSB = new StringBuilder(1000);
+        String output;
         ArrayList<Card> cards = playerHand.getCards();
         for (int i = 0; i < cards.size(); i++)
         {
-            outPut.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");
+            outputSB.append("[" + (i + 1) + "]: " + cards.get(i) + "\n");
         }
-        UserInput.display(outPut);
+        output = outputSB.toString();
+        return output;
     }
 
 }
